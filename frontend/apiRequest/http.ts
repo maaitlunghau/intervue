@@ -22,8 +22,15 @@ export type RequestOptions = {
 };
 
 const UNAUTHORIZED = 401;
+const MAINTENANCE_CODE = 'MAINTENANCE_MODE_ACTIVE';
 
 let refreshInFlight: Promise<AuthSession> | null = null;
+
+// A full load rather than a router push, so the proxy re-runs and answers with the notice.
+function redirectToMaintenanceNotice(): void {
+  if (typeof window === 'undefined' || window.location.pathname === '/') return;
+  window.location.replace(window.location.origin);
+}
 
 function toApiError(response: Response, payload: ApiResponse<unknown> | null): ApiError {
   const retryAfter = Number(response.headers.get('Retry-After'));
@@ -124,6 +131,10 @@ export async function request<T = null>(path: string, options: RequestOptions = 
   try {
     return await execute<T>(path, options, auth ? useAuthStore.getState()[portal].accessToken : null);
   } catch (error) {
+    if (isApiError(error) && error.code === MAINTENANCE_CODE) {
+      redirectToMaintenanceNotice();
+      throw error;
+    }
     if (!auth || !isApiError(error) || error.status !== UNAUTHORIZED) throw error;
     try {
       await refreshSession();
