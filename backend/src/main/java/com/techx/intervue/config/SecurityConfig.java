@@ -3,6 +3,7 @@ package com.techx.intervue.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techx.intervue.exceptions.ErrorCode;
 import com.techx.intervue.filters.JwtAuthFilter;
+import com.techx.intervue.filters.MaintenanceFilter;
 import com.techx.intervue.filters.RateLimitFilter;
 import com.techx.intervue.filters.TraceIdFilter;
 import com.techx.intervue.resources.ApiResource;
@@ -38,6 +39,7 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final JwtAuthFilter jwtAuthFilter;
     private final TraceIdFilter traceIdFilter;
+    private final MaintenanceFilter maintenanceFilter;
     private final RateLimitServiceInterface rateLimitService;
 
     @Bean
@@ -82,6 +84,10 @@ public class SecurityConfig {
                                         .requestMatchers("/ping")
                                         .permitAll()
                                         // 2. Public API
+                                        // The maintenance status gates the whole site, so it has
+                                        // to answer even while maintenance is blocking everything
+                                        .requestMatchers("/api/v1/platform/maintenance")
+                                        .permitAll()
                                         .requestMatchers("/api/v1/ai/chat")
                                         .permitAll()
                                         .requestMatchers("/api/v1/products")
@@ -156,7 +162,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(traceIdFilter, JwtAuthFilter.class)
                 .addFilterAfter(
-                        new RateLimitFilter(rateLimitService, objectMapper), JwtAuthFilter.class);
+                        new RateLimitFilter(rateLimitService, objectMapper), JwtAuthFilter.class)
+                .addFilterAfter(maintenanceFilter, JwtAuthFilter.class);
 
         return http.build();
     }
