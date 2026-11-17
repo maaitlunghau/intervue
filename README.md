@@ -89,7 +89,7 @@ Web and a Flutter mobile app, sharing the same account, listing, and application
 
 | | |
 |---|---|
-| Containers | Docker Compose (MySQL, Redis) |
+| Containers | Docker Compose (MySQL, Redis, phpMyAdmin) |
 | Git hooks | Lefthook — auto-formats Java (Spotless), TS/JS (Prettier), and Dart (`dart format`) on commit |
 
 ## Getting Started
@@ -156,7 +156,7 @@ MYSQL_PASSWORD=<your-db-password>
 
 > `.env` is git-ignored. Never commit it.
 
-#### Step 4 — Start MySQL and Redis
+#### Step 4 — Start MySQL, Redis and phpMyAdmin
 
 Open Docker Desktop first, then in the **project root**:
 
@@ -164,7 +164,7 @@ Open Docker Desktop first, then in the **project root**:
 docker compose up -d
 ```
 
-Wait until both containers are `healthy` (10–30 seconds on first run):
+Wait until all containers are `healthy` (10–30 seconds on first run):
 
 ```bash
 docker compose ps
@@ -173,14 +173,16 @@ docker compose ps
 Expected output:
 
 ```
-NAME             IMAGE              STATUS              PORTS
-intervue-mysql   mysql:8.4          Up ... (healthy)    0.0.0.0:3306->3306/tcp
-intervue-redis   redis:7.4-alpine   Up ... (healthy)    0.0.0.0:6379->6379/tcp
+NAME                  IMAGE              STATUS              PORTS
+intervue-mysql        mysql:8.4          Up ... (healthy)    0.0.0.0:3306->3306/tcp
+intervue-phpmyadmin   phpmyadmin:5.2     Up ...              0.0.0.0:8081->80/tcp
+intervue-redis        redis:7.4-alpine   Up ... (healthy)    0.0.0.0:6379->6379/tcp
 ```
 
 | Service | Address | Credentials |
 |---|---|---|
 | MySQL | `localhost:3306` | Database, user and password from your `.env` |
+| phpMyAdmin | `http://localhost:8081` | Auto-logged in as `root` using `MYSQL_ROOT_PASSWORD` from your `.env` |
 | Redis | `localhost:6379` | No password |
 
 Data is stored in the Docker volumes `mysql-data` and `redis-data`, so it survives container restarts.
@@ -359,6 +361,7 @@ dart format .                       # format Dart code
 | `Communications link failure` / `Connection refused` on 3306 or 6379 | Docker is not running or containers are not healthy yet | Start Docker Desktop, run `docker compose ps` and wait for `healthy` |
 | `Bind for 0.0.0.0:3306 failed: port is already allocated` | Another MySQL (XAMPP, MySQL Server...) is using port 3306 | Stop the other MySQL, or change the port mapping in `docker-compose.yml` (e.g. `"3307:3306"`) and update the port in `spring.datasource.url` in `application.yaml` locally (do not commit it) |
 | `Port 8080 was already in use` | Another process is using port 8080 | Stop the process using port 8080 |
+| `Bind for 0.0.0.0:8081 failed: port is already allocated` | Another process is using port 8081 (phpMyAdmin) | Stop the other process, or change the port mapping in `docker-compose.yml` (e.g. `"8082:80"`) |
 | `Illegal base64 character` / `WeakKeyException` on startup | `jwt.secret` is not valid Base64 or is shorter than 256 bits | Generate a new secret with the command in Step 5 |
 | `invalid target release: 25` | `JAVA_HOME` points to an older JDK | Install JDK 25, update `JAVA_HOME`, reopen the terminal and check `java -version` |
 | `./mvnw: Permission denied` | Missing execute permission (macOS/Linux) | `chmod +x backend/mvnw` |
