@@ -6,6 +6,7 @@ import type { AdminDashboardData, AdminWorkItemKind } from '@/types/admin';
 import AdminAuditFeed from './AdminAuditFeed';
 import AdminBannerCarousel from './AdminBannerCarousel';
 import AdminHighlightRow from './AdminHighlightRow';
+import AdminMaintenanceBanner from './AdminMaintenanceBanner';
 import AdminMascotCard from './AdminMascotCard';
 import AdminMetricStrip from './AdminMetricStrip';
 import AdminQueueBreakdown from './AdminQueueBreakdown';
@@ -38,6 +39,8 @@ export default function AdminDashboardView({ data, initialKind }: AdminDashboard
           }).format(new Date())}
         </p>
       </div>
+
+      <AdminMaintenanceBanner />
 
       <AdminBannerCarousel slides={data.banners} />
 
