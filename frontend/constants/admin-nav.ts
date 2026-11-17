@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Users,
   Wallet,
+  Wrench,
 } from 'lucide-react';
 
 export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
@@ -254,6 +255,11 @@ export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
         icon: ScrollText,
         permission: 'users.admins',
         comingSoon: true,
+      },
+      {
+        label: 'Maintenance mode',
+        href: ROUTES.ADMIN_PLATFORM_SETTINGS,
+        icon: Wrench,
       },
       {
         label: 'Notifications',
