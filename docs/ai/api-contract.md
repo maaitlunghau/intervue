@@ -765,3 +765,16 @@ Not built yet: admin management of recruiters. Company endpoints still key membe
 - `GET /recruiter/company/documents` lists only the caller's own documents.
 - Admin: `GET /admin/companies/{id}/members` and `DELETE /admin/companies/{id}/members/{userId}` remain; `transfer-owner` was removed with the roles.
 - Frontend: `CompanyResource` no longer carries `verified`, `verificationStatus`, `myRole` or `legalFieldsLocked`, and `CompanySummaryResource` is reduced to `id, name, taxCode, address`.
+
+## Maintenance mode (platform)
+
+| Method | Path | Auth | Notes |
+|---|---|---|---|
+| `GET` | `/platform/maintenance` | public | `MaintenanceStatusResource { enabled, message, estimatedResumeAt }` — only what the notice needs. Never blocked, even while maintenance is on. |
+| `GET` | `/admin/platform/maintenance` | admin | `MaintenanceSettingsResource` — adds `enabledAt` and `enabledBy`. |
+| `PUT` | `/admin/platform/maintenance` | admin | Body `SaveMaintenanceRequest { enabled, message?, estimatedResumeAt? }`. `message` is at most 500 characters. |
+
+- **Enforcement:** while `enabled`, `MaintenanceFilter` answers every other request with `503 MAINTENANCE_MODE_ACTIVE` plus a `Retry-After` header (seconds). Four things still pass: `OPTIONS` preflights, any caller holding `ROLE_ADMIN`, the prefixes `/api/v1/admin/**` and `/api/v1/auth/**`, and `/ping`. `/api/v1/admin/**` is listed by prefix because admin login and refresh arrive with no token and cannot be matched by role — admin auth lives at `/api/v1/admin/auth/**`, outside `/api/v1/auth/**`. Spring Security still guards those routes.
+- **Clock:** `enabledAt` and `enabledBy` are stamped only on the **off → on** transition, so editing the message while maintenance is already running does not reset the elapsed timer. Switching off clears both.
+- **Cache:** the status is cached in Redis under `cache:platform:maintenance` for 30s and evicted on every write. MySQL stays the source of truth; an unreadable cache falls through to the database.
+- **Frontend:** `proxy.ts` reads the public status through a 10s in-process cache and redirects all non-admin traffic to `/`, which is rewritten to the notice with `503` + `Retry-After`. Both layers **fail open** — a failed status read never closes the site. `/admin/**` is never gated.
