@@ -117,6 +117,9 @@ CLAUDE.local.md
 # CodeGraph local index
 .codegraph/
 
+# Superpowers brainstorming mockups (local scratch)
+.superpowers/
+
 # Personal member workspace
 workspace/
 
