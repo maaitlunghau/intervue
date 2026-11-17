@@ -2,9 +2,9 @@ const { execFileSync } = require('node:child_process');
 
 const path = require('node:path');
 
-const OWNERS = ['hoangtuanqn', 'maaitlunghau'];
+const OWNERS = ['maaitlunghau'];
 const BLOCK_MESSAGE =
-  'You have violated the project governance policy. Please contact the team leader, Pham Hoang Tuan, on Zalo at 0812.665.001 to discuss.';
+  'You have violated the project governance policy. Please contact the team leader, Mai Trung Hau, on Zalo at 0704618714 to discuss.';
 
 const PROTECTED_PATTERNS = [
   /(^|\/)CLAUDE\.md$/i,
