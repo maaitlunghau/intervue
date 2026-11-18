@@ -1,28 +1,28 @@
 'use client';
 
 import NotificationDropdown from '@/components/common/NotificationDropdown';
-import { ADMIN_QUICK_LINKS } from '@/constants/admin-work';
 import { ROUTES } from '@/constants/routes';
 import { useAdminTheme } from '@/hooks/useAdminTheme';
 import { useAuth } from '@/hooks/useAuth';
 import { useUnreadCount } from '@/hooks/useNotifications';
 import type { AdminQueueCounts } from '@/types/admin';
-import { Bell, ChevronDown, Menu, Moon, Sun } from 'lucide-react';
+import { Bell, ChevronDown, Menu, Moon, Search, Sun } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import AdminUserMenuDropdown from './AdminUserMenuDropdown';
 
 interface AdminTopBarProps {
-  queueCounts: AdminQueueCounts;
+  queueCounts?: AdminQueueCounts;
   onToggleSidebar: () => void;
   onOpenMobileNav: () => void;
+  onOpenPalette?: () => void;
 }
 
 const ICON_BUTTON_CLASS =
-  'dark:text-forest-700 dark:hover:bg-forest-950/10 dark:hover:text-forest-950 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white';
+  'text-on-surface-variant dark:text-forest-300 hover:text-navy dark:hover:text-forest-50 hover:bg-surface-container-low dark:hover:bg-forest-800 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl transition-colors';
 
-export default function AdminTopBar({ queueCounts, onToggleSidebar, onOpenMobileNav }: AdminTopBarProps) {
+export default function AdminTopBar({ onToggleSidebar, onOpenMobileNav, onOpenPalette }: AdminTopBarProps) {
   const { user } = useAuth();
   const { theme, toggleTheme } = useAdminTheme();
   const { total: unreadNotifications } = useUnreadCount('admin');
@@ -42,67 +42,75 @@ export default function AdminTopBar({ queueCounts, onToggleSidebar, onOpenMobile
   }, []);
 
   return (
-    <header className="bg-dark dark:bg-forest-50 sticky top-0 z-40 w-full">
-      <div className="flex h-18 w-full items-center gap-3 px-4 sm:px-5 lg:px-6">
-        <button
-          type="button"
-          onClick={onOpenMobileNav}
-          aria-label="Open the menu"
-          className={`${ICON_BUTTON_CLASS} lg:hidden`}
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+    <header className="dark:bg-forest-900 border-outline-variant dark:border-forest-800 sticky top-0 z-40 w-full border-b bg-white shadow-2xs transition-colors">
+      <div className="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <button
+            type="button"
+            onClick={onOpenMobileNav}
+            aria-label="Open the menu"
+            className={`${ICON_BUTTON_CLASS} lg:hidden`}
+          >
+            <Menu className="h-5 w-5" />
+          </button>
 
-        <button
-          type="button"
-          onClick={onToggleSidebar}
-          aria-label="Toggle the menu"
-          title="Toggle the menu"
-          className={`${ICON_BUTTON_CLASS} hidden lg:flex`}
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+          <button
+            type="button"
+            onClick={onToggleSidebar}
+            aria-label="Toggle the menu"
+            title="Toggle the menu"
+            className={`${ICON_BUTTON_CLASS} hidden lg:flex`}
+          >
+            <Menu className="h-5 w-5" />
+          </button>
 
-        {/* The knockout file is transparent and cropped, so it needs no blending and sits on any
-            header colour. The colour file keeps its baked white box, which multiply clears exactly. */}
-        <Link href={ROUTES.ADMIN_DASHBOARD} className="flex shrink-0 items-center" aria-label="InterVue Admin">
-          <Image
-            src="/intervue-logo-white.png"
-            alt="InterVue"
-            width={1588}
-            height={324}
-            priority
-            className="h-7.5 w-auto dark:hidden"
-          />
-          <Image
-            src="/intervue-logo.png"
-            alt="InterVue"
-            width={948}
-            height={258}
-            priority
-            className="hidden h-10 w-auto mix-blend-multiply dark:block"
-          />
-        </Link>
+          <Link
+            href={ROUTES.ADMIN_DASHBOARD}
+            className="flex shrink-0 items-center gap-2.5"
+            aria-label="InterVue Admin"
+          >
+            <Image
+              src="/intervue-logo.png"
+              alt="InterVue"
+              width={176}
+              height={48}
+              priority
+              className="h-10 w-auto object-contain dark:hidden"
+            />
+            <Image
+              src="/intervue-logo-white.png"
+              alt="InterVue"
+              width={1588}
+              height={324}
+              priority
+              className="hidden h-6.5 w-auto object-contain dark:block"
+            />
+          </Link>
+        </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-3 sm:gap-4">
-          <nav aria-label="Quick access" className="hidden items-center gap-2 xl:flex">
-            {ADMIN_QUICK_LINKS.map((link) => {
-              const Icon = link.icon;
-              const count = queueCounts[link.queue] ?? 0;
+        {/* Command Palette Quick Search Bar */}
+        <div className="mx-4 hidden max-w-md flex-1 md:flex">
+          <button
+            type="button"
+            onClick={onOpenPalette}
+            className="bg-surface-container-low dark:bg-forest-850 hover:bg-surface-container-high dark:hover:bg-forest-800 text-body-sm text-outline border-outline-variant dark:border-forest-700 flex w-full cursor-pointer items-center justify-between rounded-xl border py-1.5 pr-2.5 pl-3 transition"
+          >
+            <span className="flex items-center gap-2">
+              <span className="text-outline">
+                <Search className="h-4 w-4" />
+              </span>
+              <span className="text-on-surface-variant dark:text-forest-300 text-xs">
+                Search records or press ⌘K...
+              </span>
+            </span>
+            <kbd className="text-outline dark:bg-forest-900 border-outline-variant dark:border-forest-700 rounded border bg-white px-1.5 py-0.5 text-[10px] font-semibold shadow-2xs">
+              ⌘K
+            </kbd>
+          </button>
+        </div>
 
-              return (
-                <Link
-                  key={link.queue}
-                  href={`${ROUTES.ADMIN_DASHBOARD}?queue=${link.kind}`}
-                  className="dark:border-forest-700/20 dark:text-forest-800 dark:hover:border-primary/40 dark:hover:bg-primary/10 dark:hover:text-forest-950 text-body-md inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 font-semibold text-white/85 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-white"
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{link.label}</span>
-                  {count > 0 && <span className="font-bold tabular-nums">{count}</span>}
-                </Link>
-              );
-            })}
-          </nav>
+        <div className="ml-auto flex shrink-0 items-center gap-2.5 sm:gap-3.5">
+          <div className="bg-outline-variant dark:bg-forest-800 hidden h-5 w-px sm:block"></div>
 
           <button
             type="button"
@@ -127,7 +135,7 @@ export default function AdminTopBar({ queueCounts, onToggleSidebar, onOpenMobile
             >
               <Bell className="h-5 w-5" />
               {unreadNotifications > 0 && (
-                <span className="ring-dark dark:ring-forest-50 text-label-sm absolute top-0.5 right-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-rose-500 px-1 font-bold text-white ring-2">
+                <span className="dark:ring-forest-900 text-label-sm absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-500 px-1 font-bold text-white ring-2 ring-white">
                   {unreadNotifications > 99 ? '99+' : unreadNotifications}
                 </span>
               )}
@@ -148,7 +156,7 @@ export default function AdminTopBar({ queueCounts, onToggleSidebar, onOpenMobile
               aria-label="Account menu"
               className="flex cursor-pointer items-center rounded-full p-0.5 transition hover:scale-105 active:scale-95"
             >
-              <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-tr from-emerald-500 via-emerald-600 to-teal-600 text-sm font-bold text-white shadow-sm ring-2 ring-emerald-400/30">
+              <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-tr from-emerald-500 via-emerald-600 to-teal-600 text-sm font-bold text-white shadow-xs ring-2 ring-emerald-400/30">
                 {user?.name.charAt(0).toUpperCase()}
                 <span className="absolute -right-0.5 -bottom-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white ring-1 ring-emerald-200">
                   <ChevronDown className="h-2 w-2 stroke-[2.5] text-emerald-700" />
