@@ -38,6 +38,7 @@ com.techx.intervue
    ├─ billing/        service catalog, cart, orders, payments (SePay), vouchers, invoices
    ├─ entitlement/    what a company owns and may consume (quota ledger)
    ├─ ads/            ad slots, weekly bookings, creatives, serving, metrics
+   ├─ platform/       platform-wide operational state (maintenance mode)            [exists]
    └─ admin/          moderation, verification review, reports
 ```
 

@@ -1,5 +1,6 @@
 export const ROUTES = {
   HOME: '/',
+  MAINTENANCE: '/maintenance',
   LOGIN: '/login',
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',
@@ -63,6 +64,7 @@ export const ROUTES = {
   ADMIN_ACCOUNT_SECURITY: '/admin/account/security',
   ADMIN_ACCOUNT_NOTIFICATIONS: '/admin/account/notifications',
   ADMIN_DASHBOARD: '/admin/dashboard',
+  ADMIN_PLATFORM_SETTINGS: '/admin/platform/settings',
   ADMIN_VERIFICATION_BUSINESS: '/admin/verification/business',
   ADMIN_VERIFICATION_COMPANY_CHANGES: '/admin/verification/company-changes',
   ADMIN_VERIFICATION_IDENTITY: '/admin/verification/identity',

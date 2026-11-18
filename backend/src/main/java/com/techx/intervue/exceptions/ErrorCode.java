@@ -286,7 +286,10 @@ public enum ErrorCode {
             HttpStatus.UNPROCESSABLE_CONTENT, "Only text and link messages can be edited!"),
     MESSAGE_ALREADY_RECALLED(HttpStatus.CONFLICT, "This message has already been unsent!"),
     CONNECTION_NOT_BLOCKED(HttpStatus.CONFLICT, "This conversation is not currently blocked!"),
-    CONNECT_REACTION_INVALID(HttpStatus.BAD_REQUEST, "Unsupported reaction emoji!");
+    CONNECT_REACTION_INVALID(HttpStatus.BAD_REQUEST, "Unsupported reaction emoji!"),
+    MAINTENANCE_MODE_ACTIVE(
+            HttpStatus.SERVICE_UNAVAILABLE,
+            "InterVue is under maintenance. Please try again later!");
 
     private final HttpStatus status;
     private final String message;

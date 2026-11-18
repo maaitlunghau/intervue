@@ -41,8 +41,9 @@ export function SupportChatbot() {
     return null;
   }
 
+  // The notice is served through a rewrite, so usePathname() reports "/" and cannot gate this.
   return (
-    <>
+    <div data-support-chatbot="">
       <FloatingChatButton isOpen={isOpen} onToggle={() => setIsOpen((prev) => !prev)} robotState={robotState} />
       <ChatPanel
         isOpen={isOpen}
@@ -54,6 +55,6 @@ export function SupportChatbot() {
         onSendMessage={sendMessage}
         onResetSession={resetSession}
       />
-    </>
+    </div>
   );
 }
