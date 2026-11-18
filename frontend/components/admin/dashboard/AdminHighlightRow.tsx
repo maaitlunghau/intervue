@@ -1,7 +1,15 @@
 import { Sparkline } from '@/components/ui/Sparkline';
 import { HIGHLIGHT_ICON } from '@/constants/admin-work';
+import { AnimatedNumber } from '@/hooks/useCountUp';
 import { cn } from '@/lib/utils';
 import type { AdminHighlight } from '@/types/admin';
+
+function parseValueAndSuffix(raw: string): { num: number | null; suffix: string } {
+  const match = raw.match(/^([0-9,.]+)(.*)$/);
+  if (!match) return { num: null, suffix: raw };
+  const num = parseFloat(match[1].replace(/,/g, ''));
+  return isNaN(num) ? { num: null, suffix: raw } : { num, suffix: match[2] };
+}
 
 interface AdminHighlightRowProps {
   highlights: AdminHighlight[];
@@ -57,7 +65,13 @@ export default function AdminHighlightRow({ highlights }: AdminHighlightRowProps
 
               <div className="mt-2.5 flex items-end justify-between gap-3">
                 <p className="text-navy dark:text-forest-50 text-3xl font-bold tracking-tight tabular-nums">
-                  {highlight.value}
+                  {(() => {
+                    const parsed = parseValueAndSuffix(highlight.value);
+                    if (parsed.num !== null) {
+                      return <AnimatedNumber value={parsed.num} suffix={parsed.suffix} duration={480} />;
+                    }
+                    return highlight.value;
+                  })()}
                 </p>
 
                 <Sparkline values={sparkline} className="h-7 w-16 shrink-0" />

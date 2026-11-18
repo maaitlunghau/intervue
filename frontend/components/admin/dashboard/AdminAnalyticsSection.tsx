@@ -1,5 +1,6 @@
 'use client';
 
+import { AnimatedNumber } from '@/hooks/useCountUp';
 import { BarChart3, TrendingUp, Users, Building2, FileCheck2, ShieldCheck } from 'lucide-react';
 
 interface AdminAnalyticsSectionProps {
@@ -67,11 +68,11 @@ export default function AdminAnalyticsSection({ timeRange }: AdminAnalyticsSecti
             <div className="text-label-sm flex items-center gap-3 font-semibold">
               <span className="text-navy dark:text-forest-100 flex items-center gap-1.5">
                 <span className="bg-primary h-2.5 w-2.5 rounded-sm" />
-                Resolved ({totalResolved})
+                Resolved (<AnimatedNumber value={totalResolved} duration={400} />)
               </span>
               <span className="text-on-surface-variant dark:text-forest-400 flex items-center gap-1.5">
                 <span className="dark:bg-forest-700 h-2.5 w-2.5 rounded-sm bg-slate-300" />
-                Received ({totalReceived})
+                Received (<AnimatedNumber value={totalReceived} duration={400} />)
               </span>
             </div>
           </div>
@@ -88,13 +89,13 @@ export default function AdminAnalyticsSection({ timeRange }: AdminAnalyticsSecti
                     {/* Received Bar */}
                     <div
                       style={{ height: `${recHeight}%` }}
-                      className="dark:bg-forest-750 w-full max-w-3.5 rounded-t bg-slate-200 transition-all group-hover:bg-slate-300"
+                      className="dark:bg-forest-750 w-full max-w-3.5 origin-bottom rounded-t bg-slate-200 transition-all duration-500 ease-out group-hover:bg-slate-300"
                       title={`Received: ${d.received}`}
                     />
                     {/* Resolved Bar */}
                     <div
                       style={{ height: `${resHeight}%` }}
-                      className="bg-primary hover:bg-primary-hover w-full max-w-3.5 rounded-t transition-all"
+                      className="bg-primary hover:bg-primary-hover w-full max-w-3.5 origin-bottom rounded-t transition-all duration-500 ease-out"
                       title={`Resolved: ${d.resolved}`}
                     />
                   </div>
@@ -134,7 +135,9 @@ export default function AdminAnalyticsSection({ timeRange }: AdminAnalyticsSecti
                   <p className="text-label-sm text-on-surface-variant dark:text-forest-400 font-medium">
                     Registered accounts
                   </p>
-                  <p className="text-navy dark:text-forest-50 text-body-md font-bold tabular-nums">28,450</p>
+                  <p className="text-navy dark:text-forest-50 text-body-md font-bold tabular-nums">
+                    <AnimatedNumber value={28450} duration={500} />
+                  </p>
                 </div>
               </div>
               <span className="text-label-sm text-primary font-semibold">↑ 340 new</span>
@@ -149,7 +152,9 @@ export default function AdminAnalyticsSection({ timeRange }: AdminAnalyticsSecti
                   <p className="text-label-sm text-on-surface-variant dark:text-forest-400 font-medium">
                     Verified enterprises
                   </p>
-                  <p className="text-navy dark:text-forest-50 text-body-md font-bold tabular-nums">1,120 (88.4%)</p>
+                  <p className="text-navy dark:text-forest-50 text-body-md font-bold tabular-nums">
+                    <AnimatedNumber value={1120} duration={500} /> (88.4%)
+                  </p>
                 </div>
               </div>
               <span className="text-label-sm text-primary font-semibold">↑ 24 verified</span>
@@ -164,7 +169,9 @@ export default function AdminAnalyticsSection({ timeRange }: AdminAnalyticsSecti
                   <p className="text-label-sm text-on-surface-variant dark:text-forest-400 font-medium">
                     Monthly CV flow
                   </p>
-                  <p className="text-navy dark:text-forest-50 text-body-md font-bold tabular-nums">8,940 CVs</p>
+                  <p className="text-navy dark:text-forest-50 text-body-md font-bold tabular-nums">
+                    <AnimatedNumber value={8940} duration={500} /> CVs
+                  </p>
                 </div>
               </div>
               <span className="text-label-sm text-primary font-semibold">↑ 14.2% MoM</span>
@@ -179,7 +186,9 @@ export default function AdminAnalyticsSection({ timeRange }: AdminAnalyticsSecti
                   <p className="text-label-sm text-on-surface-variant dark:text-forest-400 font-medium">
                     Platform fraud rate
                   </p>
-                  <p className="text-navy dark:text-forest-50 text-body-md font-bold tabular-nums">0.12%</p>
+                  <p className="text-navy dark:text-forest-50 text-body-md font-bold tabular-nums">
+                    <AnimatedNumber value={0.12} decimals={2} duration={500} />%
+                  </p>
                 </div>
               </div>
               <span className="text-label-sm text-primary font-semibold">Healthy</span>
