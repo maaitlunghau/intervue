@@ -1,5 +1,6 @@
 'use client';
 
+import { AnimatedNumber } from '@/hooks/useCountUp';
 import { ROUTES } from '@/constants/routes';
 import { cn } from '@/lib/utils';
 import type { AdminQueueKey, AdminQueueSummary } from '@/types/admin';
@@ -103,13 +104,18 @@ export default function AdminQueueFunnelCard({ queues }: AdminQueueFunnelCardPro
 
               <div className="bg-surface-container-low dark:bg-forest-850 h-2.5 overflow-hidden rounded-full">
                 <div
-                  className={cn('h-full rounded-full transition-all', stage.isUrgent ? 'bg-rose-500' : 'bg-primary')}
+                  className={cn(
+                    'h-full rounded-full transition-all duration-700 ease-out',
+                    stage.isUrgent ? 'bg-rose-500' : 'bg-primary',
+                  )}
                   style={{ width: `${Math.max((stage.count / maxCount) * 100, 4)}%` }}
                 />
               </div>
 
               <span className="flex w-24 items-baseline justify-end gap-2 tabular-nums">
-                <span className="text-navy dark:text-forest-50 text-body-md font-bold">{stage.count}</span>
+                <span className="text-navy dark:text-forest-50 text-body-md font-bold">
+                  <AnimatedNumber value={stage.count} duration={450} />
+                </span>
                 <span className="text-label-sm text-outline w-10 text-right">{stage.slaRate}% SLA</span>
               </span>
             </li>
