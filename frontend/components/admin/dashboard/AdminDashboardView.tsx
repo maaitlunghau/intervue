@@ -37,7 +37,10 @@ export default function AdminDashboardView({ data, initialKind }: AdminDashboard
   return (
     <div className="space-y-6">
       {/* Executive Greeting Header (matching Recruiter Dashboard style) */}
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <header
+        className="animate-fade-in-up flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+        style={{ animationDelay: '0ms' }}
+      >
         <div className="min-w-0">
           <p className="text-body-sm text-on-surface-variant dark:text-forest-400 truncate">
             InterVue Platform Operations · Vietnam
@@ -72,7 +75,7 @@ export default function AdminDashboardView({ data, initialKind }: AdminDashboard
             type="button"
             onClick={handleSyncRealtime}
             disabled={isSyncing}
-            className="border-outline-variant text-navy hover:bg-surface-container-low dark:border-forest-700 dark:bg-forest-900 dark:text-forest-100 dark:hover:bg-forest-800 text-body-sm inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg border bg-white px-3.5 font-semibold transition"
+            className="border-outline-variant text-navy hover:bg-surface-container-low dark:border-forest-700 dark:bg-forest-900 dark:text-forest-100 dark:hover:bg-forest-800 text-body-sm hover:border-outline inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg border bg-white px-3.5 font-semibold shadow-2xs transition active:scale-[0.98]"
           >
             <RotateCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
             <span>{isSyncing ? 'Syncing...' : 'Sync Realtime'}</span>
@@ -83,13 +86,20 @@ export default function AdminDashboardView({ data, initialKind }: AdminDashboard
       <AdminMaintenanceBanner />
 
       {/* TẦNG 1: 4 Executive KPI Stat Cards (Chuẩn 1:1 Recruiter continuous grid) */}
-      <AdminHighlightRow highlights={data.highlights} />
+      <div className="animate-fade-in-up" style={{ animationDelay: '70ms' }}>
+        <AdminHighlightRow highlights={data.highlights} />
+      </div>
 
       {/* TẦNG 2: Rich Analytics & Operations Throughput Chart */}
-      <AdminAnalyticsSection timeRange={timeRange} />
+      <div className="animate-fade-in-up" style={{ animationDelay: '140ms' }}>
+        <AdminAnalyticsSection timeRange={timeRange} />
+      </div>
 
       {/* TẦNG 3: Operational Queue Funnel vs Needs Attention Today (Tỷ lệ vàng 3:2 chuẩn Recruiter) */}
-      <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-5">
+      <div
+        className="animate-fade-in-up grid grid-cols-1 items-stretch gap-6 lg:grid-cols-5"
+        style={{ animationDelay: '210ms' }}
+      >
         <div className="lg:col-span-3">
           <AdminQueueFunnelCard queues={data.queues} />
         </div>
@@ -100,7 +110,9 @@ export default function AdminDashboardView({ data, initialKind }: AdminDashboard
       </div>
 
       {/* TẦNG 4: Latest Submissions for Review Table (Chuẩn bảng dữ liệu Recruiter) */}
-      <AdminRecentTriageTable items={items} initialKind={initialKind} onApprove={approve} onReject={requestReject} />
+      <div className="animate-fade-in-up" style={{ animationDelay: '280ms' }}>
+        <AdminRecentTriageTable items={items} initialKind={initialKind} onApprove={approve} onReject={requestReject} />
+      </div>
 
       {rejectTarget && <AdminRejectDialog item={rejectTarget} onClose={closeReject} onConfirm={confirmReject} />}
     </div>
