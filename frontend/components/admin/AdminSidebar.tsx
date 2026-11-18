@@ -8,10 +8,10 @@ import {
   visibleSections,
 } from '@/lib/admin-nav';
 import { cn } from '@/lib/utils';
-import type { AdminNavItem, AdminNavSection, AdminPermission, AdminQueueCounts } from '@/types/admin';
+import type { AdminNavItem, AdminPermission, AdminQueueCounts } from '@/types/admin';
 import { ROUTES } from '@/constants/routes';
 import { useUnreadCount } from '@/hooks/useNotifications';
-import { ChevronDown, HelpCircle, Search } from 'lucide-react';
+import { ChevronDown, KeyRound, Lock, ShieldAlert, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -28,22 +28,6 @@ interface AdminSidebarProps {
   className?: string;
 }
 
-function filterByQuery(sections: AdminNavSection[], needle: string): AdminNavSection[] {
-  if (!needle) return sections;
-
-  return sections
-    .map((section) => ({
-      ...section,
-      items: section.items.reduce<AdminNavItem[]>((kept, item) => {
-        if (item.label.toLowerCase().includes(needle)) return [...kept, item];
-
-        const children = (item.children ?? []).filter((child) => child.label.toLowerCase().includes(needle));
-        return children.length > 0 ? [...kept, { ...item, children }] : kept;
-      }, []),
-    }))
-    .filter((section) => section.items.length > 0);
-}
-
 export default function AdminSidebar({
   isCollapsed,
   queueCounts,
@@ -56,12 +40,10 @@ export default function AdminSidebar({
   className,
 }: AdminSidebarProps) {
   const pathname = usePathname();
-  const [query, setQuery] = useState('');
   const [toggled, setToggled] = useState<Record<string, boolean>>({});
   const { total: unreadNotificationsCount } = useUnreadCount('admin');
 
-  const needle = query.trim().toLowerCase();
-  const sections = useMemo(() => filterByQuery(visibleSections(permissions), needle), [permissions, needle]);
+  const sections = useMemo(() => visibleSections(permissions), [permissions]);
 
   const renderBadge = (count: number, isAction: boolean, isNotification = false) =>
     count > 0 ? (
@@ -69,9 +51,9 @@ export default function AdminSidebar({
         className={cn(
           'text-label-sm shrink-0 rounded-full px-2 py-0.5 font-bold tabular-nums',
           isNotification
-            ? 'bg-primary text-white shadow-2xs'
+            ? 'bg-rose-500 text-white shadow-2xs'
             : isAction
-              ? 'bg-amber-100 text-amber-700'
+              ? 'dark:bg-forest-800 dark:text-forest-200 bg-surface-container-high text-on-surface-variant'
               : 'dark:bg-forest-850 dark:text-forest-300 bg-surface-container-high text-on-surface-variant',
         )}
       >
@@ -87,7 +69,7 @@ export default function AdminSidebar({
     const hasChildren = Boolean(item.children?.length) && !item.href;
 
     if (hasChildren) {
-      const isExpanded = toggled[item.label] ?? (hasActiveDescendant(item, pathname) || needle.length > 0);
+      const isExpanded = toggled[item.label] ?? hasActiveDescendant(item, pathname);
 
       if (isCollapsed) {
         return (
@@ -262,65 +244,101 @@ export default function AdminSidebar({
         className,
       )}
     >
-      <div className={isCollapsed ? 'flex justify-center p-3' : 'p-5'}>
-        <div className={isCollapsed ? '' : 'flex items-center gap-3.5'}>
-          <div
-            className={cn(
-              'from-primary flex shrink-0 items-center justify-center rounded-2xl bg-linear-to-tr to-[#00d660] font-bold text-white shadow-sm',
-              isCollapsed ? 'h-10 w-10 text-base' : 'h-12 w-12 text-lg',
+      <div className={isCollapsed ? 'flex justify-center p-3' : 'p-3.5 pb-2'}>
+        <div
+          className={cn(
+            !isCollapsed &&
+              'dark:border-forest-800 dark:bg-forest-850/60 border-outline-variant/80 bg-surface-container-lowest rounded-xl border p-3 shadow-2xs',
+          )}
+        >
+          <div className={isCollapsed ? '' : 'flex items-center gap-3'}>
+            <div className="relative shrink-0">
+              <div
+                className={cn(
+                  'bg-primary-light text-primary-deep dark:bg-forest-800 dark:text-forest-200 border-primary/20 flex shrink-0 items-center justify-center rounded-xl border font-bold',
+                  isCollapsed ? 'h-10 w-10 text-base' : 'h-11 w-11 text-base',
+                )}
+              >
+                {adminName?.charAt(0).toUpperCase()}
+              </div>
+              <span
+                className="dark:border-forest-900 bg-primary absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full border-2 border-white"
+                title="Active administrator session"
+              />
+            </div>
+
+            {!isCollapsed && (
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <h3 className="text-navy dark:text-forest-50 text-body-md truncate font-bold">{adminName}</h3>
+                </div>
+                <p className="text-label-sm text-on-surface-variant dark:text-forest-400 truncate">
+                  {adminEmail || 'admin@intervue.com'}
+                </p>
+                <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                  <span className="bg-primary/10 text-primary border-primary/20 inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[11px] font-semibold">
+                    <ShieldCheck className="h-3 w-3" />
+                    Super Admin
+                  </span>
+                  <span className="bg-surface-container-high text-on-surface-variant dark:bg-forest-800 dark:text-forest-300 inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium">
+                    Full Access
+                  </span>
+                </div>
+              </div>
             )}
-          >
-            {adminName?.charAt(0).toUpperCase()}
           </div>
 
           {!isCollapsed && (
-            <div className="min-w-0 flex-1">
-              <p className="dark:text-forest-300 text-label-sm text-on-surface-variant">Administrator</p>
-              <h3 className="text-navy dark:text-forest-50 text-body-lg truncate font-bold">{adminName}</h3>
-              <p className="dark:text-forest-300 text-body-sm text-on-surface-variant truncate">{adminEmail}</p>
+            <div className="dark:border-forest-800 border-outline-variant/60 mt-3 space-y-2 border-t pt-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-on-surface-variant dark:text-forest-400">Security assurance:</span>
+                {twoFactorEnabled ? (
+                  <span className="text-primary inline-flex items-center gap-1 font-semibold">
+                    <Lock className="text-primary h-3 w-3" />
+                    2FA Enforced
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 font-semibold text-rose-600">
+                    <ShieldAlert className="h-3 w-3 text-rose-600" />
+                    2FA Off
+                  </span>
+                )}
+              </div>
+
+              {twoFactorEnabled ? (
+                <div className="flex items-center gap-2 pt-0.5">
+                  <Link
+                    href={ROUTES.ADMIN_PLATFORM_SETTINGS}
+                    onClick={onNavigate}
+                    className="border-outline-variant dark:border-forest-750 bg-surface-container-low hover:bg-surface-container-high dark:bg-forest-800 dark:hover:bg-forest-750 text-navy dark:text-forest-100 hover:border-outline text-body-sm flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-1.5 font-semibold shadow-2xs transition"
+                  >
+                    <SlidersHorizontal className="text-primary h-3.5 w-3.5" />
+                    <span>Platform Settings</span>
+                  </Link>
+
+                  <Link
+                    href={ROUTES.ADMIN_ACCOUNT_SECURITY}
+                    onClick={onNavigate}
+                    title="Account security & 2FA credentials"
+                    className="border-outline-variant dark:border-forest-750 bg-surface-container-low hover:bg-surface-container-high dark:bg-forest-800 dark:hover:bg-forest-750 text-on-surface-variant dark:text-forest-200 hover:text-navy hover:border-outline flex items-center justify-center rounded-lg border p-1.5 shadow-2xs transition"
+                  >
+                    <KeyRound className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              ) : (
+                <Link
+                  href={ROUTES.ADMIN_ACCOUNT_SECURITY}
+                  onClick={onNavigate}
+                  className="text-body-sm flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-3 py-1.5 font-semibold text-white shadow-2xs transition hover:bg-amber-600"
+                >
+                  <ShieldAlert className="h-4 w-4" />
+                  <span>Enable 2FA Protection</span>
+                </Link>
+              )}
             </div>
           )}
         </div>
-
-        {!isCollapsed && (
-          <>
-            <div className="text-body-sm mt-3 flex items-center gap-1.5">
-              <span className="dark:text-forest-300 text-on-surface-variant">Security:</span>
-              <span className={cn('font-bold', twoFactorEnabled ? 'text-primary' : 'text-rose-600')}>
-                {twoFactorEnabled ? '2FA on' : '2FA off'}
-              </span>
-              <span title="Admin accounts hold the most destructive permissions on the platform">
-                <HelpCircle className="text-outline h-3.5 w-3.5" />
-              </span>
-            </div>
-
-            {!twoFactorEnabled && (
-              <Link
-                href={ROUTES.ACCOUNT_TWO_FACTOR}
-                onClick={onNavigate}
-                className="text-body-sm mt-3 flex w-full items-center justify-center rounded-full bg-amber-600 px-3 py-2 font-bold text-white transition-colors hover:bg-amber-700"
-              >
-                Turn on two-factor auth
-              </Link>
-            )}
-          </>
-        )}
       </div>
-
-      {!isCollapsed && (
-        <div className="px-4 pb-1">
-          <label className="dark:border-forest-800 dark:bg-forest-850/60 dark:focus-within:bg-forest-850 border-outline-variant bg-surface-container-low focus-within:border-outline-variant flex items-center gap-2 rounded-xl border px-3 py-2 focus-within:bg-white">
-            <Search className="text-outline h-3.5 w-3.5 shrink-0" />
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Filter sections"
-              aria-label="Filter sections"
-              className="text-navy dark:text-forest-50 text-body-sm placeholder:text-outline min-w-0 flex-1 bg-transparent outline-none"
-            />
-          </label>
-        </div>
-      )}
 
       {sections.length === 0 && !isCollapsed && (
         <p className="text-body-sm text-outline px-5 py-4">No section matches.</p>
@@ -331,32 +349,18 @@ export default function AdminSidebar({
         const sectionTotal = sectionPendingCount(section, queueCounts);
 
         return (
-          <nav
-            key={section.id}
-            aria-label={section.title}
-            className={cn(
-              'space-y-0.5 px-2 py-1',
-              isAction && !isCollapsed && 'mx-2 my-2 rounded-2xl bg-amber-50/60 px-2 py-2 dark:bg-amber-500/5',
-            )}
-          >
-            {sectionIndex > 0 && !isAction && (
-              <div className="dark:border-forest-800 border-outline-variant mx-1 my-2 border-t" />
-            )}
+          <nav key={section.id} aria-label={section.title} className="space-y-0.5 px-2 py-1">
+            {sectionIndex > 0 && <div className="dark:border-forest-800 border-outline-variant mx-1 my-2 border-t" />}
 
             {!isCollapsed && (
-              <div className="flex items-center justify-between gap-2 px-2.5 pt-1 pb-1.5">
-                <span
-                  className={cn(
-                    'text-label-sm truncate font-bold tracking-wider uppercase',
-                    isAction ? 'text-amber-700 dark:text-amber-400' : 'text-outline',
-                  )}
-                >
+              <div className="flex items-center justify-between gap-2 px-2.5 pt-1.5 pb-1">
+                <span className="text-label-sm text-outline truncate font-bold tracking-wider uppercase">
                   {section.title}
                 </span>
 
                 {isAction && sectionTotal > 0 && (
-                  <span className="text-label-sm shrink-0 rounded-full bg-amber-600 px-1.5 py-0.5 font-bold text-white tabular-nums">
-                    {sectionTotal}
+                  <span className="text-primary bg-primary-light dark:bg-forest-800 border-primary/20 rounded-full border px-2 py-0.5 text-[10px] font-bold tabular-nums">
+                    {sectionTotal} pending
                   </span>
                 )}
               </div>

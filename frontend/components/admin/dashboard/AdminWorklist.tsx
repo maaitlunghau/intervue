@@ -24,23 +24,31 @@ export default function AdminWorklist({ items, initialKind, onApprove, onReject 
 
   const chipClass = (isActive: boolean) =>
     cn(
-      'cursor-pointer rounded-full px-2.5 py-1 text-body-sm font-bold transition-colors',
+      'cursor-pointer rounded-lg px-3 py-1.5 text-xs font-semibold transition-all',
       isActive
-        ? 'bg-primary text-white'
-        : 'text-on-surface-variant hover:bg-surface-container-low dark:text-forest-300 dark:hover:bg-forest-850',
+        ? 'bg-primary text-white shadow-2xs'
+        : 'text-on-surface-variant hover:bg-surface-container-high dark:text-forest-300 dark:hover:bg-forest-800',
     );
 
   const filterChips = (
-    <div className="flex flex-wrap items-center gap-1">
+    <div className="bg-surface-container-low dark:bg-forest-850 flex flex-wrap items-center gap-1.5 rounded-xl p-1">
       <button type="button" onClick={() => setKindFilter('all')} className={chipClass(kindFilter === 'all')}>
-        All
+        All ({items.length})
       </button>
 
-      {kinds.map((kind) => (
-        <button key={kind} type="button" onClick={() => setKindFilter(kind)} className={chipClass(kindFilter === kind)}>
-          {WORK_ITEM_KIND_LABEL[kind]}
-        </button>
-      ))}
+      {kinds.map((kind) => {
+        const count = items.filter((item) => item.kind === kind).length;
+        return (
+          <button
+            key={kind}
+            type="button"
+            onClick={() => setKindFilter(kind)}
+            className={chipClass(kindFilter === kind)}
+          >
+            {WORK_ITEM_KIND_LABEL[kind]} {count > 0 && `(${count})`}
+          </button>
+        );
+      })}
     </div>
   );
 
@@ -55,10 +63,14 @@ export default function AdminWorklist({ items, initialKind, onApprove, onReject 
 
   return (
     <section className="dark:border-forest-800 dark:bg-forest-900 border-outline-variant overflow-hidden rounded-2xl border bg-white shadow-xs">
-      <header className="dark:border-forest-800 border-outline-variant flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3.5">
-        <div className="flex items-baseline gap-2">
-          <h2 className="text-navy dark:text-forest-50 text-body-md font-bold">Next up</h2>
-          <span className="text-label-sm text-outline">{visible.length} shown</span>
+      <header className="dark:border-forest-800 border-outline-variant flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4">
+        <div>
+          <h2 className="text-navy dark:text-forest-50 font-display text-base font-bold">
+            Rapid Triage Desk (Duyệt nhanh hồ sơ tiếp theo)
+          </h2>
+          <p className="dark:text-forest-300 text-on-surface-variant mt-0.5 text-xs">
+            Xử lý tác vụ trực tiếp mà không cần chuyển trang sâu ({visible.length} hồ sơ hiển thị)
+          </p>
         </div>
 
         {filterChips}
