@@ -12,7 +12,7 @@ export function Sparkline({ values, className }: SparklineProps) {
       {values.map((value, index) => (
         <div
           key={index}
-          className={`w-1.5 flex-1 rounded-sm ${index === values.length - 1 ? 'bg-primary' : 'bg-primary/25'}`}
+          className={`w-1.5 flex-1 origin-bottom rounded-sm transition-all duration-500 ease-out ${index === values.length - 1 ? 'bg-primary' : 'bg-primary/25'}`}
           style={{ height: `${Math.max((value / max) * 100, 8)}%` }}
         />
       ))}
