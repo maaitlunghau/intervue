@@ -224,7 +224,7 @@ The status is fetched from `NEXT_PUBLIC_API_URL`, the same base the browser clie
 | `hooks/useMaintenance.ts` | React Query hook shared by the banner and the settings form |
 | `app/maintenance/page.tsx` | the notice page (rewrite target); redirects to `/` if hit directly while maintenance is off, so it is never an orphan URL |
 | `components/maintenance/MaintenanceNotice.tsx` | logo → headline → 2 lines → sign-off → illustration → rule |
-| `components/maintenance/WorkZoneBarrier.tsx` | the chosen illustration as an inline SVG |
+| `components/maintenance/MaintenanceCablePlugs.tsx` | the TopCV-benchmark two cable plugs illustration as an inline SVG |
 | `components/admin/platform/AdminMaintenanceSettingsView.tsx` | the admin form |
 | `app/(admin)/admin/platform/settings/page.tsx` | admin route, mirroring `admin/finance/settings` |
 | `components/admin/dashboard/AdminMaintenanceBanner.tsx` | the dashboard reminder |
