@@ -1,4 +1,4 @@
-import WorkZoneBarrier from '@/components/maintenance/WorkZoneBarrier';
+import MaintenanceCablePlugs from '@/components/maintenance/MaintenanceCablePlugs';
 import type { MaintenanceStatus } from '@/types/platform';
 import Image from 'next/image';
 
@@ -19,41 +19,63 @@ function formatResumeTime(iso: string): string | null {
   }).format(date);
 }
 
+function isTimePassed(iso: string | null): boolean {
+  if (!iso) return false;
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return false;
+  return date.getTime() < Date.now();
+}
+
 export default function MaintenanceNotice({ status }: MaintenanceNoticeProps) {
+  const isOverdue = isTimePassed(status.estimatedResumeAt);
   const resumeAt = status.estimatedResumeAt ? formatResumeTime(status.estimatedResumeAt) : null;
 
   return (
-    <main className="flex min-h-screen justify-center bg-white">
+    <main className="flex min-h-screen w-full justify-center bg-white px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:pt-24">
       {/* The root layout mounts the chatbot everywhere; its API is blocked here anyway. */}
       <style>{`[data-support-chatbot]{display:none}`}</style>
 
-      <div className="w-full max-w-[1180px] px-6 pt-18 pb-12 text-center">
-        <Image
-          src="/intervue-logo.png"
-          alt="InterVue"
-          width={220}
-          height={60}
-          priority
-          className="mx-auto mb-11 h-13 w-auto object-contain"
-        />
+      <div className="w-full max-w-4xl text-center">
+        {/* Brand Logo */}
+        <div className="mb-7 flex justify-center sm:mb-9">
+          <Image
+            src="/intervue-logo.png"
+            alt="InterVue"
+            width={220}
+            height={56}
+            priority
+            className="h-10 w-auto object-contain sm:h-12"
+          />
+        </div>
 
-        <h1 className="text-navy text-[clamp(30px,4.6vw,52px)] leading-[1.2] font-extrabold tracking-[-0.6px]">
+        {/* 1-Line Heading: Positioned Top-Center, stays on 1 line on desktop and tablet */}
+        <h1 className="text-navy text-2xl leading-snug font-bold tracking-tight whitespace-normal sm:text-3xl sm:whitespace-nowrap lg:text-[32px]">
           The website is under maintenance for a system upgrade
         </h1>
 
-        <div className="mt-7 space-y-3.5 text-[clamp(15px,1.45vw,19px)] leading-[1.75] text-[#6f7882]">
-          {resumeAt && (
-            <p>
-              We expect to be back online at <strong className="text-navy font-bold">{resumeAt}</strong>.
-            </p>
-          )}
-          <p>{status.message ?? DEFAULT_MESSAGE}</p>
-          <p className="pt-2 text-[#9aa3ab]">— InterVue</p>
+        {/* Subtext description */}
+        <div className="mx-auto mt-4 max-w-2xl space-y-1.5 text-sm leading-relaxed text-[#6f7882] sm:mt-5 sm:max-w-3xl sm:space-y-2 sm:text-base">
+          {resumeAt &&
+            (isOverdue ? (
+              <p className="font-medium whitespace-normal text-amber-700 sm:whitespace-nowrap">
+                We are finalizing the upgrade and expect to be back online shortly.
+              </p>
+            ) : (
+              <p className="whitespace-normal sm:whitespace-nowrap">
+                We expect to be back online at <strong className="text-navy font-bold">{resumeAt}</strong>.
+              </p>
+            ))}
+          <p className="whitespace-normal sm:whitespace-nowrap">{status.message ?? DEFAULT_MESSAGE}</p>
+          <p className="pt-1 text-xs font-medium text-[#9aa3ab] sm:text-sm">— InterVue Team</p>
         </div>
 
-        <WorkZoneBarrier className="mx-auto mt-13 w-[min(700px,88vw)]" />
+        {/* Graphic: Prominent Two Flat Tech Plugs Disconnected (TopCV Benchmark) */}
+        <div className="mt-10 flex justify-center sm:mt-14">
+          <MaintenanceCablePlugs className="w-full max-w-[680px] sm:max-w-[760px]" />
+        </div>
 
-        <hr className="mx-auto mt-14 max-w-[900px] border-t border-[#e9eaec]" />
+        {/* Subtle Horizontal Divider Line */}
+        <hr className="mx-auto mt-10 max-w-[760px] border-t border-[#f1f5f9] sm:mt-14" />
       </div>
     </main>
   );
