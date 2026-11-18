@@ -18,26 +18,36 @@ export default function AdminPageBar({ permissions }: AdminPageBarProps) {
   const title = trail.at(-1)?.label ?? 'Admin';
 
   return (
-    <div className="dark:border-forest-800 dark:bg-forest-900 border-outline-variant sticky top-18 z-30 border-b bg-white px-4 py-3.5 sm:px-6 lg:px-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="dark:border-forest-800 dark:bg-forest-900 border-outline-variant sticky top-16 z-30 border-b bg-white px-4 py-3 transition-colors sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between gap-3">
+        {/* Left: Page Title */}
         <div className="min-w-0 flex-1">
-          <nav aria-label="Breadcrumb" className="text-label-sm flex flex-wrap items-center gap-1.5">
+          <h1 className="text-navy dark:text-forest-50 font-display truncate text-xl font-bold tracking-tight">
+            {title}
+          </h1>
+        </div>
+
+        {/* Right: Breadcrumb Trail & Slot Actions */}
+        <div className="flex shrink-0 items-center gap-3">
+          <nav aria-label="Breadcrumb" className="text-body-sm flex items-center gap-2 font-medium sm:text-sm">
             {trail.map((entry, index) => {
               const isLast = index === trail.length - 1;
 
               return (
-                <span key={`${entry.label}-${index}`} className="flex items-center gap-1.5">
-                  {index > 0 && <ChevronRight className="text-outline h-3 w-3 shrink-0" aria-hidden="true" />}
+                <span key={`${entry.label}-${index}`} className="flex items-center gap-2">
+                  {index > 0 && <ChevronRight className="text-outline h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
 
                   {entry.href && !isLast && isRouteAvailable(entry.href) ? (
                     <Link
                       href={entry.href}
-                      className="dark:text-forest-400 dark:hover:text-forest-100 text-outline hover:text-on-surface-variant transition-colors hover:underline"
+                      className="text-on-surface-variant hover:text-navy dark:text-forest-300 dark:hover:text-forest-50 transition-colors hover:underline"
                     >
                       {entry.label}
                     </Link>
                   ) : (
-                    <span className={isLast ? 'text-primary font-semibold' : 'dark:text-forest-400 text-outline'}>
+                    <span
+                      className={isLast ? 'text-primary font-bold' : 'text-on-surface-variant dark:text-forest-400'}
+                    >
                       {entry.label}
                     </span>
                   )}
@@ -46,10 +56,8 @@ export default function AdminPageBar({ permissions }: AdminPageBarProps) {
             })}
           </nav>
 
-          <h1 className="text-navy dark:text-forest-50 mt-1 truncate text-xl font-bold">{title}</h1>
+          <div ref={slotRef} className="flex shrink-0 items-center gap-2 empty:hidden" />
         </div>
-
-        <div ref={slotRef} className="flex shrink-0 flex-wrap items-center gap-2 empty:hidden" />
       </div>
     </div>
   );
