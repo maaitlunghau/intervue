@@ -158,6 +158,7 @@ export default function AdminShell({ children, queueCounts, account, permissions
         queueCounts={liveQueueCounts}
         onToggleSidebar={() => setSidebarCollapsed(!isCollapsed)}
         onOpenMobileNav={() => setMobileNavOpen(true)}
+        onOpenPalette={() => setPaletteOpen(true)}
       />
 
       <div className="flex w-full flex-1 flex-col lg:flex-row">
@@ -169,7 +170,7 @@ export default function AdminShell({ children, queueCounts, account, permissions
           adminEmail={profile?.email || user?.email}
           permissions={permissions}
           onExpand={() => setSidebarCollapsed(false)}
-          className="dark:border-forest-800 border-outline-variant hidden transition-[width] duration-200 lg:sticky lg:top-18 lg:block lg:h-[calc(100vh-4.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:border-r"
+          className="dark:border-forest-800 border-outline-variant hidden transition-[width] duration-200 lg:sticky lg:top-16 lg:block lg:h-[calc(100vh-4rem)] lg:overflow-y-auto lg:overscroll-contain lg:border-r"
         />
 
         <main className="min-w-0 flex-1">
