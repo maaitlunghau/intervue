@@ -1,11 +1,5 @@
-import AdminPaymentSettingsPageClient from '@/components/admin/finance/AdminPaymentSettingsPageClient';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Payment Settings | InterVue Admin',
-  description: 'VAT, order expiry and the SePay bank account used for recruiter payments.',
-};
+import { redirect } from 'next/navigation';
 
 export default function AdminPaymentSettingsPage() {
-  return <AdminPaymentSettingsPageClient />;
+  redirect('/admin/platform/settings?tab=payment');
 }

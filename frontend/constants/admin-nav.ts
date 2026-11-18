@@ -13,10 +13,10 @@ import {
   Library,
   Package,
   ScrollText,
+  Settings,
   ShieldCheck,
   Users,
   Wallet,
-  Wrench,
 } from 'lucide-react';
 
 export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
@@ -197,12 +197,6 @@ export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
             permission: 'finance.manage',
             comingSoon: false,
           },
-          {
-            label: 'Payment settings',
-            href: ROUTES.ADMIN_FINANCE_SETTINGS,
-            permission: 'finance.manage',
-            comingSoon: false,
-          },
           { label: 'Refunds', href: ROUTES.ADMIN_FINANCE_REFUNDS, permission: 'finance.manage', comingSoon: false },
           {
             label: 'Invoices',
@@ -257,9 +251,9 @@ export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
         comingSoon: true,
       },
       {
-        label: 'Maintenance mode',
+        label: 'Settings',
         href: ROUTES.ADMIN_PLATFORM_SETTINGS,
-        icon: Wrench,
+        icon: Settings,
       },
       {
         label: 'Notifications',
