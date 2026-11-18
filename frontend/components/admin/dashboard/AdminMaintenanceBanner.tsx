@@ -4,6 +4,7 @@ import { ROUTES } from '@/constants/routes';
 import { useMaintenanceSettings } from '@/hooks/useMaintenance';
 import { ArrowRight, TriangleAlert } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
 
 function formatElapsed(enabledAt: string): string | null {
   const started = new Date(enabledAt).getTime();
@@ -15,10 +16,12 @@ function formatElapsed(enabledAt: string): string | null {
 
 export default function AdminMaintenanceBanner() {
   const { data } = useMaintenanceSettings();
+  const [nowMs] = useState(() => Date.now());
 
   if (!data?.enabled) return null;
 
   const elapsed = data.enabledAt ? formatElapsed(data.enabledAt) : null;
+  const isOverdue = Boolean(data.estimatedResumeAt) && new Date(data.estimatedResumeAt!).getTime() < nowMs;
 
   return (
     <section className="flex flex-wrap items-center gap-3.5 rounded-2xl border border-amber-300 bg-amber-50 px-4.5 py-4 dark:border-amber-500/40 dark:bg-amber-500/10">
@@ -35,10 +38,16 @@ export default function AdminMaintenanceBanner() {
               {elapsed}
             </span>
           )}
+          {isOverdue && (
+            <span className="text-label-sm rounded-full bg-rose-100 px-2.5 py-0.5 font-bold text-rose-700 dark:bg-rose-500/20 dark:text-rose-300">
+              Overdue
+            </span>
+          )}
         </p>
         <p className="text-body-sm mt-1 leading-relaxed text-amber-800 dark:text-amber-300/90">
-          Candidates and recruiters cannot reach any page right now. Remember to switch this off once the upgrade is
-          finished.
+          {isOverdue
+            ? 'Estimated resume time has passed. Please verify upgrade completion and reopen the platform or update the time.'
+            : 'Candidates and recruiters cannot reach any page right now. Remember to switch this off once the upgrade is finished.'}
         </p>
       </div>
 
