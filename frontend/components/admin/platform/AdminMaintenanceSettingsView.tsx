@@ -35,6 +35,9 @@ const INPUT_CLASS = cn(
 
 const MAINTENANCE_FIELDS: ReadonlyArray<keyof MaintenanceFormData> = ['enabled', 'message', 'estimatedResumeAt'];
 
+export const DEFAULT_MAINTENANCE_MESSAGE =
+  'Sorry for the inconvenience. Please check back after that time. Thank you so much!';
+
 function formatElapsed(enabledAt: string): string {
   const started = new Date(enabledAt).getTime();
   if (Number.isNaN(started)) return '';
@@ -54,6 +57,7 @@ export default function AdminMaintenanceSettingsView({ initial }: AdminMaintenan
     register,
     handleSubmit,
     reset,
+    setValue,
     setError,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<MaintenanceFormData>({
@@ -61,8 +65,17 @@ export default function AdminMaintenanceSettingsView({ initial }: AdminMaintenan
     defaultValues: toMaintenanceFormDefaults(initial),
   });
 
+  const [nowMs] = useState(() => Date.now());
   const enabled = useWatch({ control, name: 'enabled' });
   const message = useWatch({ control, name: 'message' });
+
+  const isOverdue =
+    serverState.enabled &&
+    Boolean(serverState.estimatedResumeAt) &&
+    new Date(serverState.estimatedResumeAt!).getTime() < nowMs;
+  const overdueMinutes = isOverdue
+    ? Math.floor((nowMs - new Date(serverState.estimatedResumeAt!).getTime()) / 60_000)
+    : 0;
 
   const persist = async (values: MaintenanceFormData) => {
     try {
@@ -90,12 +103,27 @@ export default function AdminMaintenanceSettingsView({ initial }: AdminMaintenan
       <AdminPageHeader description="Close the platform to candidates and recruiters while you upgrade. The admin area stays reachable." />
 
       {serverState.enabled && (
-        <div className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-500/40 dark:bg-amber-500/10">
-          <TriangleAlert className="h-4.5 w-4.5 shrink-0 text-amber-600 dark:text-amber-400" />
-          <p className="text-body-sm font-semibold text-amber-800 dark:text-amber-300">
-            The site is currently closed to candidates and recruiters
-            {serverState.enabledAt && ` — on for ${formatElapsed(serverState.enabledAt)}`}.
-          </p>
+        <div className="space-y-2.5">
+          <div className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-500/40 dark:bg-amber-500/10">
+            <TriangleAlert className="h-4.5 w-4.5 shrink-0 text-amber-600 dark:text-amber-400" />
+            <p className="text-body-sm font-semibold text-amber-800 dark:text-amber-300">
+              The site is currently closed to candidates and recruiters
+              {serverState.enabledAt && ` — on for ${formatElapsed(serverState.enabledAt)}`}.
+            </p>
+          </div>
+
+          {isOverdue && (
+            <div className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-rose-300 bg-rose-50 px-4 py-3 dark:border-rose-500/40 dark:bg-rose-500/10">
+              <TriangleAlert className="h-4.5 w-4.5 shrink-0 text-rose-600 dark:text-rose-400" />
+              <p className="text-body-sm font-semibold text-rose-800 dark:text-rose-300">
+                Estimated resume time has passed (overdue by{' '}
+                {overdueMinutes >= 60
+                  ? `${Math.floor(overdueMinutes / 60)}h ${overdueMinutes % 60}m`
+                  : `${overdueMinutes}m`}
+                ). Remember to reopen the platform or update the estimated time.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
@@ -121,14 +149,23 @@ export default function AdminMaintenanceSettingsView({ initial }: AdminMaintenan
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor={`${formId}-message`} className="text-navy dark:text-forest-100 text-body-sm font-semibold">
-            Custom message <span className="text-outline font-normal">(optional)</span>
-          </label>
+          <div className="flex items-center justify-between">
+            <label htmlFor={`${formId}-message`} className="text-navy dark:text-forest-100 text-body-sm font-semibold">
+              Custom message <span className="text-outline font-normal">(optional)</span>
+            </label>
+            <button
+              type="button"
+              onClick={() => setValue('message', DEFAULT_MAINTENANCE_MESSAGE, { shouldDirty: true })}
+              className="text-label-sm text-primary cursor-pointer font-medium transition-colors hover:underline"
+            >
+              Use default template
+            </button>
+          </div>
           <textarea
             id={`${formId}-message`}
             rows={3}
             maxLength={MAINTENANCE_MESSAGE_MAX_LENGTH}
-            placeholder="Leave empty to use the default apology line."
+            placeholder={DEFAULT_MAINTENANCE_MESSAGE}
             className={cn(INPUT_CLASS, 'resize-y')}
             {...register('message')}
           />
@@ -138,6 +175,9 @@ export default function AdminMaintenanceSettingsView({ initial }: AdminMaintenan
               {(message ?? '').length}/{MAINTENANCE_MESSAGE_MAX_LENGTH}
             </p>
           </div>
+          <p className="text-label-sm text-outline">
+            Leave empty to use the default apology message shown in the placeholder.
+          </p>
         </div>
 
         <div className="space-y-1.5">
