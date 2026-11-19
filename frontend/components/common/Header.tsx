@@ -13,11 +13,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import HeaderAccountActions from './header/HeaderAccountActions';
-import CvMegaMenu from './header/megamenu/CvMegaMenu';
-import GuidesMegaMenu from './header/megamenu/GuidesMegaMenu';
-import JobsMegaMenu from './header/megamenu/JobsMegaMenu';
-import NavMegaMenu from './header/megamenu/NavMegaMenu';
-import ToolsMegaMenu from './header/megamenu/ToolsMegaMenu';
+import CandidateNavMegaMenus from './header/megamenu/CandidateNavMegaMenus';
 import MobileNavDrawer from './header/MobileNavDrawer';
 import RecruiterEntryButton from './header/RecruiterEntryButton';
 
@@ -88,40 +84,7 @@ export default function Header({ portal = 'candidate' }: HeaderProps) {
                 </Link>
               ))
             ) : (
-              <>
-                <NavMegaMenu
-                  label="Jobs"
-                  isActive={pathname.startsWith('/jobs')}
-                  alignClass="left-0 w-[1060px] xl:w-[1140px]"
-                >
-                  {({ close }) => <JobsMegaMenu onClose={close} />}
-                </NavMegaMenu>
-
-                <NavMegaMenu
-                  label="Create CV"
-                  isActive={pathname.startsWith('/cv') || pathname.startsWith('/profile')}
-                  alignClass="-left-20 xl:left-0 w-[840px] xl:w-[880px]"
-                >
-                  {({ close }) => <CvMegaMenu onClose={close} />}
-                </NavMegaMenu>
-
-                <NavMegaMenu
-                  label="Career guides"
-                  isActive={pathname.startsWith('/career-orientation') || pathname.startsWith('/blog')}
-                  alignClass="-left-44 xl:-left-20 w-[800px] xl:w-[840px]"
-                >
-                  {({ close }) => <GuidesMegaMenu onClose={close} />}
-                </NavMegaMenu>
-
-                <NavMegaMenu
-                  label="Tools & Help"
-                  badge="NEW"
-                  isActive={pathname.startsWith('/tools') || pathname.startsWith('/mock-interview')}
-                  alignClass="-left-72 lg:-left-72 xl:-left-60 w-[900px] xl:w-[960px]"
-                >
-                  {({ close }) => <ToolsMegaMenu onClose={close} />}
-                </NavMegaMenu>
-              </>
+              <CandidateNavMegaMenus pathname={pathname} />
             )}
           </nav>
         </div>
