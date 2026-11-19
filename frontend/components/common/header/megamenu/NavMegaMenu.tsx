@@ -82,7 +82,7 @@ export default function NavMegaMenu({
         <div
           id={menuId}
           className={cn(
-            'animate-fade-in-up absolute top-full z-50 mt-2.5 max-w-[calc(100vw-32px)] overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.1)] transition-all',
+            "animate-megamenu-enter absolute top-full z-50 mt-2.5 max-w-[calc(100vw-32px)] overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.1)] before:absolute before:-top-3.5 before:right-0 before:left-0 before:h-3.5 before:content-['']",
             alignClass,
           )}
         >
