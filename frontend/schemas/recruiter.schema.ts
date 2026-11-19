@@ -9,6 +9,7 @@ export const recruiterProfileSchema = z.object({
     .min(2, 'Full name must be at least 2 characters.')
     .max(50, 'Full name must be at most 50 characters.'),
   gender: z.enum(['MALE', 'FEMALE', 'OTHER'], { error: 'Please select your gender.' }),
+  phone: z.string().trim().optional(),
   companyName: z
     .string()
     .trim()

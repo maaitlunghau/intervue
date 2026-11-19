@@ -89,16 +89,18 @@ export default function SocialAuthButtons({ portal = 'candidate', mode, acceptTe
     );
   }
 
-  // Recruiter Portal format
+  // Recruiter Portal format matching TopCV
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <button
         type="button"
         disabled={termsPending || authorize.isPending || authorize.isSuccess}
         onClick={() => authorize.mutate()}
-        className={cn(BUTTON_BASE, 'h-11 w-full cursor-pointer gap-2.5')}
+        className="flex h-[42px] w-full cursor-pointer items-center justify-center gap-2.5 rounded-md bg-[#4285f4] text-sm font-semibold text-white shadow-xs transition hover:bg-[#3367d6] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        <GoogleIcon />
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white p-0.5">
+          <GoogleIcon />
+        </span>
         <span>
           {authorize.isPending || authorize.isSuccess
             ? 'Redirecting...'
@@ -109,17 +111,8 @@ export default function SocialAuthButtons({ portal = 'candidate', mode, acceptTe
       </button>
 
       {termsPending && (
-        <p className="text-center text-xs text-slate-500">Accept the terms above to continue with Google</p>
+        <p className="text-center text-xs text-slate-500">Please accept the terms above to continue with Google</p>
       )}
-
-      <button
-        type="button"
-        onClick={() => handleComingSoon('LinkedIn')}
-        className={cn(BUTTON_BASE, 'h-11 w-full cursor-pointer gap-2.5')}
-      >
-        <LinkedinIcon />
-        <span>LinkedIn · Coming soon</span>
-      </button>
     </div>
   );
 }
