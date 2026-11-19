@@ -1,81 +1,88 @@
-import Footer from '@/components/common/Footer';
-import Header from '@/components/common/Header';
-import { SUPPORT_EMAIL } from '@/constants/header';
-import { Check } from 'lucide-react';
+import { ROUTES } from '@/constants/routes';
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 interface AuthLayoutProps {
-  title: string;
+  title?: string;
+  subtitle?: string;
+  showLogo?: boolean;
+  titleClassName?: string;
   children: ReactNode;
 }
-
-const BENEFITS = [
-  'Apply quickly with your saved CV',
-  'AI CV feedback and interview practice',
-  'Track the status of every application',
-];
 
 export function InterVueLogo() {
   return (
     <div className="flex items-center justify-center">
-      <Link href="/" className="inline-flex items-center">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/intervue-logo.png" alt="InterVue" className="h-11 w-auto max-w-55 object-contain sm:h-12" />
+      <Link href={ROUTES.HOME} className="inline-flex items-center">
+        <Image
+          src="/intervue-logo.png"
+          alt="InterVue"
+          width={200}
+          height={54}
+          priority
+          className="h-11 w-auto object-contain sm:h-12"
+        />
       </Link>
     </div>
   );
 }
 
-export default function AuthLayout({ title, children }: AuthLayoutProps) {
+export default function AuthLayout({ title, subtitle, showLogo = true, titleClassName, children }: AuthLayoutProps) {
   return (
-    <div className="bg-surface text-on-surface flex min-h-screen flex-col">
-      <Header />
+    <div className="relative flex min-h-screen flex-col justify-between overflow-x-hidden bg-[#F8F9FA] text-[#1E2837]">
+      {/* Pattern at the left (pointing right >) */}
+      <div className="pointer-events-none fixed top-1/2 left-0 z-0 hidden -translate-y-1/2 select-none lg:block">
+        <Image
+          src="/hero-left-pattern.png"
+          alt=""
+          width={180}
+          height={540}
+          priority
+          className="h-[460px] w-auto object-contain"
+        />
+      </div>
 
-      <main className="grid flex-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <aside className="bg-primary-deeper relative hidden overflow-hidden p-14 lg:flex lg:flex-col lg:justify-center">
-          <div aria-hidden className="bg-primary-deep absolute -right-32 -bottom-32 h-[480px] w-[480px] rounded-full" />
-          <div aria-hidden className="bg-noise absolute inset-0 opacity-[0.07]" />
+      {/* Pattern at the right (mirrored: pointing left <) */}
+      <div className="pointer-events-none fixed top-1/2 right-0 z-0 hidden -translate-y-1/2 scale-x-[-1] select-none lg:block">
+        <Image
+          src="/hero-left-pattern.png"
+          alt=""
+          width={180}
+          height={540}
+          priority
+          className="h-[460px] w-auto object-contain"
+        />
+      </div>
 
-          <div className="relative max-w-md">
-            <p className="text-label-lg text-primary-bright flex items-center gap-3 font-bold tracking-widest uppercase">
-              <span aria-hidden className="bg-primary-bright h-px w-10" />
-              For candidates
-            </p>
-            <p className="font-display text-display-md mt-5 text-white">Your next IT job starts here</p>
-            <ul className="mt-10 space-y-4">
-              {BENEFITS.map((benefit) => (
-                <li key={benefit} className="text-title-md flex items-center gap-3 font-normal text-white/85">
-                  <span className="bg-primary flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-white">
-                    <Check className="h-3.5 w-3.5" aria-hidden />
-                  </span>
-                  {benefit}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
+      {/* Main card */}
+      <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-4 sm:py-6">
+        <div className="w-full max-w-[540px] rounded-2xl border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:max-w-[560px] sm:rounded-3xl sm:p-8 sm:py-7">
+          <header className={cn('text-center', showLogo ? 'mb-4 sm:mb-5' : 'mb-5 sm:mb-6')}>
+            {showLogo && <InterVueLogo />}
+            {title && (
+              <h1
+                className={cn(
+                  'font-bold sm:text-[22px]',
+                  showLogo ? 'mt-2.5 text-xl text-[#1E2837]' : 'text-2xl text-[#00B14F]',
+                  titleClassName,
+                )}
+              >
+                {title}
+              </h1>
+            )}
+            {subtitle && <p className="mt-1 text-xs text-[#6C757D] sm:text-sm">{subtitle}</p>}
+          </header>
 
-        <section className="bg-surface-container-low flex items-center justify-center px-4 py-12 sm:py-16">
-          <div className="bg-surface shadow-card w-full max-w-120 rounded-3xl p-7 sm:p-10">
-            <header className="mb-6 text-center">
-              <InterVueLogo />
-              <h1 className="font-display text-headline-sm text-on-surface mt-4 font-bold">{title}</h1>
-            </header>
-
-            {children}
-
-            <footer className="bg-surface-container-low text-body-sm text-on-surface-variant mt-6 rounded-2xl px-4 py-3 text-center leading-relaxed">
-              Need help? Contact{' '}
-              <a href={`mailto:${SUPPORT_EMAIL}`} className="text-primary font-semibold hover:underline">
-                {SUPPORT_EMAIL}
-              </a>
-            </footer>
-          </div>
-        </section>
+          {children}
+        </div>
       </main>
 
-      <Footer />
+      {/* Copyright at bottom */}
+      <footer className="relative z-10 py-3 text-center text-xs text-[#808894] sm:py-4">
+        © 2026. All Rights Reserved. InterVue Vietnam JSC.
+      </footer>
     </div>
   );
 }

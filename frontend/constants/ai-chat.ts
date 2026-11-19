@@ -38,6 +38,13 @@ export function hasBottomBar(pathname: string | null | undefined): boolean {
     pathname.startsWith('/recruiter') ||
     pathname.startsWith('/admin') ||
     pathname === '/mascot' ||
-    pathname.startsWith('/candidate/conversations')
+    pathname.startsWith('/candidate/conversations') ||
+    pathname === '/login' ||
+    pathname === '/register' ||
+    pathname === '/forgot-password' ||
+    pathname === '/reset-password' ||
+    pathname === '/verify-email' ||
+    pathname === '/confirm-email-change' ||
+    pathname.startsWith('/auth')
   );
 }
