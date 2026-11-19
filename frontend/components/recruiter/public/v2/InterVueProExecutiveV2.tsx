@@ -21,12 +21,12 @@ export default function InterVueProExecutiveV2({ onOpenConsultModal }: InterVueP
           </div>
 
           <h2 className="mt-4 text-2xl font-black tracking-tight text-white sm:text-4xl">
-            Tuyển dụng Lập trình viên cấp cao &amp; <span className="text-amber-400">Tech Lead</span>
+            Hire Senior Software Engineers &amp; <span className="text-amber-400">Tech Leads</span>
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base">
-            Không gian tuyển dụng bảo mật danh tính chuyên biệt, kết nối các tập đoàn công nghệ lớn với những chuyên gia
-            hàng đầu (Senior, Tech Lead, Solution Architect, VP of Engineering).
+            A confidential, dedicated executive hiring environment connecting high-growth tech companies with premier
+            technical leaders (Senior, Tech Lead, Solution Architect, VP of Engineering).
           </p>
         </div>
 
@@ -38,22 +38,23 @@ export default function InterVueProExecutiveV2({ onOpenConsultModal }: InterVueP
               <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition-all hover:border-amber-400/50">
                 <div className="flex items-center gap-2.5 text-xs font-black tracking-wider text-amber-300 uppercase">
                   <ShieldCheck className="h-5 w-5 text-amber-400" />
-                  <span>BẢO MẬT DANH TÍNH HAI CHIỀU NGHIÊM NGẶT</span>
+                  <span>STRICT BI-DIRECTIONAL IDENTITY PRIVACY</span>
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-slate-300 sm:text-sm">
-                  Các chuyên gia cấp cao có thể an tâm bật chế độ tìm việc ẩn danh. Thông tin liên hệ chỉ được chia sẻ
-                  khi ứng viên đồng ý kết nối với doanh nghiệp của bạn, loại bỏ rủi ro lộ tin với công ty hiện tại.
+                  Executive talent can explore career opportunities with complete anonymity. Contact details are
+                  disclosed only when candidates formally accept your connection request, eliminating any risk with
+                  their current employer.
                 </p>
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition-all hover:border-amber-400/50">
                 <div className="flex items-center gap-2.5 text-xs font-black tracking-wider text-amber-300 uppercase">
                   <Zap className="h-5 w-5 text-amber-400" />
-                  <span>ĐÁNH GIÁ NĂNG LỰC KIẾN TRÚC &amp; QUẢN TRỊ DỰ ÁN</span>
+                  <span>ARCHITECTURE &amp; ENGINEERING LEADERSHIP BENCHMARKING</span>
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-slate-300 sm:text-sm">
-                  Hồ sơ được thẩm định bởi bài test System Design, High-load Optimization và kinh nghiệm dẫn dắt đội ngũ
-                  kỹ thuật. Đảm bảo ứng viên có khả năng gánh vác các bài toán kiến trúc công nghệ phức tạp.
+                  Profiles are pre-assessed through real-world System Design evaluations, high-concurrency optimization
+                  scenarios, and engineering leadership assessments to ensure immediate organizational impact.
                 </p>
               </div>
 
@@ -64,12 +65,12 @@ export default function InterVueProExecutiveV2({ onOpenConsultModal }: InterVueP
                   className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-amber-400 px-8 py-3.5 text-xs font-black text-slate-950 shadow-md transition-all hover:bg-amber-300 sm:text-sm"
                 >
                   <Headphones className="h-4 w-4" />
-                  <span>Tư vấn dịch vụ InterVue Pro</span>
+                  <span>Consult with InterVue Pro Team</span>
                   <ArrowRight className="h-4 w-4" />
                 </button>
 
                 <span className="text-xs text-slate-400">
-                  Phí dịch vụ thành công, bảo hành ứng viên lên tới 60 ngày.
+                  Success-based fee model with up to 60-day candidate warranty.
                 </span>
               </div>
             </div>
@@ -84,10 +85,10 @@ export default function InterVueProExecutiveV2({ onOpenConsultModal }: InterVueP
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-sm font-bold text-white">Senior Tech Lead (Ẩn danh)</span>
+                        <span className="text-sm font-bold text-white">Senior Tech Lead (Confidential)</span>
                         <Lock className="h-3.5 w-3.5 text-amber-400" />
                       </div>
-                      <span className="text-xs text-slate-400">8+ năm kinh nghiệm • Distributed Systems</span>
+                      <span className="text-xs text-slate-400">8+ years exp • Distributed Systems</span>
                     </div>
                   </div>
                   <span className="rounded-full bg-amber-400/20 px-2.5 py-1 text-xs font-black text-amber-300">
@@ -97,22 +98,22 @@ export default function InterVueProExecutiveV2({ onOpenConsultModal }: InterVueP
 
                 <div className="mt-5 space-y-2.5 text-xs">
                   <div className="flex justify-between border-b border-white/5 py-1">
-                    <span className="text-slate-400">Kiến trúc:</span>
+                    <span className="text-slate-400">Architecture:</span>
                     <span className="font-semibold text-white">Microservices, Event-Driven, Kafka</span>
                   </div>
                   <div className="flex justify-between border-b border-white/5 py-1">
-                    <span className="text-slate-400">Quy mô hệ thống:</span>
+                    <span className="text-slate-400">System Scale:</span>
                     <span className="font-semibold text-white">50M+ requests/day, 99.99% SLA</span>
                   </div>
                   <div className="flex justify-between border-b border-white/5 py-1">
-                    <span className="text-slate-400">Mức lương kỳ vọng:</span>
-                    <span className="font-semibold text-emerald-400">60 - 85 Triệu VND / tháng</span>
+                    <span className="text-slate-400">Target Compensation:</span>
+                    <span className="font-semibold text-emerald-400">$2,500 - $3,800 USD / month</span>
                   </div>
                 </div>
 
                 <div className="mt-5 flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-xs text-emerald-400">
                   <Check className="h-4 w-4 shrink-0" />
-                  <span>Đã vượt qua thẩm định năng lực System Design bởi InterVue Board</span>
+                  <span>System Design competency verified by InterVue Engineering Board</span>
                 </div>
               </div>
             </div>

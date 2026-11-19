@@ -5,35 +5,35 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 const UNIVERSITIES = [
-  { code: 'HUST', name: 'Đại học Bách Khoa Hà Nội', logo: '/srp/university/hust.png' },
-  { code: 'VNU', name: 'Đại học Quốc gia Hà Nội', logo: '/srp/university/vnu.png' },
-  { code: 'VNUHCM', name: 'Đại học Quốc gia TP.HCM', logo: '/srp/university/vnuhcm.png' },
-  { code: 'FTU', name: 'Đại học Ngoại Thương', logo: '/srp/university/ftu.png' },
-  { code: 'NEU', name: 'Đại học Kinh tế Quốc dân', logo: '/srp/university/neu.png' },
-  { code: 'TMU', name: 'Đại học Thương Mại', logo: '/srp/university/tmu.png' },
-  { code: 'UEH', name: 'Đại học Kinh tế TP.HCM', logo: '/srp/university/ueh.png' },
+  { code: 'HUST', name: 'Hanoi University of Science and Technology', logo: '/srp/university/hust.png' },
+  { code: 'VNU', name: 'Vietnam National University, Hanoi', logo: '/srp/university/vnu.png' },
+  { code: 'VNUHCM', name: 'Vietnam National University, HCMC', logo: '/srp/university/vnuhcm.png' },
+  { code: 'FTU', name: 'Foreign Trade University', logo: '/srp/university/ftu.png' },
+  { code: 'NEU', name: 'National Economics University', logo: '/srp/university/neu.png' },
+  { code: 'TMU', name: 'Thuongmai University', logo: '/srp/university/tmu.png' },
+  { code: 'UEH', name: 'University of Economics HCMC', logo: '/srp/university/ueh.png' },
 ];
 
 const COLLAB_MODULES = [
   {
-    title: 'CỔNG VIỆC LÀM IT ĐỘC QUYỀN THEO TRƯỜNG',
-    subtitle: 'Kênh tuyển dụng thực tập sinh và kỹ sư phần mềm trẻ',
-    desc: 'Hợp tác cùng Ban giám hiệu và Đoàn trường xây dựng chuyên trang việc làm mang thương hiệu nhà trường, kết nối sinh viên IT trực tiếp với doanh nghiệp.',
-    badge: 'Chuyên trang Đại học',
+    title: 'EXCLUSIVE UNIVERSITY IT JOB PORTALS',
+    subtitle: 'Direct sourcing channel for tech interns and junior engineers',
+    desc: 'Co-branded career portals built with university faculty, connecting engineering students directly to verified employers.',
+    badge: 'University Portals',
     img: '/market-bg.jpg',
   },
   {
-    title: 'TECH JOB FAIR & KÝ KẾT DOANH NGHIỆP',
-    subtitle: 'Ngày hội việc làm công nghệ và phỏng vấn sơ loại on-site',
-    desc: 'Đồng tổ chức các sự kiện Tech Job Fair thường niên tại các trường ĐH công nghệ hàng đầu, nơi các tài năng trẻ tham gia phỏng vấn trực tiếp tại gian hàng.',
-    badge: 'Sự kiện quy mô lớn',
+    title: 'TECH JOB FAIRS & ON-SITE INTERVIEW BOOTHS',
+    subtitle: 'Annual on-campus engineering job fairs & preliminary screening',
+    desc: 'Co-hosting premier tech career fairs at top technology universities, where young talent interviews directly at your booth.',
+    badge: 'Campus Events',
     img: '/banner-recruitment-1.jpg',
   },
   {
     title: 'EDUCATION CODE VIP & AI MOCK INTERVIEW',
-    subtitle: 'Đào tạo kỹ năng thực chiến và cấp mã định danh sinh viên xuất sắc',
-    desc: 'Tổ chức workshop tối ưu hóa CV chuẩn ATS quốc tế, luyện phỏng vấn AI Mock Interview và cấp mã định danh Education Code cho Top 5% sinh viên tiêu biểu.',
-    badge: 'Tính năng Độc quyền',
+    subtitle: 'Real-world skill training and VIP badges for top 5% STEM graduates',
+    desc: 'Workshops on ATS-optimized tech resumes, technical AI Mock Interview simulations, and verified Education Code credentials.',
+    badge: 'Exclusive Capability',
     img: '/landing/banner-bot.jpg',
   },
 ];
@@ -53,12 +53,12 @@ export default function AcademicTalentSectionV2() {
           </div>
 
           <h2 className="mt-4 text-2xl font-black tracking-tight text-[#1E2837] sm:text-4xl">
-            Mạng lưới Đại học đối tác &amp; <span className="text-[#00B14F]">Pipeline Tài năng trẻ IT</span>
+            Top STEM University Network &amp; <span className="text-[#00B14F]">Junior Tech Talent Pipeline</span>
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-[#6C757D] sm:text-base">
-            InterVue đồng hành cùng hơn 15+ trường Đại học đào tạo Công nghệ thông tin hàng đầu Việt Nam, giúp doanh
-            nghiệp tiếp cận sớm nguồn sinh viên xuất sắc và thực tập sinh tài năng.
+            InterVue partners directly with over 15+ leading IT &amp; STEM universities across Vietnam, granting tech
+            enterprises early access to top honors graduates and talented interns.
           </p>
         </div>
 
@@ -149,21 +149,21 @@ export default function AcademicTalentSectionV2() {
               <div>
                 <div className="flex items-center gap-2">
                   <h4 className="text-sm font-black text-[#1E2837] sm:text-base">
-                    Tính năng độc quyền: Education Code VIP Pipeline
+                    Exclusive Capability: Education Code VIP Pipeline
                   </h4>
                   <span className="rounded-full bg-amber-200/70 px-2 py-0.5 text-[10px] font-extrabold text-amber-900">
-                    Sắp ra mắt
+                    Coming Soon
                   </span>
                 </div>
                 <p className="mt-0.5 text-xs text-[#6C757D]">
-                  Cấp mã định danh hồ sơ cho sinh viên IT có thành tích GPA xuất sắc, đồ án capstone đạt giải và vượt
-                  qua bài test kỹ thuật của InterVue.
+                  Verified candidate credentials granted to IT students with top-tier GPAs, award-winning capstone
+                  projects, and validated coding test scores.
                 </p>
               </div>
             </div>
 
             <span className="shrink-0 rounded-full border border-amber-300 bg-white px-4 py-2 text-xs font-bold text-amber-900 shadow-2xs">
-              Tiếp cận nguồn tài năng trẻ sớm 6 tháng
+              Access Top Junior Talent 6 Months Early
             </span>
           </div>
         </div>
