@@ -9,8 +9,10 @@ type RecruiterAuthSplitLayoutProps = {
 export default function RecruiterAuthSplitLayout({ children }: RecruiterAuthSplitLayoutProps) {
   return (
     <div className="relative flex min-h-screen w-full flex-col bg-white lg:flex-row">
-      <div className="relative flex min-h-screen w-full flex-1 flex-col justify-between overflow-y-auto px-6 py-8 sm:px-10 md:px-12 lg:w-[65%] lg:flex-none lg:px-10 xl:w-[66.6667%] xl:px-14 2xl:w-[67%] 2xl:px-20">
-        <div className="relative z-10 mx-auto w-full max-w-[680px] py-4 sm:py-6 xl:max-w-[720px]">{children}</div>
+      <div className="relative flex min-h-screen w-full flex-1 flex-col justify-between overflow-y-auto px-6 py-8 sm:px-10 md:px-12 lg:w-[65%] lg:flex-none lg:px-10 xl:w-[66.6667%] xl:px-12 2xl:w-[67%] 2xl:px-14">
+        <div className="relative z-10 mx-auto w-full max-w-[720px] py-4 sm:py-6 xl:max-w-[780px] 2xl:max-w-[840px]">
+          {children}
+        </div>
 
         <div
           aria-hidden="true"
@@ -26,8 +28,8 @@ export default function RecruiterAuthSplitLayout({ children }: RecruiterAuthSpli
         </div>
 
         <div className="relative z-10 mt-10 mb-4 text-center">
-          <p className="text-xs font-medium text-emerald-700/80 sm:text-sm">
-            ©2024-2026 InterVue Vietnam JSC. All rights reserved.
+          <p className="text-xs font-medium text-slate-400 sm:text-sm">
+            ©2014-2026 InterVue Vietnam JSC. All rights reserved.
           </p>
         </div>
       </div>

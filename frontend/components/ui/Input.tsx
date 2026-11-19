@@ -9,6 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   rightElement?: React.ReactNode;
   radius?: 'md' | 'lg' | 'xl' | 'full';
   focusTone?: 'primary' | 'neutral';
+  inputSize?: 'compact' | 'default' | 'lg';
 }
 
 const radiusStyles: Record<NonNullable<InputProps['radius']>, string> = {
@@ -16,6 +17,12 @@ const radiusStyles: Record<NonNullable<InputProps['radius']>, string> = {
   lg: 'rounded-lg',
   xl: 'rounded-xl',
   full: 'rounded-full',
+};
+
+const sizeStyles: Record<NonNullable<InputProps['inputSize']>, string> = {
+  compact: 'min-h-[42px] h-[42px] py-2 text-sm',
+  default: 'min-h-11 py-2.5 text-sm',
+  lg: 'min-h-12 py-3 text-base',
 };
 
 const focusToneStyles: Record<NonNullable<InputProps['focusTone']>, string> = {
@@ -27,7 +34,19 @@ const focusToneStyles: Record<NonNullable<InputProps['focusTone']>, string> = {
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, label, error, helperText, leftIcon, rightElement, radius = 'xl', focusTone = 'primary', id, ...props },
+    {
+      className,
+      label,
+      error,
+      helperText,
+      leftIcon,
+      rightElement,
+      radius = 'xl',
+      focusTone = 'primary',
+      inputSize = 'default',
+      id,
+      ...props
+    },
     ref,
   ) => {
     const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
@@ -51,9 +70,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={cn(
-              'text-on-surface placeholder:text-on-surface-variant/70 min-h-11 w-full border bg-white px-3.5 py-2.5 text-sm transition-colors',
+              'text-on-surface placeholder:text-on-surface-variant/70 w-full border bg-white px-3.5 transition-colors',
               'disabled:bg-surface-container-low disabled:text-on-surface-variant dark:disabled:bg-forest-900/60 dark:disabled:text-forest-400 disabled:cursor-not-allowed disabled:opacity-75',
               radiusStyles[radius],
+              sizeStyles[inputSize],
               leftIcon ? 'pl-10' : 'pl-3.5',
               rightElement ? 'pr-11' : 'pr-3.5',
               error

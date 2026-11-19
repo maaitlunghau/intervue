@@ -13,10 +13,41 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   helperText?: string;
   options: SelectOption[];
   placeholder?: string;
+  leftIcon?: React.ReactNode;
+  radius?: 'md' | 'lg' | 'xl' | 'full';
+  inputSize?: 'compact' | 'default' | 'lg';
 }
 
+const radiusStyles: Record<NonNullable<SelectProps['radius']>, string> = {
+  md: 'rounded-md',
+  lg: 'rounded-lg',
+  xl: 'rounded-xl',
+  full: 'rounded-full',
+};
+
+const sizeStyles: Record<NonNullable<SelectProps['inputSize']>, string> = {
+  compact: 'min-h-[42px] h-[42px] py-2 text-sm',
+  default: 'min-h-11 py-2.5 text-sm',
+  lg: 'min-h-12 py-3 text-base',
+};
+
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, label, error, helperText, options, placeholder, id, ...props }, ref) => {
+  (
+    {
+      className,
+      label,
+      error,
+      helperText,
+      options,
+      placeholder,
+      leftIcon,
+      radius = 'xl',
+      inputSize = 'default',
+      id,
+      ...props
+    },
+    ref,
+  ) => {
     const selectId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
     return (
@@ -28,11 +59,18 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         )}
 
         <div className="relative flex items-center">
+          {leftIcon && (
+            <span className="pointer-events-none absolute left-3.5 flex items-center justify-center">{leftIcon}</span>
+          )}
+
           <select
             ref={ref}
             id={selectId}
             className={cn(
-              'text-on-surface min-h-11 w-full cursor-pointer appearance-none rounded-xl border bg-white px-3.5 py-2.5 pr-10 text-sm transition-colors',
+              'text-on-surface w-full cursor-pointer appearance-none border bg-white pr-10 transition-colors',
+              radiusStyles[radius],
+              sizeStyles[inputSize],
+              leftIcon ? 'pl-10' : 'px-3.5',
               'hover:border-on-surface-variant/60 focus:border-primary focus:ring-2 focus:ring-emerald-600/15 focus:outline-none',
               'disabled:bg-surface-container-low disabled:text-on-surface-variant dark:disabled:bg-forest-900/60 dark:disabled:text-forest-400 disabled:cursor-not-allowed disabled:opacity-75',
               error ? 'border-error focus:border-error focus:ring-rose-500/15' : 'border-outline',
