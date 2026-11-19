@@ -12,10 +12,10 @@ interface RecruiterHeroV2Props {
 }
 
 const HERO_STATS = [
-  { value: '50.000+', label: 'Ứng viên IT tiềm năng' },
-  { value: '94%', label: 'Độ chính xác so khớp AI' },
-  { value: '1.200+', label: 'Doanh nghiệp tin dùng' },
-  { value: '24 Giờ', label: 'Thời gian kết nối phỏng vấn' },
+  { value: '50,000+', label: 'Active IT Candidates' },
+  { value: '94%', label: 'AI Matching Accuracy' },
+  { value: '1,200+', label: 'Trusted Enterprises' },
+  { value: '24 Hours', label: 'Average Interview Connection' },
 ];
 
 export default function RecruiterHeroV2({ onOpenConsultModal }: RecruiterHeroV2Props) {
@@ -62,28 +62,28 @@ export default function RecruiterHeroV2({ onOpenConsultModal }: RecruiterHeroV2P
         {/* Centered Headlines & Buttons Overlay */}
         <div className="relative z-10 mx-auto flex w-full max-w-[1080px] flex-col items-center px-4 text-center">
           <h1 className="m-0 text-3xl font-extrabold tracking-tight text-[#263A4D] sm:text-4xl lg:text-[42px] lg:leading-[50px]">
-            Tuyển dụng Nhân tài IT phù hợp <span className="text-[#0B933E]">cùng AI</span>
+            Hire the Right Tech Talent <span className="text-[#0B933E]">with AI</span>
           </h1>
 
           <p className="mt-2 text-base font-semibold text-[#0B933E] sm:text-xl lg:text-[24px] lg:leading-[32px]">
-            Tiếp cận hơn 50.000+ kỹ sư phần mềm &amp; lập trình viên đang tìm việc
+            Connect with over 50,000+ verified software engineers &amp; developers actively looking for jobs
           </p>
 
-          <div className="mt-5 flex w-full max-w-[340px] flex-col items-center justify-center gap-3 sm:max-w-none sm:flex-row sm:gap-5">
+          <div className="mt-5 flex w-full max-w-[360px] flex-col items-center justify-center gap-3 sm:max-w-none sm:flex-row sm:gap-5">
             <button
               type="button"
               onClick={onOpenConsultModal}
               className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#263A4D] px-8 py-3 text-center text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1a2936] hover:shadow-md sm:w-auto sm:text-base"
             >
               <Headphones className="h-4 w-4" />
-              <span>Tư vấn tuyển dụng</span>
+              <span>Request Consultation</span>
             </button>
 
             <Link
               href={postJobUrl}
               className="flex w-full items-center justify-center gap-2 rounded-full bg-[#009D46] px-8 py-3 text-center text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#00873c] hover:shadow-md sm:w-auto sm:text-base"
             >
-              <span>Đăng tin ngay</span>
+              <span>Post a Job Now</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
