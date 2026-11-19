@@ -1,14 +1,13 @@
 'use client';
 
-import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
 import { RESEND_COOLDOWN_SECONDS } from '@/constants/auth';
 import { useForgotPassword } from '@/hooks/useForgotPassword';
 import { AUTH_PORTAL_ROUTES, type AuthPortal } from '@/lib/auth-portal';
+import { cn } from '@/lib/utils';
 import { ForgotPasswordFormData, forgotPasswordSchema } from '@/schemas/auth.schema';
 import { applyFormError, getErrorMessage } from '@/utils/error';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -18,9 +17,11 @@ import FormErrorAlert from './FormErrorAlert';
 type ForgotPasswordFormProps = { portal?: AuthPortal };
 
 export default function ForgotPasswordForm({ portal = 'candidate' }: ForgotPasswordFormProps) {
+  const routes = AUTH_PORTAL_ROUTES[portal];
   const forgotPassword = useForgotPassword(portal);
   const [sentEmail, setSentEmail] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(0);
+
   const {
     register,
     handleSubmit,
@@ -64,21 +65,17 @@ export default function ForgotPasswordForm({ portal = 'candidate' }: ForgotPassw
 
   return (
     <div className="w-full">
-      <p className="text-on-surface-variant mb-5 text-center text-sm leading-relaxed">
-        Enter the email you registered with to receive a secure password reset link.
-      </p>
-
       {sentEmail ? (
-        <div className="border-primary/30 space-y-4 rounded-2xl border bg-emerald-50/70 p-6 text-center">
-          <div className="bg-primary-container text-primary mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+        <div className="space-y-4 rounded-2xl border border-[#00B14F]/30 bg-emerald-50/70 p-6 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-[#009D46]">
             <CheckCircle2 className="h-7 w-7" />
           </div>
 
           <div>
-            <h3 className="text-on-surface text-base font-bold">Recovery link sent</h3>
-            <p className="text-on-surface-variant mt-1 text-sm leading-relaxed">
-              If <strong>{sentEmail}</strong> is registered, you will receive a password reset link within a few
-              minutes.
+            <h3 className="text-base font-bold text-[#1E2837]">Recovery link sent</h3>
+            <p className="mt-1 text-sm leading-relaxed text-[#4B5563]">
+              If <strong>{sentEmail}</strong> is registered with InterVue, you will receive a password reset link within
+              a few minutes.
             </p>
           </div>
 
@@ -87,45 +84,77 @@ export default function ForgotPasswordForm({ portal = 'candidate' }: ForgotPassw
               type="button"
               disabled={countdown > 0 || forgotPassword.isPending}
               onClick={handleResend}
-              className="text-primary disabled:text-outline text-sm font-semibold transition-colors enabled:cursor-pointer enabled:hover:underline disabled:cursor-not-allowed"
+              className="text-sm font-semibold text-[#009D46] transition-colors enabled:cursor-pointer enabled:hover:underline disabled:cursor-not-allowed disabled:text-[#9CA3AF]"
             >
               {countdown > 0 ? `Resend in ${countdown}s` : 'Resend email'}
             </button>
+          </div>
+
+          <div className="border-t border-emerald-100 pt-2">
+            <Link href={routes.login} className="text-sm font-semibold text-[#009D46] hover:underline">
+              Back to sign in
+            </Link>
           </div>
         </div>
       ) : (
         <form onSubmit={onSubmit} noValidate className="space-y-4">
           <FormErrorAlert message={errors.root?.message} />
 
-          <Input
-            label="Email"
-            type="email"
-            placeholder="Enter your email"
-            autoComplete="email"
-            error={errors.email?.message}
-            {...register('email')}
-          />
+          {/* Email input with leading Mail icon */}
+          <div>
+            <label htmlFor="forgot-email" className="mb-1.5 block text-xs font-semibold text-[#1E2837]">
+              Email
+            </label>
+            <div className="relative">
+              <Mail className="pointer-events-none absolute top-1/2 left-3.5 h-4.5 w-4.5 -translate-y-1/2 text-[#9CA3AF]" />
+              <input
+                id="forgot-email"
+                type="email"
+                placeholder="Enter your email"
+                autoComplete="email"
+                className={cn(
+                  'h-11 w-full rounded-lg border border-[#E5E7EB] bg-white pr-3.5 pl-10.5 text-sm text-[#1E2837] placeholder-[#9CA3AF] transition-colors focus:border-[#00B14F] focus:ring-1 focus:ring-[#00B14F] focus:outline-none',
+                  errors.email && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+                )}
+                {...register('email')}
+              />
+            </div>
+            {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
+          </div>
 
-          <Button
+          {/* Agreement note matching TopCV */}
+          <p className="text-xs leading-relaxed text-[#6C757D]">
+            By resetting your password, you agree to our{' '}
+            <Link href="/terms-of-service" className="font-medium text-[#009D46] hover:underline" target="_blank">
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link href="/privacy-policy" className="font-medium text-[#009D46] hover:underline" target="_blank">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+
+          {/* Submit button */}
+          <button
             type="submit"
-            isLoading={forgotPassword.isPending}
-            className="mt-2 w-full rounded-xl py-3 text-sm font-bold"
-            rightIcon={<ArrowRight className="h-4 w-4 stroke-[2.5]" />}
+            disabled={forgotPassword.isPending}
+            className="flex h-[46px] w-full cursor-pointer items-center justify-center rounded-full bg-[#00B14F] text-sm font-bold text-white transition-all hover:bg-[#009643] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Send recovery link
-          </Button>
+            {forgotPassword.isPending ? 'Sending recovery link...' : 'Reset password'}
+          </button>
+
+          {/* Bottom row: Back to sign in (left) & Create new account (right) */}
+          <div className="flex items-center justify-between pt-1 text-xs text-[#009D46] sm:text-sm">
+            <Link href={routes.login} className="font-semibold hover:underline">
+              Back to sign in
+            </Link>
+            <Link href={routes.register} className="font-semibold hover:underline">
+              Create new account
+            </Link>
+          </div>
         </form>
       )}
-
-      <div className="mt-5 text-center">
-        <Link
-          href={AUTH_PORTAL_ROUTES[portal].login}
-          className="text-primary inline-flex items-center gap-1.5 text-sm font-semibold transition-colors hover:underline"
-        >
-          <ArrowLeft className="h-4 w-4 stroke-[2.5]" />
-          <span>Back to sign in</span>
-        </Link>
-      </div>
     </div>
   );
 }
