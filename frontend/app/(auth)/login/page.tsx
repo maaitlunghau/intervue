@@ -4,9 +4,8 @@ import LoginForm from '@/components/auth/LoginForm';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Sign in | InterVue AI - AI-powered recruitment & interview practice',
-  description:
-    'Sign in to InterVue to practice technical interviews with the STAR method and optimize your ATS-ready CV.',
+  title: 'Sign in | InterVue',
+  description: 'Sign in to InterVue to explore top tech jobs and access your ATS-ready CV tools.',
 };
 
 export default function LoginPage() {
