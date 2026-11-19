@@ -9,7 +9,7 @@ import { getErrorMessage } from '@/utils/error';
 import { sanitizeRedirect } from '@/utils/redirect';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { GoogleIcon, LinkedinIcon } from './SocialIcons';
+import { FacebookIcon, GoogleIcon, LinkedinIcon } from './SocialIcons';
 
 type SocialAuthButtonsProps = {
   portal?: OAuthPortal;
@@ -17,8 +17,8 @@ type SocialAuthButtonsProps = {
   acceptTerms?: boolean;
 };
 
-const BUTTON_CLASS =
-  'text-navy flex w-full items-center justify-center gap-2.5 rounded-full border border-[#e0e0e0] bg-white px-4 py-2.5 text-[13.5px] font-semibold transition';
+const BUTTON_BASE =
+  'text-[#1E2837] flex items-center justify-center rounded-full border border-[#E5E7EB] bg-white text-sm font-semibold transition hover:bg-slate-50 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed';
 
 export default function SocialAuthButtons({ portal = 'candidate', mode, acceptTerms = false }: SocialAuthButtonsProps) {
   const isRegister = mode === 'register';
@@ -37,16 +37,66 @@ export default function SocialAuthButtons({ portal = 'candidate', mode, acceptTe
     onError: (error) => toast.error(getErrorMessage(error)),
   });
 
+  const handleComingSoon = (providerName: string) => {
+    toast.info(`Sign in with ${providerName} is coming soon!`);
+  };
+
+  if (portal === 'candidate') {
+    return (
+      <div className="space-y-2.5">
+        {/* Google button full width */}
+        <button
+          type="button"
+          disabled={termsPending || authorize.isPending || authorize.isSuccess}
+          onClick={() => authorize.mutate()}
+          className={cn(BUTTON_BASE, 'h-11 w-full cursor-pointer gap-2.5')}
+        >
+          <GoogleIcon />
+          <span>
+            {authorize.isPending || authorize.isSuccess
+              ? 'Redirecting...'
+              : isRegister
+                ? 'Sign up with Google'
+                : 'Sign in with Google'}
+          </span>
+        </button>
+
+        {/* Facebook and LinkedIn row */}
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() => handleComingSoon('Facebook')}
+            className={cn(BUTTON_BASE, 'h-11 w-full cursor-pointer gap-2')}
+          >
+            <FacebookIcon />
+            <span>Facebook</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleComingSoon('LinkedIn')}
+            className={cn(BUTTON_BASE, 'h-11 w-full cursor-pointer gap-2')}
+          >
+            <LinkedinIcon />
+            <span>LinkedIn</span>
+          </button>
+        </div>
+
+        {termsPending && (
+          <p className="text-center text-xs text-slate-500">Please accept the terms before continuing with Google</p>
+        )}
+      </div>
+    );
+  }
+
+  // Recruiter Portal format
   return (
     <div className="space-y-3">
       <button
         type="button"
         disabled={termsPending || authorize.isPending || authorize.isSuccess}
         onClick={() => authorize.mutate()}
-        className={cn(
-          BUTTON_CLASS,
-          'cursor-pointer hover:border-[#cbd5e1] hover:bg-[#f8fafc] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:border-[#e0e0e0] disabled:hover:bg-white disabled:active:scale-100',
-        )}
+        className={cn(BUTTON_BASE, 'h-11 w-full cursor-pointer gap-2.5')}
       >
         <GoogleIcon />
         <span>
@@ -57,13 +107,16 @@ export default function SocialAuthButtons({ portal = 'candidate', mode, acceptTe
               : 'Sign in with Google'}
         </span>
       </button>
+
       {termsPending && (
-        <p className="text-center text-xs text-slate-500">
-          Accept the terms {portal === 'recruiter' ? 'above' : 'below'} to continue with Google
-        </p>
+        <p className="text-center text-xs text-slate-500">Accept the terms above to continue with Google</p>
       )}
 
-      <button type="button" disabled className={cn(BUTTON_CLASS, 'cursor-not-allowed opacity-60')}>
+      <button
+        type="button"
+        onClick={() => handleComingSoon('LinkedIn')}
+        className={cn(BUTTON_BASE, 'h-11 w-full cursor-pointer gap-2.5')}
+      >
         <LinkedinIcon />
         <span>LinkedIn · Coming soon</span>
       </button>

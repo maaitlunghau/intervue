@@ -3,7 +3,7 @@ import ResetPasswordForm from '@/components/auth/ResetPasswordForm';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Reset password | InterVue AI',
+  title: 'Reset password | InterVue',
   description: 'Create a new password for your InterVue account.',
   robots: { index: false },
 };
@@ -14,7 +14,7 @@ export default async function ResetPasswordPage({ searchParams }: ResetPasswordP
   const { token } = await searchParams;
 
   return (
-    <AuthLayout title="Reset password">
+    <AuthLayout title="Reset password" subtitle="Create a new password for your InterVue account.">
       <ResetPasswordForm token={token} />
     </AuthLayout>
   );

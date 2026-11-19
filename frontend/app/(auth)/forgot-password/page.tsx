@@ -4,13 +4,13 @@ import GuestRedirect from '@/components/auth/GuestRedirect';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Forgot password | InterVue AI',
+  title: 'Forgot password | InterVue',
   description: 'Recover your InterVue account password quickly and securely.',
 };
 
 export default function ForgotPasswordPage() {
   return (
-    <AuthLayout title="Forgot password">
+    <AuthLayout showLogo={false} title="Forgot password">
       <GuestRedirect />
       <ForgotPasswordForm />
     </AuthLayout>

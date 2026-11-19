@@ -4,13 +4,13 @@ import RegisterForm from '@/components/auth/RegisterForm';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Create account | InterVue AI - AI-powered recruitment & interview practice',
-  description: 'Create your InterVue account today for unlimited AI interview practice and ATS-ready CV reviews.',
+  title: 'Sign up | InterVue',
+  description: 'Create your free InterVue account to access top IT jobs and practice interviews with AI.',
 };
 
 export default function RegisterPage() {
   return (
-    <AuthLayout title="Create your InterVue account">
+    <AuthLayout title="Sign up for InterVue" subtitle="Create a free account to explore top tech jobs and AI tools.">
       <GuestRedirect />
       <RegisterForm />
     </AuthLayout>
