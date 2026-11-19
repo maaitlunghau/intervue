@@ -3,23 +3,22 @@
 import EmailVerificationBanner from '@/components/auth/EmailVerificationBanner';
 import { buttonClassName } from '@/components/ui/Button';
 import { ROLES } from '@/constants/auth';
-import {
-  CANDIDATE_CV_MENU,
-  CANDIDATE_GUIDE_MENU,
-  CANDIDATE_JOBS_MENU,
-  RECRUITER_NAV_LINKS,
-  SUPPORT_EMAIL,
-} from '@/constants/header';
+import { RECRUITER_NAV_LINKS } from '@/constants/header';
 import { ROUTES } from '@/constants/routes';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, Menu, PlusCircle, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import HeaderAccountActions from './header/HeaderAccountActions';
+import CvMegaMenu from './header/megamenu/CvMegaMenu';
+import GuidesMegaMenu from './header/megamenu/GuidesMegaMenu';
+import JobsMegaMenu from './header/megamenu/JobsMegaMenu';
+import NavMegaMenu from './header/megamenu/NavMegaMenu';
+import ToolsMegaMenu from './header/megamenu/ToolsMegaMenu';
 import MobileNavDrawer from './header/MobileNavDrawer';
-import NavMenu from './header/NavMenu';
 import RecruiterEntryButton from './header/RecruiterEntryButton';
 
 const NAV_LINK_CLASS =
@@ -33,6 +32,7 @@ export default function Header({ portal = 'candidate' }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, hasRole } = useAuth();
+  const pathname = usePathname() || '';
   const isRecruiterPortal = portal === 'recruiter';
 
   useEffect(() => {
@@ -89,12 +89,38 @@ export default function Header({ portal = 'candidate' }: HeaderProps) {
               ))
             ) : (
               <>
-                <NavMenu label="Jobs" items={CANDIDATE_JOBS_MENU} />
-                <NavMenu label="Create CV" items={CANDIDATE_CV_MENU} />
-                <NavMenu label="Career guides" items={CANDIDATE_GUIDE_MENU} />
-                <a href={`mailto:${SUPPORT_EMAIL}`} className={NAV_LINK_CLASS}>
-                  Help
-                </a>
+                <NavMegaMenu
+                  label="Jobs"
+                  isActive={pathname.startsWith('/jobs')}
+                  alignClass="left-0 w-[1060px] xl:w-[1140px]"
+                >
+                  {({ close }) => <JobsMegaMenu onClose={close} />}
+                </NavMegaMenu>
+
+                <NavMegaMenu
+                  label="Create CV"
+                  isActive={pathname.startsWith('/cv') || pathname.startsWith('/profile')}
+                  alignClass="-left-20 xl:left-0 w-[840px] xl:w-[880px]"
+                >
+                  {({ close }) => <CvMegaMenu onClose={close} />}
+                </NavMegaMenu>
+
+                <NavMegaMenu
+                  label="Career guides"
+                  isActive={pathname.startsWith('/career-orientation') || pathname.startsWith('/blog')}
+                  alignClass="-left-44 xl:-left-20 w-[800px] xl:w-[840px]"
+                >
+                  {({ close }) => <GuidesMegaMenu onClose={close} />}
+                </NavMegaMenu>
+
+                <NavMegaMenu
+                  label="Tools & Help"
+                  badge="NEW"
+                  isActive={pathname.startsWith('/tools') || pathname.startsWith('/mock-interview')}
+                  alignClass="-left-72 lg:-left-72 xl:-left-60 w-[900px] xl:w-[960px]"
+                >
+                  {({ close }) => <ToolsMegaMenu onClose={close} />}
+                </NavMegaMenu>
               </>
             )}
           </nav>
