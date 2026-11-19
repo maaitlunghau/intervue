@@ -9,24 +9,24 @@ interface RecruiterFaqAccordionV2Props {
 
 const FAQS = [
   {
-    q: 'InterVue khác gì so với các trang tuyển dụng tổng hợp trên thị trường?',
-    a: 'InterVue tập trung 100% chuyên sâu vào ngành Công nghệ Thông tin (IT). Hệ thống AI được tinh chỉnh để đọc hiểu sâu các ngôn ngữ lập trình, framework, cloud architecture, đồng thời 100% hồ sơ ứng viên được xác thực danh tính eKYC, hạn chế tối đa tình trạng rải CV ảo và giúp nhà tuyển dụng tiết kiệm tới 60% thời gian sàng lọc kỹ thuật.',
+    q: 'How does InterVue differ from general job boards on the market?',
+    a: 'InterVue is 100% focused exclusively on Information Technology (IT). Our domain-tuned AI deeply comprehends programming languages, modern frameworks, and cloud architectures. Moreover, 100% of candidate profiles undergo automated identity verification, eliminating phantom CV spam and reducing initial technical screening hours by up to 60%.',
   },
   {
-    q: 'Doanh nghiệp mới có được đăng tin tuyển dụng IT miễn phí không?',
-    a: 'Hoàn toàn có! Mọi doanh nghiệp mới khi đăng ký tài khoản tại InterVue đều được kích hoạt ngay gói Starter với 3 tin đăng tuyển dụng IT miễn phí vĩnh viễn và 30 lượt AI chấm điểm CV tự động, trải nghiệm đầy đủ bảng Kanban quản trị ứng viên.',
+    q: 'Can new enterprises post IT jobs for free?',
+    a: 'Absolutely! Every new employer account registered on InterVue is instantly activated with our perpetual Starter Plan, offering 3 free IT job postings, 30 automated AI CV scoring runs, and full access to our Kanban candidate pipeline management dashboard.',
   },
   {
-    q: 'Đăng tin miễn phí và các gói dịch vụ trả phí khác nhau như thế nào?',
-    a: 'Gói trả phí (Growth Pro, Enterprise) cung cấp số lượng tin đăng và lượt sàng lọc AI không giới hạn, tính năng gợi ý bộ câu hỏi phỏng vấn kỹ thuật phân tầng theo từng level, huy hiệu Doanh nghiệp uy tín (Top IT Company), và vị trí ưu tiên hiển thị trên trang chủ để tiếp cận tối đa ứng viên.',
+    q: 'What are the key advantages of Growth Pro and Enterprise plans?',
+    a: 'Paid plans (Growth Pro, Enterprise) unlock unlimited job listings and AI CV screenings, AI-generated tiered technical interview questionnaires, verified Top IT Company branding badges, and prioritized ranking on the candidate job feed to maximize talent reach.',
   },
   {
-    q: 'Thời gian kết nối phỏng vấn với lập trình viên mất bao lâu?',
-    a: 'Nhờ tính năng InterVue Connect (Chat trực tiếp 1-1 giữa nhà tuyển dụng và ứng viên), tỷ lệ phản hồi đạt trên 85% và thời gian trung bình từ lúc gửi tin nhắn đến khi chốt lịch phỏng vấn là dưới 24 giờ, thay vì phải chờ đợi phản hồi email kéo dài nhiều ngày.',
+    q: 'How fast can we connect and schedule interviews with software developers?',
+    a: 'Through InterVue Connect (direct 1-on-1 real-time messaging between verified employers and candidates), candidate response rates exceed 85%, and the average turnaround from message sent to confirmed interview is under 24 hours—eliminating days of waiting for cold email replies.',
   },
   {
-    q: 'Gói Doanh nghiệp Enterprise hỗ trợ tích hợp với những hệ thống nào?',
-    a: 'Gói Enterprise cung cấp RESTful API và Webhook để đồng bộ hai chiều trực tiếp với hệ thống phần mềm quản trị nhân sự nội bộ (ATS) của doanh nghiệp, hỗ trợ tùy chỉnh tiêu chí chấm điểm AI theo chuẩn công ty, đồng thời xuất hóa đơn VAT điện tử và có chuyên viên hỗ trợ riêng 24/7.',
+    q: 'What integrations does the Enterprise tier support?',
+    a: 'The Enterprise package provides bi-directional RESTful APIs and Webhooks to sync seamlessly with your internal Applicant Tracking System (ATS), supports custom AI evaluation criteria aligned with company tech standards, and includes dedicated 24/7 account management with electronic VAT invoicing.',
   },
 ];
 
@@ -44,16 +44,16 @@ export default function RecruiterFaqAccordionV2({ onOpenConsultModal }: Recruite
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#00B14F]/20 bg-[#F0FDF4] px-4 py-1.5 text-xs font-bold text-[#009D46]">
             <HelpCircle className="h-3.5 w-3.5" />
-            <span>CÂU HỎI THƯỜNG GẶP (FAQ)</span>
+            <span>FREQUENTLY ASKED QUESTIONS (FAQ)</span>
           </div>
 
           <h2 className="mt-4 text-2xl font-black tracking-tight text-[#1E2837] sm:text-4xl">
-            Giải đáp băn khoăn của <span className="text-[#00B14F]">Nhà tuyển dụng</span>
+            Answering Key Questions for <span className="text-[#00B14F]">Tech Recruiters</span>
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-[#6C757D] sm:text-base">
-            Tổng hợp các thắc mắc phổ biến nhất về chính sách đăng tin, chi phí, công nghệ AI và cách kết nối ứng viên
-            IT tại InterVue.
+            Frequently asked questions about job posting policies, pricing, AI matching algorithms, and candidate
+            engagement on InterVue.
           </p>
         </div>
 
@@ -94,13 +94,13 @@ export default function RecruiterFaqAccordionV2({ onOpenConsultModal }: Recruite
         {/* Bottom CTA trigger */}
         <div className="mt-10 text-center">
           <p className="text-xs text-[#6C757D] sm:text-sm">
-            Bạn vẫn còn câu hỏi khác cần được tư vấn chi tiết?{' '}
+            Have more questions and need personalized consultation?{' '}
             <button
               type="button"
               onClick={onOpenConsultModal}
               className="cursor-pointer font-bold text-[#009D46] underline hover:text-[#00873c]"
             >
-              Liên hệ với chuyên viên tư vấn ngay ➔
+              Contact a recruitment consultant now ➔
             </button>
           </p>
         </div>

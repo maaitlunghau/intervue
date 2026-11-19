@@ -5,44 +5,44 @@ import Image from 'next/image';
 
 const TESTIMONIALS = [
   {
-    name: 'Nguyễn Thị Mai Lan',
+    name: 'Mai Lan Nguyen',
     role: 'Head of Talent Acquisition',
     company: 'FPT Software',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
     tag: 'AI CV Matcher',
-    metric: 'Rút ngắn 60% thời gian lọc CV',
+    metric: '60% Faster CV Screening',
     content:
-      'Với tính năng AI CV Matcher của InterVue, đội ngũ tuyển dụng của chúng tôi đã rút ngắn đáng kể thời gian sàng lọc ban đầu cho các vị trí Senior Fullstack và DevOps. Khả năng đối chiếu chuẩn xác từng framework rất ấn tượng!',
+      "With InterVue's AI CV Matcher, our talent team dramatically cut down initial screening turnaround for Senior Fullstack and DevOps roles. Its accuracy in cross-matching technical framework proficiencies is truly outstanding!",
   },
   {
-    name: 'Trần Đức Huy',
+    name: 'Duc Huy Tran',
     role: 'Engineering Manager',
     company: 'Techcombank Digital',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
     tag: 'Structured Technical Interview',
-    metric: 'Tăng 94% độ khớp kỹ thuật',
+    metric: '94% Technical Match Rate',
     content:
-      'Bộ câu hỏi phỏng vấn kỹ thuật phân tầng được AI gợi ý bám sát thực tế dự án của từng ứng viên, giúp vòng phỏng vấn chuyên môn diễn ra chính xác, chuyên sâu và tiết kiệm thời gian quý báu cho dàn Tech Lead.',
+      "The tiered technical interview questions suggested by the AI are closely tailored to each candidate's real-world project experience, making specialized technical rounds precise, rigorous, and time-saving for our Tech Leads.",
   },
   {
-    name: 'Lê Hoàng Yến',
+    name: 'Hoang Yen Le',
     role: 'HR Director',
     company: 'VNG Corporation',
     avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
     tag: 'InterVue Pro & Connect',
-    metric: 'Tiếp cận Senior AI Talent',
+    metric: 'Access to Senior AI Talents',
     content:
-      'Tính năng tìm kiếm lập trình viên chủ động mang lại nguồn ứng viên cực kỳ chất lượng, đặc biệt là các chuyên gia AI/ML vốn rất khan hiếm trên thị trường. Cơ chế chat 1-1 trên InterVue Connect phản hồi cực nhanh!',
+      'The proactive developer sourcing feature delivers exceptionally high-caliber candidates, especially for scarce AI/ML specialists. The 1-on-1 direct chat on InterVue Connect yields immediate candidate response rates!',
   },
 ];
 
 const PRESS_OUTLETS = [
-  { name: 'VTV Digital', tag: 'Đài Truyền hình Việt Nam' },
-  { name: 'VnExpress', tag: 'Báo điện tử nhiều người đọc nhất' },
-  { name: 'CafeF', tag: 'Kênh tài chính & Doanh nghiệp' },
-  { name: 'GenK', tag: 'Chuyên trang Công nghệ hàng đầu' },
-  { name: 'Dân Trí', tag: 'Báo điện tử uy tín' },
-  { name: 'Doanh Nhân Việt Nam', tag: 'Tạp chí kinh tế' },
+  { name: 'VTV Digital', tag: 'Vietnam National Television' },
+  { name: 'VnExpress', tag: 'Most-Read Tech & News' },
+  { name: 'CafeF', tag: 'Finance & Enterprise Channel' },
+  { name: 'GenK', tag: 'Leading Technology Media' },
+  { name: 'Dan Tri', tag: 'Top-Tier Digital Daily' },
+  { name: 'Doanh Nhan VN', tag: 'Business Magazine' },
 ];
 
 export default function SocialProofAndMediaV2() {
@@ -53,15 +53,16 @@ export default function SocialProofAndMediaV2() {
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#00B14F]/20 bg-[#F0FDF4] px-4 py-1.5 text-xs font-bold text-[#009D46]">
             <Sparkles className="h-3.5 w-3.5" />
-            <span>ĐÁNH GIÁ TỪ DOANH NGHIỆP</span>
+            <span>ENTERPRISE TESTIMONIALS</span>
           </div>
 
           <h2 className="mt-4 text-2xl font-black tracking-tight text-[#1E2837] sm:text-4xl">
-            Các chuyên gia công nghệ <span className="text-[#00B14F]">nói gì về InterVue?</span>
+            What Tech Leaders <span className="text-[#00B14F]">Say About InterVue</span>
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-[#6C757D] sm:text-base">
-            Lắng nghe chia sẻ thực tế từ các Giám đốc nhân sự và Tech Lead tại các tập đoàn công nghệ hàng đầu Việt Nam.
+            Discover genuine experiences from Talent Acquisition Directors and Engineering Leaders across Vietnam&apos;s
+            premier tech corporations.
           </p>
         </div>
 
@@ -124,7 +125,7 @@ export default function SocialProofAndMediaV2() {
         {/* Media & Press Network */}
         <div className="mt-16 border-t border-[#E5E7EB] pt-12">
           <p className="text-center text-xs font-bold tracking-widest text-[#6C757D] uppercase">
-            BÁO CHÍ VÀ CỘNG ĐỒNG CÔNG NGHỆ NÓI VỀ INTERVUE
+            MEDIA &amp; TECH COMMUNITY RECOGNITION
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-5">
