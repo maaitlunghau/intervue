@@ -11,21 +11,21 @@ import { useAuthStore } from '@/store/auth.store';
 import { applyFormError } from '@/utils/error';
 import { sanitizeRedirect } from '@/utils/redirect';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight } from 'lucide-react';
+import { Lock, Mail } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import FormErrorAlert from './FormErrorAlert';
-import RecruiterSocialLogin from './RecruiterSocialLogin';
+import SocialAuthButtons from './SocialAuthButtons';
 import TwoFactorChallengeModal from './TwoFactorChallengeModal';
 
 export default function RecruiterLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [challengeToken, setChallengeToken] = useState<string | null>(null);
 
   const {
@@ -60,72 +60,92 @@ export default function RecruiterLoginForm() {
 
   return (
     <div className="w-full">
-      <RecruiterSocialLogin />
+      {/* Brand Header with generous spacing matching TopCV */}
+      <div className="mb-6">
+        <Link
+          href={ROUTES.RECRUITER_LANDING}
+          aria-label="Back to InterVue for Employers"
+          className="mb-10 inline-block sm:mb-12 xl:mb-14"
+        >
+          <Image
+            src="/intervue-logo.png"
+            alt="InterVue"
+            width={200}
+            height={56}
+            priority
+            className="h-12 w-auto object-contain sm:h-13 xl:h-14"
+          />
+        </Link>
+        <h1 className="text-2xl font-bold tracking-tight text-[#00b14f] sm:text-[28px]">Welcome back</h1>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+          Build a competitive edge for your business with AI-powered hiring and deep recruitment funnel experience.
+        </p>
+      </div>
+
+      {/* Google Login Button */}
+      <div className="my-5">
+        <SocialAuthButtons portal="recruiter" mode="login" />
+      </div>
+
+      {/* Divider */}
+      <div className="relative my-6 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-slate-200" />
+        </div>
+        <span className="relative bg-white px-3 text-xs text-slate-400 sm:text-[13px]">Or sign in with email</span>
+      </div>
+
       <FormErrorAlert message={errors.root?.message} />
 
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         <Input
-          label="Work email"
+          label="Email"
           type="email"
-          placeholder="hr@company.com"
+          placeholder="Email"
           autoComplete="email"
+          inputSize="compact"
+          radius="md"
+          leftIcon={<Mail className="h-4 w-4 text-[#00b14f]" />}
           error={errors.email?.message}
           {...register('email')}
         />
 
-        <PasswordInput
-          label="Password"
-          id="recruiter-login-password"
-          placeholder="Enter your password"
-          autoComplete="current-password"
-          error={errors.password?.message}
-          {...register('password')}
-        />
-
-        <div className="flex items-center justify-between pt-1">
-          <label className="text-on-surface-variant flex cursor-pointer items-center gap-2 text-xs font-medium select-none">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              className="text-primary focus:ring-primary border-outline-variant h-4 w-4 rounded"
-            />
-            <span>Remember me</span>
-          </label>
-          <Link
-            href={ROUTES.RECRUITER_FORGOT_PASSWORD}
-            className="text-primary hover:text-primary-hover text-xs font-bold transition hover:underline"
-          >
-            Forgot password?
-          </Link>
+        <div>
+          <PasswordInput
+            label="Password"
+            id="recruiter-login-password"
+            placeholder="Password"
+            autoComplete="current-password"
+            inputSize="compact"
+            radius="md"
+            leftIcon={<Lock className="h-4 w-4 text-[#00b14f]" />}
+            error={errors.password?.message}
+            {...register('password')}
+          />
+          <div className="mt-1.5 flex justify-end">
+            <Link
+              href={ROUTES.RECRUITER_FORGOT_PASSWORD}
+              className="text-sm font-medium text-[#00b14f] transition-colors hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
         </div>
 
         <Button
           type="submit"
           isLoading={isLoading}
-          className="bg-primary hover:bg-primary-hover shadow-primary/20 shadow-elevation-1 mt-3 w-full rounded-xl py-3.5 text-sm font-bold text-white transition"
-          rightIcon={<ArrowRight className="h-4 w-4 stroke-[2.5]" />}
+          className="!mt-3 h-[42px] w-full cursor-pointer rounded-md bg-[#00b14f] text-sm font-semibold text-white shadow-xs transition-colors hover:bg-[#009643] active:scale-[0.99] disabled:opacity-60"
         >
-          Sign in to the employer portal
+          Sign in
         </Button>
       </form>
 
       {/* Switch to Register */}
-      <div className="border-outline-variant text-on-surface-variant mt-5 border-t pt-4 text-center text-sm">
-        <span>New to InterVue for Employers? </span>
-        <Link
-          href={ROUTES.RECRUITER_REGISTER}
-          className="text-primary hover:text-primary-hover font-bold hover:underline"
-        >
-          Create an account
-        </Link>
-      </div>
-
-      {/* Switch to Candidate Login */}
-      <div className="border-outline-variant bg-surface-container-low text-on-surface-variant mt-3 rounded-xl border p-3 text-center text-xs">
-        <span>Looking for a job? </span>
-        <Link href={ROUTES.LOGIN} className="text-navy hover:text-primary font-bold hover:underline">
-          Candidate sign in
+      <div className="mt-6 text-center text-sm text-slate-600">
+        <span>Don&apos;t have an account? </span>
+        <Link href={ROUTES.RECRUITER_REGISTER} className="font-semibold text-[#00b14f] hover:underline">
+          Sign up now
         </Link>
       </div>
 
