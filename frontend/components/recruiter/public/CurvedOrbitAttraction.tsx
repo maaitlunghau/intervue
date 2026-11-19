@@ -4,7 +4,7 @@ import { ROUTES } from '@/constants/routes';
 import { ArrowRight, Bot, Code2, Globe2, Headphones, Layers, Smartphone, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
-interface CurvedOrbitAttractionV2Props {
+interface CurvedOrbitAttractionProps {
   onOpenConsultModal?: () => void;
 }
 
@@ -12,48 +12,48 @@ const CHANNELS = [
   {
     step: '01',
     icon: Layers,
-    title: 'Hàng ngàn việc làm IT cập nhật liên tục mỗi ngày',
-    desc: 'Đa dạng mọi cấp độ từ Intern, Junior đến Senior, Tech Lead, Architect tại các công ty Outsourcing, Product và Tech Unicorn.',
-    badge: 'Mọi Level IT',
+    title: 'Thousands of IT opportunities updated daily',
+    desc: 'Covering all seniority levels from Intern and Junior to Senior, Tech Lead, and Solution Architect across Product, Outsourcing, and Tech Unicorns.',
+    badge: 'All Tech Levels',
   },
   {
     step: '02',
     icon: Globe2,
-    title: 'Đưa việc làm đến đúng nơi Lập trình viên tìm kiếm',
-    desc: 'Tối ưu hóa hiển thị hàng đầu trên Google Search, GitHub Community và các nền tảng AI Answer Engine hàng đầu.',
-    badge: 'SEO & AI Search',
+    title: 'Placing job openings where developers actively search',
+    desc: 'Optimized for top rankings on Google Search, GitHub Community, Stack Overflow, and next-generation AI Answer Engines.',
+    badge: 'SEO & AI Discovery',
   },
   {
     step: '03',
     icon: Smartphone,
-    title: 'Ứng dụng Web & Mobile tối ưu trải nghiệm ứng viên',
-    desc: 'Ứng viên nhận thông báo việc làm phù hợp tức thì qua Notification và ứng tuyển nhanh chóng với CV đã được đồng bộ.',
-    badge: 'Đa nền tảng',
+    title: 'Web & Mobile apps engineered for seamless candidate experience',
+    desc: 'Candidates receive real-time push alerts for relevant openings and apply with one click using synchronized profiles.',
+    badge: 'Omnichannel',
   },
   {
     step: '04',
     icon: Bot,
-    title: 'Tự động gợi ý việc làm chuẩn xác bằng AI Matching',
-    desc: 'Thuật toán AI tự động phân tích sâu Tech Stack, Framework và độ tương thích dự án thực tế để đề xuất việc làm chuẩn xác.',
+    title: 'Automated recommendations powered by AI Matching',
+    desc: 'Deep neural algorithms analyze tech stacks, frameworks, and project complexity to deliver precision job recommendations.',
     badge: 'AI Matching',
   },
   {
     step: '05',
     icon: Code2,
-    title: 'Tiếp cận cộng đồng Lập trình viên & Trường Đại học IT',
-    desc: 'Hiện diện trực tiếp tại các diễn đàn Tech, GitHub Repositories, các buổi Tech Talk và mạng lưới 15+ trường ĐH công nghệ hàng đầu.',
-    badge: 'Mạng lưới Tech',
+    title: 'Deep engagement with developer communities & tech universities',
+    desc: 'Direct presence at tech meetups, hackathons, open-source repositories, and a network of 15+ top STEM universities.',
+    badge: 'Tech Community',
   },
   {
     step: '06',
     icon: Sparkles,
-    title: 'Hệ sinh thái công cụ hỗ trợ phát triển sự nghiệp IT',
-    desc: 'Cung cấp AI CV Builder chuẩn ATS quốc tế và AI Mock Interview kỹ thuật, thu hút hàng chục ngàn nhân tài IT luyện tập mỗi ngày.',
+    title: 'Comprehensive AI-driven career development tools',
+    desc: 'ATS-compliant AI CV Builder and technical Mock Interview simulations attract tens of thousands of active engineers daily.',
     badge: 'AI Career Tools',
   },
 ];
 
-export default function CurvedOrbitAttractionV2({ onOpenConsultModal }: CurvedOrbitAttractionV2Props) {
+export default function CurvedOrbitAttraction({ onOpenConsultModal }: CurvedOrbitAttractionProps) {
   return (
     <section aria-label="Candidate Attraction Ecosystem" className="border-b border-[#E5E7EB] bg-white py-16 sm:py-24">
       <div className="container-page">
@@ -61,16 +61,16 @@ export default function CurvedOrbitAttractionV2({ onOpenConsultModal }: CurvedOr
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#00B14F]/20 bg-[#F0FDF4] px-4 py-1.5 text-xs font-bold text-[#009D46]">
             <Globe2 className="h-3.5 w-3.5" />
-            <span>HỆ SINH THÁI ĐA KÊNH CHUYÊN SÂU IT</span>
+            <span>SPECIALIZED MULTI-CHANNEL TECH ECOSYSTEM</span>
           </div>
 
           <h2 className="mt-4 text-2xl font-black tracking-tight text-[#1E2837] sm:text-4xl">
-            InterVue thu hút ứng viên IT <span className="text-[#00B14F]">như thế nào?</span>
+            How InterVue Attracts <span className="text-[#00B14F]">Top IT Talent</span>
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-[#6C757D] sm:text-base">
-            Hơn 50.000+ kỹ sư phần mềm và lập trình viên sử dụng InterVue để tìm kiếm cơ hội mới, rèn luyện kỹ năng và
-            xây dựng sự nghiệp công nghệ vững chắc mỗi ngày.
+            Over 50,000+ software engineers and developers rely on InterVue every day to discover opportunities, sharpen
+            their skills, and advance their tech careers.
           </p>
         </div>
 
@@ -91,10 +91,10 @@ export default function CurvedOrbitAttractionV2({ onOpenConsultModal }: CurvedOr
 
                 {/* Central Floating Metric Badge */}
                 <div className="relative z-10 flex h-40 w-40 flex-col items-center justify-center rounded-full border-2 border-[#00B14F]/30 bg-white/95 p-4 shadow-[0_8px_30px_rgba(0,177,79,0.15)] backdrop-blur-md">
-                  <span className="text-3xl font-black tracking-tight text-[#009D46] sm:text-4xl">50.000+</span>
+                  <span className="text-3xl font-black tracking-tight text-[#009D46] sm:text-4xl">50,000+</span>
                   <span className="mt-1 text-center text-xs font-bold text-[#1E2837]">
-                    Nhân tài IT <br />
-                    sẵn sàng ứng tuyển
+                    Tech Talents <br />
+                    Ready to Apply
                   </span>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default function CurvedOrbitAttractionV2({ onOpenConsultModal }: CurvedOr
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00B14F] opacity-75" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#00B14F]" />
                 </span>
-                <span>Dữ liệu hồ sơ xác thực theo thời gian thực</span>
+                <span>Real-time eKYC-verified candidate profiles</span>
               </div>
             </div>
           </div>
@@ -153,10 +153,10 @@ export default function CurvedOrbitAttractionV2({ onOpenConsultModal }: CurvedOr
           <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
             <div>
               <p className="text-base font-extrabold text-[#1E2837] sm:text-lg">
-                Hệ sinh thái ứng viên IT rộng lớn giúp tin tuyển dụng tiếp cận đúng người, đúng thời điểm.
+                An expansive IT talent ecosystem connecting your openings to the right engineers at the right time.
               </p>
               <p className="mt-1 text-xs text-[#6C757D] sm:text-sm">
-                Rút ngắn 3 lần thời gian phỏng vấn và giảm tới 60% chi phí tìm nguồn ứng viên công nghệ.
+                Shorten interview lead time by 3x and reduce tech sourcing costs by up to 60%.
               </p>
             </div>
 
@@ -167,14 +167,14 @@ export default function CurvedOrbitAttractionV2({ onOpenConsultModal }: CurvedOr
                 className="flex cursor-pointer items-center gap-1.5 rounded-full border border-[#00B14F] bg-white px-5 py-2.5 text-xs font-bold text-[#00B14F] transition-all hover:bg-emerald-50 sm:text-sm"
               >
                 <Headphones className="h-4 w-4" />
-                <span>Tư vấn tuyển dụng</span>
+                <span>Request Consultation</span>
               </button>
 
               <Link
                 href={ROUTES.RECRUITER_REGISTER}
                 className="flex items-center gap-1.5 rounded-full bg-[#009D46] px-6 py-2.5 text-xs font-bold text-white shadow-xs transition-all hover:bg-[#00873c] sm:text-sm"
               >
-                <span>Đăng ký ngay</span>
+                <span>Get Started Now</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

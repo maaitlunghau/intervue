@@ -9,15 +9,15 @@ const INITIAL_FORM = {
   phone: '',
   email: '',
   company: '',
-  needs: 'Gói đăng tin tuyển dụng & AI matching',
+  needs: 'Job Posting & AI Matching Solutions',
 };
 
-interface RecruiterConsultModalV2Props {
+interface RecruiterConsultModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterConsultModalV2Props) {
+export default function RecruiterConsultModal({ isOpen, onClose }: RecruiterConsultModalProps) {
   const [form, setForm] = useState(INITIAL_FORM);
   const [submitted, setSubmitted] = useState(false);
   const [submittedPhone, setSubmittedPhone] = useState('');
@@ -40,8 +40,8 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Đăng ký tư vấn Tuyển dụng Doanh nghiệp"
-      description="Chuyên viên giải pháp tuyển dụng của InterVue sẽ liên hệ hỗ trợ bạn trong vòng 15 phút làm việc."
+      title="Enterprise Recruitment Consultation"
+      description="An InterVue recruitment solutions specialist will reach out to assist you within 15 working minutes."
       maxWidth="md"
     >
       {submitted ? (
@@ -49,10 +49,10 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
           <div className="bg-primary-container text-primary mx-auto flex h-14 w-14 items-center justify-center rounded-full">
             <CheckCircle2 className="h-8 w-8" />
           </div>
-          <h3 className="text-navy mt-4 text-lg font-bold">Gửi yêu cầu thành công!</h3>
+          <h3 className="text-navy mt-4 text-lg font-bold">Request Submitted Successfully!</h3>
           <p className="text-on-surface-variant mt-2 text-xs">
-            Cảm ơn bạn đã tin tưởng InterVue. Chuyên viên tư vấn tuyển dụng sẽ gọi điện trực tiếp tới số điện thoại{' '}
-            <strong className="text-navy">{submittedPhone}</strong> để hỗ trợ.
+            Thank you for trusting InterVue. Our recruitment specialist will call directly to{' '}
+            <strong className="text-navy">{submittedPhone}</strong> to assist you.
           </p>
           <div className="mt-6 flex justify-center gap-3">
             <a
@@ -60,56 +60,56 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
               className="bg-navy inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold text-white transition hover:bg-slate-800"
             >
               <PhoneCall className="h-3.5 w-3.5 text-emerald-400" />
-              <span>Hotline: 0812.665.001</span>
+              <span>Hotline: (+84) 812.665.001</span>
             </a>
             <button
               type="button"
               onClick={handleClose}
               className="border-outline text-navy hover:bg-surface-container-high rounded-xl border px-5 py-2.5 text-xs font-bold transition"
             >
-              Đóng
+              Close
             </button>
           </div>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4 pt-2">
           <div>
-            <label htmlFor="modal-v2-fullName" className="text-navy block text-xs font-bold">
-              Họ và tên người liên hệ *
+            <label htmlFor="modal-fullName" className="text-navy block text-xs font-bold">
+              Full Name *
             </label>
             <input
-              id="modal-v2-fullName"
+              id="modal-fullName"
               type="text"
               required
               value={form.fullName}
               onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-              placeholder="VD: Nguyễn Văn An (HR Manager)"
+              placeholder="e.g. Alex Johnson (HR Manager)"
               className="border-outline-variant text-navy focus:border-primary focus:ring-primary/20 mt-1 w-full rounded-xl border px-3.5 py-2.5 text-xs font-medium transition focus:ring-2 focus:outline-none"
             />
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label htmlFor="modal-v2-phone" className="text-navy block text-xs font-bold">
-                Số điện thoại liên hệ *
+              <label htmlFor="modal-phone" className="text-navy block text-xs font-bold">
+                Phone Number *
               </label>
               <input
-                id="modal-v2-phone"
+                id="modal-phone"
                 type="tel"
                 required
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                placeholder="0987654321"
+                placeholder="+84 987 654 321"
                 className="border-outline-variant text-navy focus:border-primary focus:ring-primary/20 mt-1 w-full rounded-xl border px-3.5 py-2.5 text-xs font-medium transition focus:ring-2 focus:outline-none"
               />
             </div>
 
             <div>
-              <label htmlFor="modal-v2-email" className="text-navy block text-xs font-bold">
-                Email doanh nghiệp *
+              <label htmlFor="modal-email" className="text-navy block text-xs font-bold">
+                Work Email *
               </label>
               <input
-                id="modal-v2-email"
+                id="modal-email"
                 type="email"
                 required
                 value={form.email}
@@ -121,41 +121,35 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
           </div>
 
           <div>
-            <label htmlFor="modal-v2-company" className="text-navy block text-xs font-bold">
-              Tên công ty / Doanh nghiệp *
+            <label htmlFor="modal-company" className="text-navy block text-xs font-bold">
+              Company / Enterprise Name *
             </label>
             <input
-              id="modal-v2-company"
+              id="modal-company"
               type="text"
               required
               value={form.company}
               onChange={(e) => setForm({ ...form, company: e.target.value })}
-              placeholder="Tên doanh nghiệp của bạn"
+              placeholder="Your company name"
               className="border-outline-variant text-navy focus:border-primary focus:ring-primary/20 mt-1 w-full rounded-xl border px-3.5 py-2.5 text-xs font-medium transition focus:ring-2 focus:outline-none"
             />
           </div>
 
           <div>
-            <label htmlFor="modal-v2-needs" className="text-navy block text-xs font-bold">
-              Nhu cầu tư vấn
+            <label htmlFor="modal-needs" className="text-navy block text-xs font-bold">
+              Consultation Needs
             </label>
             <select
-              id="modal-v2-needs"
+              id="modal-needs"
               value={form.needs}
               onChange={(e) => setForm({ ...form, needs: e.target.value })}
               className="border-outline-variant text-navy focus:border-primary focus:ring-primary/20 mt-1 w-full rounded-xl border px-3.5 py-2.5 text-xs font-medium transition focus:ring-2 focus:outline-none"
             >
-              <option value="Gói đăng tin tuyển dụng & AI matching">Gói đăng tin tuyển dụng &amp; AI matching</option>
-              <option value="Gói Doanh nghiệp quy mô lớn (Enterprise Custom)">
-                Gói Doanh nghiệp quy mô lớn (Enterprise Custom)
-              </option>
-              <option value="Vị trí Banner & Quảng bá tuyển dụng đa kênh">
-                Vị trí Banner &amp; Quảng bá tuyển dụng đa kênh
-              </option>
-              <option value="Hợp tác nguồn nhân lực Đại học & Education Code">
-                Hợp tác nguồn nhân lực Đại học &amp; Education Code
-              </option>
-              <option value="Tích hợp API hệ thống ATS nội bộ">Tích hợp API hệ thống ATS nội bộ</option>
+              <option value="Job Posting & AI Matching Solutions">Job Posting &amp; AI Matching Solutions</option>
+              <option value="Large Enterprise Custom Package">Large Enterprise Custom Package</option>
+              <option value="Banner Placement & Tech Branding">Banner Placement &amp; Tech Branding</option>
+              <option value="Academic & Education Code Partnership">Academic &amp; Education Code Partnership</option>
+              <option value="Internal ATS API Integration">Internal ATS API Integration</option>
             </select>
           </div>
 
@@ -165,14 +159,14 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
               onClick={handleClose}
               className="border-outline-variant text-on-surface-variant hover:bg-surface-container-low rounded-xl border px-4 py-2.5 text-xs font-bold transition"
             >
-              Hủy
+              Cancel
             </button>
             <button
               type="submit"
               className="bg-primary hover:bg-primary-hover inline-flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-xs font-bold text-white transition"
             >
               <Send className="h-3.5 w-3.5" />
-              <span>Gửi yêu cầu tư vấn</span>
+              <span>Submit Consultation Request</span>
             </button>
           </div>
         </form>

@@ -15,12 +15,12 @@ const TRUSTED_COMPANIES = [
   { name: 'Tiki', logo: '/company-logos/tiki.png', category: 'Digital Marketplace' },
 ];
 
-export default function TrustedPartnersTickerV2() {
+export default function TrustedPartnersTicker() {
   return (
     <section aria-label="Trusted Enterprise Partners" className="border-b border-[#E5E7EB] bg-white py-10">
       <div className="container-page">
         <p className="text-center text-xs font-bold tracking-widest text-[#6C757D] uppercase">
-          ĐƯỢC TIN DÙNG BỞI HƠN 1.200+ DOANH NGHIỆP CÔNG NGHỆ VÀ TẬP ĐOÀN ĐA QUỐC GIA
+          TRUSTED BY 1,200+ TECH ENTERPRISES AND MULTINATIONAL CORPORATIONS
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:gap-5 lg:gap-6">

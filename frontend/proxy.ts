@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const PUBLIC_PATHS: readonly string[] = [
   ROUTES.RECRUITER_LANDING,
-  '/recruiter/v2',
   ROUTES.RECRUITER_LOGIN,
   ROUTES.RECRUITER_REGISTER,
   ROUTES.RECRUITER_ONBOARDING,

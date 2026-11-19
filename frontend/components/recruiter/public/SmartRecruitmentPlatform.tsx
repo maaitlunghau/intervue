@@ -18,7 +18,7 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 
-interface SmartRecruitmentPlatformV2Props {
+interface SmartRecruitmentPlatformProps {
   onOpenConsultModal?: () => void;
 }
 
@@ -26,71 +26,71 @@ const SRP_TABS = [
   {
     id: 'job-posting',
     icon: FileText,
-    label: 'Đăng tin tuyển dụng IT',
-    title: 'Đăng tin thông minh cùng AI tối ưu chuẩn SEO',
-    desc: 'Khởi tạo tin tuyển dụng nhanh chóng với sự hỗ trợ của AI. Tự động chuẩn hóa kỹ năng, framework và đề xuất mức lương thị trường cạnh tranh.',
+    label: 'AI Job Posting',
+    title: 'Smart AI Job Editor Optimized for Tech SEO',
+    desc: 'Publish tech job openings instantly with AI assistance. Automatically standardize skills, frameworks, and benchmark competitive market compensation.',
     benefits: [
-      'Gợi ý JD chuẩn xác theo từng ngôn ngữ và vị trí (Frontend, Backend, DevOps, AI)',
-      'Tự động tối ưu hóa từ khóa kỹ thuật giúp tin đạt vị trí cao trên Google & AI Search',
-      'Đẩy TOP tự động vào các khung giờ vàng nhiều lập trình viên truy cập nhất',
+      'Generates tailored JDs across engineering tracks (Frontend, Backend, DevOps, AI, Mobile)',
+      'Automatic technical SEO optimization ranks your openings high on Google & AI search engines',
+      'Automated boost during peak developer browsing hours',
     ],
-    tag: 'Tăng 3.5x lượt ứng tuyển',
+    tag: '3.5x More Applications',
   },
   {
     id: 'talent-search',
     icon: Search,
-    label: 'Săn hồ sơ IT chủ động',
-    title: 'Tìm kiếm nhân tài công nghệ theo Tech Stack',
-    desc: 'Chủ động tiếp cận kho hồ sơ IT chất lượng cao mà không cần chờ đợi ứng viên nộp đơn. Bộ lọc sâu theo framework, số năm kinh nghiệm và mức lương.',
+    label: 'Proactive Talent Sourcing',
+    title: 'Directly Source Engineers by Tech Stack',
+    desc: 'Actively engage high-caliber software talent without waiting for applicants. Deep filtering by framework, years of experience, and salary expectations.',
     benefits: [
-      'Bộ lọc chuyên sâu: Ngôn ngữ lập trình, Cloud platform, Database, Architecture',
-      'Điểm số AI Matching hiển thị trực tiếp trên từng hồ sơ ứng viên',
-      '100% ứng viên đã xác thực danh tính eKYC, hạn chế tối đa hồ sơ ảo',
+      'Granular filters: Programming languages, cloud platforms, databases, architecture',
+      'Real-time AI Match scores displayed directly on candidate profiles',
+      '100% eKYC-verified identities, eliminating fake profiles and ghosting',
     ],
-    tag: '50.000+ Hồ sơ đã xác thực',
+    tag: '50,000+ Verified Profiles',
   },
   {
     id: 'connect-chat',
     icon: MessageSquare,
-    label: 'InterVue Connect (Chat 1-1)',
-    title: 'Kết nối và phỏng vấn trực tiếp tức thì',
-    desc: 'Phá bỏ rào cản gửi email truyền thống với tỷ lệ phản hồi thấp. Nhắn tin trực tiếp 1-1 với lập trình viên, trao đổi kỹ thuật và đặt lịch phỏng vấn.',
+    label: 'InterVue Connect (1-on-1 Chat)',
+    title: 'Instant Real-time Candidate Engagement',
+    desc: 'Eliminate slow email turnaround. Message software engineers directly 1-on-1, discuss technical requirements, and schedule interviews instantly.',
     benefits: [
-      'Tỷ lệ phản hồi tin nhắn đạt trên 85% trong vòng 24 giờ',
-      'Gửi thư mời phỏng vấn kỹ thuật và nhận xác nhận trực tiếp trong khung chat',
-      'Bảo mật thông tin trao đổi giữa nhà tuyển dụng và ứng viên',
+      'Over 85% response rate within 24 hours',
+      'Send technical interview invites and receive instant RSVPs within the chat',
+      'End-to-end encrypted communication protecting hiring team and candidate privacy',
     ],
-    tag: 'Phản hồi trong 24 giờ',
+    tag: '24-Hour Response Rate',
   },
   {
     id: 'employer-branding',
     icon: Sparkles,
-    label: 'Truyền thông thương hiệu',
-    title: 'Định vị thương hiệu Nhà tuyển dụng công nghệ',
-    desc: 'Gia tăng độ nhận diện thương hiệu tuyển dụng trong mắt cộng đồng lập trình viên thông qua hệ thống Banner tài trợ và chuyên trang Company Profile.',
+    label: 'Employer Tech Branding',
+    title: 'Position Your Engineering Brand Front & Center',
+    desc: 'Elevate employer brand reputation within the developer community through sponsored tech banners and verified company profile pages.',
     benefits: [
-      'Chuyên trang tuyển dụng độc quyền (Company Tech Profile) chuẩn công nghệ',
-      'Vị trí Banner tài trợ nổi bật trên trang chủ và trang danh mục việc làm',
-      'Tăng 5 lần mức độ tin cậy và thu hút các kỹ sư phần mềm cấp cao',
+      'Exclusive engineering showcase page (Company Tech Profile)',
+      'Prominent sponsored banner placements on homepage and job directories',
+      '5x higher trust and engagement from senior engineers and engineering leads',
     ],
-    tag: 'Tăng 5x độ nhận diện',
+    tag: '5x Higher Visibility',
   },
   {
     id: 'ats-integration',
     icon: Layers,
-    label: 'ATS Kanban & Tích hợp API',
-    title: 'Quản trị phễu tuyển dụng và đồng bộ dữ liệu',
-    desc: 'Theo dõi hành trình ứng viên trực quan trên bảng Kanban. Dễ dàng đồng bộ trạng thái hồ sơ về hệ thống quản lý nội bộ qua RESTful API chuẩn hóa.',
+    label: 'ATS Kanban & API Integration',
+    title: 'Visual Hiring Pipeline & Bi-directional Sync',
+    desc: 'Track candidates across a fluid Kanban pipeline. Effortlessly synchronize hiring stages with your internal ATS via standardized RESTful APIs.',
     benefits: [
-      'Phễu Kanban kéo thả mượt mà: Mới nộp, Khớp AI, Phỏng vấn, Offer, Tuyển dụng',
-      'Chấm điểm và phân tầng câu hỏi phỏng vấn theo kinh nghiệm ứng viên',
-      'Hỗ trợ Webhook và API kết nối thông suốt với phần mềm ATS doanh nghiệp',
+      'Intuitive drag-and-drop Kanban: New, AI Matched, Interview, Offer, Hired',
+      'Automated scoring and layered technical interview questions tailored to candidate depth',
+      'Webhook & API support for seamless integration with enterprise ATS solutions',
     ],
-    tag: 'Tiết kiệm 70% thời gian',
+    tag: 'Save 70% Screening Time',
   },
 ];
 
-export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: SmartRecruitmentPlatformV2Props) {
+export default function SmartRecruitmentPlatform({ onOpenConsultModal }: SmartRecruitmentPlatformProps) {
   const [activeTabId, setActiveTabId] = useState(SRP_TABS[0].id);
   const activeTab = SRP_TABS.find((t) => t.id === activeTabId) ?? SRP_TABS[0];
 
@@ -109,12 +109,12 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
           </div>
 
           <h2 className="mt-4 text-2xl font-black tracking-tight text-[#1E2837] sm:text-4xl">
-            Nền tảng tuyển dụng IT toàn diện <span className="text-[#00B14F]">ứng dụng AI</span>
+            Comprehensive IT Recruitment Platform <span className="text-[#00B14F]">Powered by AI</span>
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-[#6C757D] sm:text-base">
-            Hệ sinh thái công nghệ khép kín giải quyết trọn vẹn bài toán tuyển dụng IT: từ tạo nguồn hồ sơ, sàng lọc kỹ
-            thuật, đến phỏng vấn và quản trị ứng viên hiệu suất cao.
+            An end-to-end technology ecosystem solving every tech hiring challenge: from sourcing and technical
+            screening to interviews and high-performance candidate management.
           </p>
         </div>
 
@@ -178,7 +178,7 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
             <div>
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E5E7EB] pb-5">
                 <div>
-                  <span className="text-xs font-bold text-[#009D46] uppercase">Giải pháp chuyên sâu</span>
+                  <span className="text-xs font-bold text-[#009D46] uppercase">Specialized Solution</span>
                   <h3 className="mt-1 text-xl font-black text-[#1E2837] sm:text-2xl">{activeTab.title}</h3>
                 </div>
                 <span className="rounded-full border border-[#D1F2DF] bg-[#F0FDF4] px-3 py-1 text-xs font-bold text-[#009D46]">
@@ -242,9 +242,9 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
                   <div className="flex items-center justify-between rounded-xl bg-emerald-50/80 p-3 text-xs text-[#009D46]">
                     <div className="flex items-center gap-2 font-semibold">
                       <Bot className="h-4 w-4" />
-                      <span>Đã gợi ý 12 tiêu chí sàng lọc kỹ thuật tự động</span>
+                      <span>12 technical screening criteria automatically suggested</span>
                     </div>
-                    <span className="cursor-pointer font-bold underline">Xem trước tin đăng</span>
+                    <span className="cursor-pointer font-bold underline">Preview Job Post</span>
                   </div>
                 </div>
               )}
@@ -252,8 +252,8 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
               {activeTabId === 'talent-search' && (
                 <div className="space-y-3 font-sans">
                   <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-2.5">
-                    <span className="text-xs font-bold text-[#1E2837]">Tìm kiếm lập trình viên chủ động</span>
-                    <span className="text-[11px] font-bold text-[#009D46]">Tìm thấy 1.420 hồ sơ phù hợp</span>
+                    <span className="text-xs font-bold text-[#1E2837]">Direct Candidate Search</span>
+                    <span className="text-[11px] font-bold text-[#009D46]">Found 1,420 matched profiles</span>
                   </div>
 
                   <div className="rounded-xl border border-[#D1F2DF] bg-white p-3.5 shadow-sm">
@@ -264,12 +264,14 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-[#1E2837]">Trần Huy Hoàng</span>
+                            <span className="text-xs font-bold text-[#1E2837]">Tran Huy Hoang</span>
                             <span className="py-0.2 flex items-center gap-0.5 rounded-full bg-emerald-100 px-1.5 text-[9px] font-bold text-emerald-800">
                               <ShieldCheck className="h-3 w-3" /> eKYC Verified
                             </span>
                           </div>
-                          <span className="text-[11px] text-[#6C757D]">Senior DevOps & Cloud Architect • 5 năm kn</span>
+                          <span className="text-[11px] text-[#6C757D]">
+                            Senior DevOps &amp; Cloud Architect • 5 yrs exp
+                          </span>
                         </div>
                       </div>
                       <div className="text-right">
@@ -289,15 +291,15 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
                       <div className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
                       <span className="text-xs font-bold text-[#1E2837]">InterVue Connect 1-on-1</span>
                     </div>
-                    <span className="text-[10px] text-slate-500">Trực tuyến</span>
+                    <span className="text-[10px] text-slate-500">Online</span>
                   </div>
 
                   <div className="space-y-2 text-xs">
                     <div className="rounded-xl border border-[#E5E7EB] bg-white p-2.5 text-[#1E2837]">
-                      Chào bạn! Chúng tôi đã xem qua profile Kubernetes & Go của bạn trên InterVue. Rất ấn tượng!
+                      Hi there! We reviewed your Kubernetes &amp; Go profile on InterVue. Very impressive track record!
                     </div>
                     <div className="ml-auto w-4/5 rounded-xl bg-[#009D46] p-2.5 text-white">
-                      Dạ em chào anh/chị! Em đang sẵn sàng cho cơ hội mới. Em có thể phỏng vấn vào thứ Năm này ạ!
+                      Hello! I am actively exploring senior backend roles. I would love to interview this Thursday!
                     </div>
                   </div>
                 </div>
@@ -310,11 +312,11 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
                       <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-[10px] font-bold text-amber-800">
                         TOP IT EMPLOYER 2026
                       </span>
-                      <span className="text-[10px] font-bold text-emerald-700">45.000+ Lượt tiếp cận</span>
+                      <span className="text-[10px] font-bold text-emerald-700">45,000+ Impressions</span>
                     </div>
-                    <h4 className="mt-2 text-xs font-bold text-[#1E2837]">Banner Trang Chủ & Chuyên trang Công Nghệ</h4>
+                    <h4 className="mt-2 text-xs font-bold text-[#1E2837]">Homepage Banner &amp; Engineering Profile</h4>
                     <p className="mt-1 text-[11px] text-[#6C757D]">
-                      Gia tăng sự tin cậy tuyệt đối khi tuyển các vị trí nhân sự IT cấp cao và Tech Lead.
+                      Build maximum credibility when recruiting Senior Engineers, Tech Leads, and Architects.
                     </p>
                   </div>
                 </div>
@@ -323,15 +325,15 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
               {activeTabId === 'ats-integration' && (
                 <div className="space-y-2 font-sans">
                   <div className="flex items-center justify-between pb-1 text-xs font-bold text-[#1E2837]">
-                    <span>Phễu ứng viên Kanban</span>
-                    <span className="text-[#009D46]">Tự động đồng bộ API</span>
+                    <span>Candidate Pipeline Kanban</span>
+                    <span className="text-[#009D46]">Auto Sync via API</span>
                   </div>
                   <div className="grid grid-cols-4 gap-2 text-center text-[10px] font-bold">
-                    <div className="rounded-lg border border-[#E5E7EB] bg-white p-2">Mới nộp (14)</div>
+                    <div className="rounded-lg border border-[#E5E7EB] bg-white p-2">Applied (14)</div>
                     <div className="rounded-lg border border-[#D1F2DF] bg-emerald-50 p-2 text-[#009D46]">
-                      Khớp 85%+ (8)
+                      85%+ Match (8)
                     </div>
-                    <div className="rounded-lg border border-blue-200 bg-blue-50 p-2 text-blue-700">Phỏng vấn (4)</div>
+                    <div className="rounded-lg border border-blue-200 bg-blue-50 p-2 text-blue-700">Interview (4)</div>
                     <div className="rounded-lg border border-amber-200 bg-amber-50 p-2 text-amber-700">Offer (2)</div>
                   </div>
                 </div>
@@ -341,7 +343,7 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
             {/* Bottom Actions */}
             <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-[#E5E7EB] pt-5">
               <span className="text-xs font-semibold text-[#6C757D]">
-                Đầy đủ giải pháp từ đăng tin, tìm kiếm, đến quản trị ứng viên.
+                End-to-end solutions from job posting and active search to pipeline management.
               </span>
 
               <div className="flex items-center gap-3">
@@ -351,14 +353,14 @@ export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: Smart
                   className="cursor-pointer rounded-full border border-[#00B14F] px-4.5 py-2 text-xs font-bold text-[#00B14F] transition-all hover:bg-emerald-50"
                 >
                   <Headphones className="mr-1.5 inline-block h-3.5 w-3.5" />
-                  <span>Tư vấn giải pháp</span>
+                  <span>Request Consultation</span>
                 </button>
 
                 <Link
                   href={ROUTES.RECRUITER_REGISTER}
                   className="inline-flex items-center gap-1.5 rounded-full bg-[#009D46] px-5 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-[#00873c]"
                 >
-                  <span>Dùng thử miễn phí</span>
+                  <span>Start Free Trial</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>

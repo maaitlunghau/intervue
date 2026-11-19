@@ -10,19 +10,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
-interface RecruiterHeaderV2Props {
+interface RecruiterHeaderProps {
   onOpenConsultModal?: () => void;
 }
 
 const LANGUAGES = [
-  { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
   { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
 ];
 
-export default function RecruiterHeaderV2({ onOpenConsultModal }: RecruiterHeaderV2Props) {
+export default function RecruiterHeader({ onOpenConsultModal }: RecruiterHeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState<'vi' | 'en'>('vi');
+  const [currentLang, setCurrentLang] = useState<'vi' | 'en'>('en');
   const { user, status } = useAuth();
   const isSignedIn = status === 'authenticated' && Boolean(user);
 
@@ -43,58 +43,58 @@ export default function RecruiterHeaderV2({ onOpenConsultModal }: RecruiterHeade
   return (
     <header className="pointer-events-none sticky top-0 z-50 w-full px-4 pt-3.5 pb-2 sm:px-6">
       {/* Floating Centered Pill / Capsule Navbar */}
-      <div className="pointer-events-auto mx-auto flex h-[64px] w-full max-w-[1240px] items-center justify-between rounded-full border border-[#E5E7EB] bg-white px-5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] sm:px-7">
+      <div className="pointer-events-auto mx-auto flex h-[64px] w-full max-w-[1280px] items-center justify-between rounded-full border border-[#E5E7EB] bg-white px-4 shadow-[0_4px_24px_rgba(0,0,0,0.06)] sm:px-6">
         {/* Left: InterVue Brand Logo & Navigation Links */}
-        <div className="flex items-center gap-6 lg:gap-8">
+        <div className="flex items-center gap-4 xl:gap-8">
           <Link href={ROUTES.RECRUITER_LANDING} className="flex shrink-0 items-center">
             <Image
               src="/intervue-logo.png"
               alt="InterVue"
-              width={150}
-              height={38}
+              width={140}
+              height={36}
               priority
               className="h-8 w-auto object-contain sm:h-9"
             />
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav aria-label="Recruiter navigation" className="hidden items-center gap-1.5 lg:flex">
+          {/* Desktop Navigation Links - Single line guaranteed */}
+          <nav aria-label="Recruiter navigation" className="hidden items-center gap-1 lg:flex xl:gap-1.5">
             <Link
-              href="#recruiter-hero-v2"
-              className="rounded-full px-3.5 py-2 text-[15px] font-medium text-[#263A4D] transition-colors hover:text-[#00B14F]"
+              href="#recruiter-hero"
+              className="rounded-full px-3 py-2 text-[14px] font-medium whitespace-nowrap text-[#263A4D] transition-colors hover:text-[#00B14F]"
             >
-              Giải pháp
+              Solutions
             </Link>
             <Link
               href="#pricing"
-              className="rounded-full px-3.5 py-2 text-[15px] font-medium text-[#263A4D] transition-colors hover:text-[#00B14F]"
+              className="rounded-full px-3 py-2 text-[14px] font-medium whitespace-nowrap text-[#263A4D] transition-colors hover:text-[#00B14F]"
             >
-              Báo giá
+              Pricing
             </Link>
             <button
               type="button"
               onClick={onOpenConsultModal}
-              className="cursor-pointer rounded-full px-3.5 py-2 text-[15px] font-medium text-[#263A4D] transition-colors hover:text-[#00B14F]"
+              className="cursor-pointer rounded-full px-3 py-2 text-[14px] font-medium whitespace-nowrap text-[#263A4D] transition-colors hover:text-[#00B14F]"
             >
-              Liên hệ
+              Contact
             </button>
             <Link
               href="/faq"
-              className="rounded-full px-3.5 py-2 text-[15px] font-medium text-[#263A4D] transition-colors hover:text-[#00B14F]"
+              className="rounded-full px-3 py-2 text-[14px] font-medium whitespace-nowrap text-[#263A4D] transition-colors hover:text-[#00B14F]"
             >
-              Hỗ trợ
+              Support
             </Link>
             <Link
               href="/blog"
-              className="rounded-full px-3.5 py-2 text-[15px] font-medium text-[#263A4D] transition-colors hover:text-[#00B14F]"
+              className="rounded-full px-3 py-2 text-[14px] font-medium whitespace-nowrap text-[#263A4D] transition-colors hover:text-[#00B14F]"
             >
-              Blog tuyển dụng
+              Blog
             </Link>
           </nav>
         </div>
 
         {/* Right: Language Selector, Switch to Job Seeker & Auth Actions */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Language Selector Dropdown */}
           <div className="relative" ref={langMenuRef}>
             <button
@@ -102,9 +102,9 @@ export default function RecruiterHeaderV2({ onOpenConsultModal }: RecruiterHeade
               onClick={() => setLangMenuOpen((prev) => !prev)}
               aria-label="Select language"
               aria-expanded={langMenuOpen}
-              className="flex h-10 cursor-pointer items-center gap-2 rounded-full border border-[#D0D5DD] bg-[#F9FAFB] px-3.5 text-sm font-semibold text-[#344054] shadow-2xs transition-colors hover:border-[#00B14F] hover:bg-white"
+              className="flex h-9.5 cursor-pointer items-center gap-1.5 rounded-full border border-[#D0D5DD] bg-[#F9FAFB] px-3 text-xs font-semibold whitespace-nowrap text-[#344054] shadow-2xs transition-colors hover:border-[#00B14F] hover:bg-white sm:h-10 sm:px-3.5 sm:text-sm"
             >
-              <span className="text-lg leading-none">{activeLangObj.flag}</span>
+              <span className="text-base leading-none sm:text-lg">{activeLangObj.flag}</span>
               <ChevronDown
                 className={cn('h-3.5 w-3.5 text-slate-500 transition-transform', langMenuOpen && 'rotate-180')}
               />
@@ -144,29 +144,29 @@ export default function RecruiterHeaderV2({ onOpenConsultModal }: RecruiterHeade
           {/* Switch to Candidate Portal Button */}
           <Link
             href={ROUTES.HOME}
-            className="hidden h-10 items-center gap-2 rounded-full bg-[#F2F4F7] px-4.5 text-[14px] font-semibold text-[#344054] shadow-2xs transition-colors hover:bg-[#E4E7EC] sm:inline-flex"
+            className="hidden h-9.5 items-center gap-1.5 rounded-full bg-[#F2F4F7] px-3.5 text-[13px] font-semibold whitespace-nowrap text-[#344054] shadow-2xs transition-colors hover:bg-[#E4E7EC] sm:inline-flex sm:h-10 sm:px-4 sm:text-[14px]"
           >
-            <Briefcase className="h-4 w-4 text-[#475467]" />
-            <span>Dành cho người tìm việc</span>
+            <Briefcase className="h-3.5 w-3.5 text-[#475467] sm:h-4 sm:w-4" />
+            <span>For Job Seekers</span>
           </Link>
 
           {/* Auth Actions: Guest vs Signed-in */}
           {isSignedIn ? (
             <HeaderAccountActions portal="recruiter" />
           ) : (
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <Link
                 href={ROUTES.RECRUITER_LOGIN}
-                className="hidden h-10 items-center rounded-full border border-gray-200 bg-white px-5 text-[14px] font-semibold text-[#00B14F] shadow-2xs transition-all hover:border-[#00B14F] hover:bg-emerald-50/50 sm:inline-flex"
+                className="hidden h-9.5 items-center rounded-full border border-gray-200 bg-white px-4 text-[13px] font-semibold whitespace-nowrap text-[#00B14F] shadow-2xs transition-all hover:border-[#00B14F] hover:bg-emerald-50/50 sm:inline-flex sm:h-10 sm:px-4.5 sm:text-[14px]"
               >
-                Đăng nhập
+                Sign In
               </Link>
               <Link
                 href={ROUTES.RECRUITER_REGISTER}
-                className="inline-flex h-10 items-center gap-1.5 rounded-full bg-[#00B14F] px-5 text-[14px] font-bold text-white shadow-2xs transition-all hover:bg-[#009643]"
+                className="inline-flex h-9.5 items-center gap-1 rounded-full bg-[#00B14F] px-4 text-[13px] font-bold whitespace-nowrap text-white shadow-2xs transition-all hover:bg-[#009643] sm:h-10 sm:px-4.5 sm:text-[14px]"
               >
-                <span>Đăng ký</span>
-                <ArrowUpRight className="h-4 w-4" />
+                <span>Sign Up</span>
+                <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               </Link>
             </div>
           )}
