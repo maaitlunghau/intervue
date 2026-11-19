@@ -1,18 +1,18 @@
-import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm';
-import RecruiterAuthLayout from '@/components/auth/RecruiterAuthLayout';
+import RecruiterAuthSplitLayout from '@/components/auth/RecruiterAuthSplitLayout';
+import RecruiterForgotPasswordForm from '@/components/auth/RecruiterForgotPasswordForm';
 import RecruiterGuestRedirect from '@/components/auth/RecruiterGuestRedirect';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Employer forgot password | InterVue AI',
-  description: 'Recover the password of your InterVue employer account quickly and securely.',
+  title: 'Forgot employer password | InterVue AI',
+  description: 'Recover access to your InterVue employer account.',
 };
 
 export default function RecruiterForgotPasswordPage() {
   return (
-    <RecruiterAuthLayout title="Forgot password" subtitle="Recover access to your employer account">
+    <RecruiterAuthSplitLayout contentMaxWidth="max-w-[520px] sm:max-w-[540px] xl:max-w-[560px]">
       <RecruiterGuestRedirect />
-      <ForgotPasswordForm portal="recruiter" />
-    </RecruiterAuthLayout>
+      <RecruiterForgotPasswordForm />
+    </RecruiterAuthSplitLayout>
   );
 }

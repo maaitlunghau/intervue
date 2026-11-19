@@ -1,18 +1,21 @@
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import RecruiterRegisterCarousel from './RecruiterRegisterCarousel';
 
 type RecruiterAuthSplitLayoutProps = {
   children: ReactNode;
+  contentMaxWidth?: string;
 };
 
-export default function RecruiterAuthSplitLayout({ children }: RecruiterAuthSplitLayoutProps) {
+export default function RecruiterAuthSplitLayout({
+  children,
+  contentMaxWidth = 'max-w-[720px] xl:max-w-[780px] 2xl:max-w-[840px]',
+}: RecruiterAuthSplitLayoutProps) {
   return (
     <div className="relative flex min-h-screen w-full flex-col bg-white lg:flex-row">
       <div className="relative flex min-h-screen w-full flex-1 flex-col justify-between overflow-y-auto px-6 py-8 sm:px-10 md:px-12 lg:w-[65%] lg:flex-none lg:px-10 xl:w-[66.6667%] xl:px-12 2xl:w-[67%] 2xl:px-14">
-        <div className="relative z-10 mx-auto w-full max-w-[720px] py-4 sm:py-6 xl:max-w-[780px] 2xl:max-w-[840px]">
-          {children}
-        </div>
+        <div className={cn('relative z-10 mx-auto w-full py-4 sm:py-6', contentMaxWidth)}>{children}</div>
 
         <div
           aria-hidden="true"
