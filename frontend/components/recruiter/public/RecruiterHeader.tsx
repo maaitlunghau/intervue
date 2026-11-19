@@ -10,7 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
-interface RecruiterHeaderV2Props {
+interface RecruiterHeaderProps {
   onOpenConsultModal?: () => void;
 }
 
@@ -19,7 +19,7 @@ const LANGUAGES = [
   { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
 ];
 
-export default function RecruiterHeaderV2({ onOpenConsultModal }: RecruiterHeaderV2Props) {
+export default function RecruiterHeader({ onOpenConsultModal }: RecruiterHeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState<'vi' | 'en'>('en');
@@ -60,7 +60,7 @@ export default function RecruiterHeaderV2({ onOpenConsultModal }: RecruiterHeade
           {/* Desktop Navigation Links - Single line guaranteed */}
           <nav aria-label="Recruiter navigation" className="hidden items-center gap-1 lg:flex xl:gap-1.5">
             <Link
-              href="#recruiter-hero-v2"
+              href="#recruiter-hero"
               className="rounded-full px-3 py-2 text-[14px] font-medium whitespace-nowrap text-[#263A4D] transition-colors hover:text-[#00B14F]"
             >
               Solutions

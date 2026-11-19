@@ -3,7 +3,7 @@
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import { useState } from 'react';
 
-interface RecruiterFaqAccordionV2Props {
+interface RecruiterFaqAccordionProps {
   onOpenConsultModal?: () => void;
 }
 
@@ -30,7 +30,7 @@ const FAQS = [
   },
 ];
 
-export default function RecruiterFaqAccordionV2({ onOpenConsultModal }: RecruiterFaqAccordionV2Props) {
+export default function RecruiterFaqAccordion({ onOpenConsultModal }: RecruiterFaqAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggle = (i: number) => {

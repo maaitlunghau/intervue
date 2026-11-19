@@ -38,7 +38,7 @@ const COLLAB_MODULES = [
   },
 ];
 
-export default function AcademicTalentSectionV2() {
+export default function AcademicTalentSection() {
   const [activeTab, setActiveTab] = useState(0);
   const current = COLLAB_MODULES[activeTab] ?? COLLAB_MODULES[0];
 

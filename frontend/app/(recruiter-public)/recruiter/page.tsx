@@ -1,4 +1,4 @@
-import RecruiterLandingViewV2 from '@/components/recruiter/public/v2/RecruiterLandingViewV2';
+import RecruiterLandingView from '@/components/recruiter/public/RecruiterLandingView';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function RecruiterLandingPage() {
-  return <RecruiterLandingViewV2 />;
+  return <RecruiterLandingView />;
 }

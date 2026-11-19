@@ -4,7 +4,7 @@ import { ROUTES } from '@/constants/routes';
 import { ArrowRight, Bot, Code2, Globe2, Headphones, Layers, Smartphone, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
-interface CurvedOrbitAttractionV2Props {
+interface CurvedOrbitAttractionProps {
   onOpenConsultModal?: () => void;
 }
 
@@ -53,7 +53,7 @@ const CHANNELS = [
   },
 ];
 
-export default function CurvedOrbitAttractionV2({ onOpenConsultModal }: CurvedOrbitAttractionV2Props) {
+export default function CurvedOrbitAttraction({ onOpenConsultModal }: CurvedOrbitAttractionProps) {
   return (
     <section aria-label="Candidate Attraction Ecosystem" className="border-b border-[#E5E7EB] bg-white py-16 sm:py-24">
       <div className="container-page">

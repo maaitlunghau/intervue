@@ -2,11 +2,11 @@
 
 import { ArrowRight, Check, Crown, Headphones, Lock, ShieldCheck, Zap } from 'lucide-react';
 
-interface InterVueProExecutiveV2Props {
+interface InterVueProExecutiveProps {
   onOpenConsultModal?: () => void;
 }
 
-export default function InterVueProExecutiveV2({ onOpenConsultModal }: InterVueProExecutiveV2Props) {
+export default function InterVueProExecutive({ onOpenConsultModal }: InterVueProExecutiveProps) {
   return (
     <section
       aria-label="InterVue Pro Executive Space"

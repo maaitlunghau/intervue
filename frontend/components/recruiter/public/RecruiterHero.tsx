@@ -7,7 +7,7 @@ import { ArrowRight, Headphones } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface RecruiterHeroV2Props {
+interface RecruiterHeroProps {
   onOpenConsultModal: () => void;
 }
 
@@ -18,7 +18,7 @@ const HERO_STATS = [
   { value: '24 Hours', label: 'Average Interview Connection' },
 ];
 
-export default function RecruiterHeroV2({ onOpenConsultModal }: RecruiterHeroV2Props) {
+export default function RecruiterHero({ onOpenConsultModal }: RecruiterHeroProps) {
   const { user, hasRole } = useAuth();
   const isRecruiter = user && hasRole(ROLES.RECRUITER);
 
@@ -30,7 +30,7 @@ export default function RecruiterHeroV2({ onOpenConsultModal }: RecruiterHeroV2P
     <>
       {/* Hero Visual Scene Section with floating header offset */}
       <section
-        id="recruiter-hero-v2"
+        id="recruiter-hero"
         aria-label="Recruiter Introduction Hero"
         className="relative -mt-[86px] h-[540px] overflow-hidden bg-[#F5FBF9] bg-contain bg-bottom bg-no-repeat pt-[108px] sm:h-[610px] sm:pt-[118px] md:bg-cover lg:h-[670px] lg:pt-[126px]"
         style={{

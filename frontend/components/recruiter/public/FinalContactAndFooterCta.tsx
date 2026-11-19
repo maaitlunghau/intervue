@@ -3,7 +3,7 @@
 import { CheckCircle2, Mail, PhoneCall, Send, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
-export default function FinalContactAndFooterCtaV2() {
+export default function FinalContactAndFooterCta() {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     fullName: '',

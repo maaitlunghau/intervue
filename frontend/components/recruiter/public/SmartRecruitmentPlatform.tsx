@@ -18,7 +18,7 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 
-interface SmartRecruitmentPlatformV2Props {
+interface SmartRecruitmentPlatformProps {
   onOpenConsultModal?: () => void;
 }
 
@@ -90,7 +90,7 @@ const SRP_TABS = [
   },
 ];
 
-export default function SmartRecruitmentPlatformV2({ onOpenConsultModal }: SmartRecruitmentPlatformV2Props) {
+export default function SmartRecruitmentPlatform({ onOpenConsultModal }: SmartRecruitmentPlatformProps) {
   const [activeTabId, setActiveTabId] = useState(SRP_TABS[0].id);
   const activeTab = SRP_TABS.find((t) => t.id === activeTabId) ?? SRP_TABS[0];
 

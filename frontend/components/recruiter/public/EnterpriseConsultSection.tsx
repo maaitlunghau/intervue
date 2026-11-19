@@ -3,7 +3,7 @@
 import { CheckCircle2, PhoneCall, Send, ShieldCheck, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
-export default function EnterpriseConsultSectionV2() {
+export default function EnterpriseConsultSection() {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     fullName: '',

@@ -15,7 +15,7 @@ const TRUSTED_COMPANIES = [
   { name: 'Tiki', logo: '/company-logos/tiki.png', category: 'Digital Marketplace' },
 ];
 
-export default function TrustedPartnersTickerV2() {
+export default function TrustedPartnersTicker() {
   return (
     <section aria-label="Trusted Enterprise Partners" className="border-b border-[#E5E7EB] bg-white py-10">
       <div className="container-page">

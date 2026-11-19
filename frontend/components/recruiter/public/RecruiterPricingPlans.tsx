@@ -4,11 +4,11 @@ import { ROUTES } from '@/constants/routes';
 import { CheckCircle2, Headphones, Sparkles, Users, Zap } from 'lucide-react';
 import Link from 'next/link';
 
-interface RecruiterPricingPlansV2Props {
+interface RecruiterPricingPlansProps {
   onOpenConsultModal?: () => void;
 }
 
-export default function RecruiterPricingPlansV2({ onOpenConsultModal }: RecruiterPricingPlansV2Props) {
+export default function RecruiterPricingPlans({ onOpenConsultModal }: RecruiterPricingPlansProps) {
   return (
     <section
       id="pricing"

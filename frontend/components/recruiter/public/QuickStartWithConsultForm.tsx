@@ -23,7 +23,7 @@ const STEPS = [
   },
 ];
 
-export default function QuickStartWithConsultFormV2() {
+export default function QuickStartWithConsultForm() {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     fullName: '',

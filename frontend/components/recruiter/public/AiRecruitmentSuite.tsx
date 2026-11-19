@@ -4,7 +4,7 @@ import { ROUTES } from '@/constants/routes';
 import { ArrowRight, CheckCircle2, Cpu, Headphones } from 'lucide-react';
 import Link from 'next/link';
 
-interface AiRecruitmentSuiteV2Props {
+interface AiRecruitmentSuiteProps {
   onOpenConsultModal?: () => void;
 }
 
@@ -50,7 +50,7 @@ const AI_BLOCKS = [
   },
 ];
 
-export default function AiRecruitmentSuiteV2({ onOpenConsultModal }: AiRecruitmentSuiteV2Props) {
+export default function AiRecruitmentSuite({ onOpenConsultModal }: AiRecruitmentSuiteProps) {
   return (
     <section aria-label="AI Recruitment Suite" className="border-b border-[#E5E7EB] bg-white py-16 sm:py-24">
       <div className="container-page">

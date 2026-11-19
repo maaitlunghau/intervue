@@ -12,12 +12,12 @@ const INITIAL_FORM = {
   needs: 'Job Posting & AI Matching Solutions',
 };
 
-interface RecruiterConsultModalV2Props {
+interface RecruiterConsultModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterConsultModalV2Props) {
+export default function RecruiterConsultModal({ isOpen, onClose }: RecruiterConsultModalProps) {
   const [form, setForm] = useState(INITIAL_FORM);
   const [submitted, setSubmitted] = useState(false);
   const [submittedPhone, setSubmittedPhone] = useState('');
@@ -74,11 +74,11 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4 pt-2">
           <div>
-            <label htmlFor="modal-v2-fullName" className="text-navy block text-xs font-bold">
+            <label htmlFor="modal-fullName" className="text-navy block text-xs font-bold">
               Full Name *
             </label>
             <input
-              id="modal-v2-fullName"
+              id="modal-fullName"
               type="text"
               required
               value={form.fullName}
@@ -90,11 +90,11 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label htmlFor="modal-v2-phone" className="text-navy block text-xs font-bold">
+              <label htmlFor="modal-phone" className="text-navy block text-xs font-bold">
                 Phone Number *
               </label>
               <input
-                id="modal-v2-phone"
+                id="modal-phone"
                 type="tel"
                 required
                 value={form.phone}
@@ -105,11 +105,11 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
             </div>
 
             <div>
-              <label htmlFor="modal-v2-email" className="text-navy block text-xs font-bold">
+              <label htmlFor="modal-email" className="text-navy block text-xs font-bold">
                 Work Email *
               </label>
               <input
-                id="modal-v2-email"
+                id="modal-email"
                 type="email"
                 required
                 value={form.email}
@@ -121,11 +121,11 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
           </div>
 
           <div>
-            <label htmlFor="modal-v2-company" className="text-navy block text-xs font-bold">
+            <label htmlFor="modal-company" className="text-navy block text-xs font-bold">
               Company / Enterprise Name *
             </label>
             <input
-              id="modal-v2-company"
+              id="modal-company"
               type="text"
               required
               value={form.company}
@@ -136,11 +136,11 @@ export default function RecruiterConsultModalV2({ isOpen, onClose }: RecruiterCo
           </div>
 
           <div>
-            <label htmlFor="modal-v2-needs" className="text-navy block text-xs font-bold">
+            <label htmlFor="modal-needs" className="text-navy block text-xs font-bold">
               Consultation Needs
             </label>
             <select
-              id="modal-v2-needs"
+              id="modal-needs"
               value={form.needs}
               onChange={(e) => setForm({ ...form, needs: e.target.value })}
               className="border-outline-variant text-navy focus:border-primary focus:ring-primary/20 mt-1 w-full rounded-xl border px-3.5 py-2.5 text-xs font-medium transition focus:ring-2 focus:outline-none"

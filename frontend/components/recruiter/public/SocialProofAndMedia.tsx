@@ -45,7 +45,7 @@ const PRESS_OUTLETS = [
   { name: 'Doanh Nhan VN', tag: 'Business Magazine' },
 ];
 
-export default function SocialProofAndMediaV2() {
+export default function SocialProofAndMedia() {
   return (
     <section aria-label="Customer Success and Press" className="border-b border-[#E5E7EB] bg-white py-16 sm:py-24">
       <div className="container-page">
