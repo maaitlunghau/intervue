@@ -2,6 +2,7 @@ package com.techx.intervue.modules.recruiter.controllers;
 
 import com.techx.intervue.controllers.BaseController;
 import com.techx.intervue.modules.helpers.CookieHelper;
+import com.techx.intervue.modules.helpers.IpHelper;
 import com.techx.intervue.modules.recruiter.resources.RecruiterTrustedDeviceResource;
 import com.techx.intervue.modules.recruiter.services.interfaces.RecruiterTwoFactorServiceInterface;
 import com.techx.intervue.modules.user.requests.PasswordVerifyRequest;
@@ -10,9 +11,12 @@ import com.techx.intervue.modules.user.resources.CustomUserDetails;
 import com.techx.intervue.modules.user.resources.TwoFactorSetupResource;
 import com.techx.intervue.modules.user.resources.TwoFactorStatusResource;
 import com.techx.intervue.resources.ApiResource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -75,6 +79,24 @@ public class RecruiterTwoFactorController extends BaseController {
         return ok(
                 recruiterTwoFactorService.getTrustedDevices(user.getId(), currentDeviceToken),
                 "Trusted devices retrieved successfully!");
+    }
+
+    @PostMapping("/devices/trust")
+    public ResponseEntity<ApiResource<Void>> trustCurrentDevice(
+            @AuthenticationPrincipal CustomUserDetails user,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        String token =
+                recruiterTwoFactorService.registerTrustedDevice(
+                        user.getId(),
+                        request.getHeader(HttpHeaders.USER_AGENT),
+                        IpHelper.getClientIp(request));
+        response.addHeader(
+                HttpHeaders.SET_COOKIE,
+                CookieHelper.buildRecruiterDeviceTrustCookie(
+                                token, CookieHelper.DEVICE_TRUST_MAX_AGE)
+                        .toString());
+        return ok(null, "Thiết bị này đã được tin cậy trong 30 ngày!");
     }
 
     @DeleteMapping("/devices/{id}")
