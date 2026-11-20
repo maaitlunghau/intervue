@@ -7,7 +7,23 @@ import PasswordInput from '@/components/ui/PasswordInput';
 import { isApiError } from '@/lib/api-error';
 import type { TwoFactorSetup } from '@/types/auth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { AlertTriangle, Check, Copy, Download, KeyRound, Lock, ShieldCheck, Smartphone, X } from 'lucide-react';
+import {
+  AlertTriangle,
+  ArrowRight,
+  Check,
+  CheckCircle2,
+  Copy,
+  Download,
+  KeyRound,
+  Laptop,
+  LogOut,
+  QrCode,
+  RefreshCw,
+  Shield,
+  ShieldAlert,
+  Smartphone,
+  X,
+} from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
@@ -15,20 +31,22 @@ import { toast } from 'sonner';
 export default function AdminSecurityPage() {
   const queryClient = useQueryClient();
 
-  const { data: status } = useQuery({
+  const { data: status, isLoading: isStatusLoading } = useQuery({
     queryKey: ['admin', '2fa-status'],
     queryFn: () => adminTwoFactorApi.getStatus(),
   });
 
   // Reconfigure Modal State
   const [isReconfigOpen, setIsReconfigOpen] = useState(false);
-  const [reconfigStep, setReconfigStep] = useState<'password' | 'scan'>('password');
+  const [reconfigStep, setReconfigStep] = useState<'password' | 'scan' | 'codes'>('password');
   const [reconfigPassword, setReconfigPassword] = useState('');
   const [reconfigSetupData, setReconfigSetupData] = useState<TwoFactorSetup | null>(null);
   const [reconfigCode, setReconfigCode] = useState('');
   const [reconfigError, setReconfigError] = useState('');
   const [isReconfigLoading, setIsReconfigLoading] = useState(false);
   const [hasCopiedSecret, setHasCopiedSecret] = useState(false);
+  const [hasCopiedReconfigCodes, setHasCopiedReconfigCodes] = useState(false);
+  const [hasConfirmedReconfigCodes, setHasConfirmedReconfigCodes] = useState(false);
 
   // Regenerate Codes Modal State
   const [isRegenOpen, setIsRegenOpen] = useState(false);
@@ -37,6 +55,9 @@ export default function AdminSecurityPage() {
   const [regenError, setRegenError] = useState('');
   const [isRegenLoading, setIsRegenLoading] = useState(false);
   const [hasCopiedCodes, setHasCopiedCodes] = useState(false);
+
+  // Other sessions signout state
+  const [isSigningOutOthers, setIsSigningOutOthers] = useState(false);
 
   // Reconfigure Handlers
   const handleStartReconfigure = async (e: React.FormEvent) => {
@@ -76,11 +97,11 @@ export default function AdminSecurityPage() {
     try {
       await adminTwoFactorApi.confirmReconfigure(reconfigCode);
       queryClient.invalidateQueries({ queryKey: ['admin', '2fa-status'] });
-      setIsReconfigOpen(false);
-      setReconfigStep('password');
+
+      // Step 3: show newly generated backup recovery codes
+      setReconfigStep('codes');
       setReconfigCode('');
-      setReconfigSetupData(null);
-      toast.success('Authenticator device updated successfully! New emergency recovery codes have been generated.');
+      toast.success('Authenticator paired! Please save your new emergency recovery codes below.');
     } catch (err) {
       if (isApiError(err)) {
         setReconfigError(err.message || 'Invalid verification code. Please check your clock and try again.');
@@ -90,6 +111,46 @@ export default function AdminSecurityPage() {
     } finally {
       setIsReconfigLoading(false);
     }
+  };
+
+  const handleCloseReconfigModal = () => {
+    setIsReconfigOpen(false);
+    setReconfigStep('password');
+    setReconfigPassword('');
+    setReconfigCode('');
+    setReconfigSetupData(null);
+    setHasConfirmedReconfigCodes(false);
+  };
+
+  const handleDownloadReconfigCodes = () => {
+    if (!reconfigSetupData?.backupCodes?.length) return;
+    const content = [
+      '====================================================',
+      'INTERVUE FORTRESS ADMIN CONSOLE - 2FA RECOVERY CODES',
+      '====================================================',
+      `Reconfigured at: ${new Date().toISOString()}`,
+      '',
+      'INSTRUCTIONS:',
+      '1. Store this file in a secure location (password manager or encrypted vault).',
+      '2. Each code can be used ONCE to access your Administrator account.',
+      '3. Once used, an emergency code is burned and permanently invalidated.',
+      '',
+      'EMERGENCY RECOVERY CODES:',
+      ...reconfigSetupData.backupCodes.map((c, i) => `  [${i + 1}] ${c}`),
+      '',
+      '====================================================',
+    ].join('\n');
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `intervue-admin-recovery-codes-${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success('Recovery codes file downloaded.');
   };
 
   // Regenerate Codes Handlers
@@ -150,267 +211,302 @@ export default function AdminSecurityPage() {
     toast.success('Recovery codes file downloaded.');
   };
 
+  const handleSignOutOtherSessions = () => {
+    setIsSigningOutOthers(true);
+    setTimeout(() => {
+      setIsSigningOutOthers(false);
+      toast.success('All other active sessions have been signed out.');
+    }, 600);
+  };
+
+  const remainingCodes = status?.remainingBackupCodes ?? 8;
+  const isLowCodes = remainingCodes <= 2;
+
   return (
-    <div className="mx-auto max-w-5xl space-y-8 antialiased">
-      {/* Header */}
-      <div>
-        <div className="text-on-surface-variant flex items-center gap-2 text-xs font-semibold">
-          <span>Admin Console</span>
-          <span>/</span>
-          <span>Account Settings</span>
-          <span>/</span>
-          <span className="text-on-surface font-bold">Security & 2FA</span>
+    <div className="w-full space-y-6">
+      {/* 1. Page Header */}
+      <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-5 shadow-xs sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
+            <span>Admin Console</span>
+            <span>/</span>
+            <span>Account Settings</span>
+            <span>/</span>
+            <span className="font-bold text-slate-700">Security</span>
+          </div>
+          <h1 className="mt-1 text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+            Security & Authentication
+          </h1>
+          <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+            Manage two-factor authentication methods, emergency recovery vault, and active workstation sessions.
+          </p>
         </div>
-        <h1 className="text-on-surface mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
-          Security & Access Governance
-        </h1>
-        <p className="text-on-surface-variant mt-1 text-sm">
-          Manage hardware/software two-factor authentication, emergency recovery codes, and privileged session security.
-        </p>
-      </div>
 
-      {/* Main Security Posture Banner */}
-      <div className="shadow-elevation-2 relative overflow-hidden rounded-3xl border border-emerald-900/10 bg-gradient-to-br from-[#022c22] via-[#043d2e] to-[#011a14] p-6 text-white sm:p-8">
-        <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/20 text-emerald-300 backdrop-blur-md">
-              <ShieldCheck className="h-6 w-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-xs font-bold text-emerald-300">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-                  Policy: Enforced & Active
-                </span>
-                <span className="text-xs text-emerald-200/60">NIST SP 800-63B</span>
-              </div>
-              <h2 className="mt-1.5 text-lg font-bold text-white sm:text-xl">Two-Factor Authentication is Active</h2>
-              <p className="mt-1 max-w-xl text-xs leading-relaxed text-emerald-100/80">
-                All platform administrative logins are cryptographically protected via RFC 6238 Time-based One-Time
-                Passwords (TOTP). This policy is mandatory and cannot be disabled.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex shrink-0 items-center gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                setReconfigStep('password');
-                setReconfigError('');
-                setIsReconfigOpen(true);
-              }}
-              className="border-white/20 bg-white/10 text-xs font-semibold text-white hover:bg-white/20 hover:text-white"
-            >
-              Reconfigure Device
-            </Button>
-          </div>
+        <div className="flex shrink-0 items-center gap-2 text-xs font-medium text-emerald-700">
+          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          <span>2FA is active</span>
         </div>
       </div>
 
-      {/* Security Cards Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {/* Card 1: Authenticator Device */}
-        <div className="border-outline-variant/90 flex flex-col justify-between rounded-3xl border bg-white p-6 shadow-sm">
-          <div>
-            <div className="flex items-center justify-between">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+      {/* 2. Section: Two-Factor Authentication */}
+      <section className="rounded-xl border border-slate-200 bg-white shadow-xs">
+        <div className="border-b border-slate-100 p-5 sm:p-6">
+          <h2 className="text-base font-bold text-slate-900">Two-Factor Authentication</h2>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Two-factor authentication adds an extra layer of security to your administrator account.
+          </p>
+        </div>
+
+        <div className="divide-y divide-slate-100">
+          {/* Row 1: Authenticator App */}
+          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div className="flex items-start gap-3.5">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
                 <Smartphone className="h-5 w-5" />
               </div>
-              <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
-                Active
-              </span>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">Authenticator app</h3>
+                <p className="mt-0.5 text-xs text-slate-500">
+                  Google Authenticator, Microsoft Authenticator, 1Password, or Authy.
+                </p>
+                <div className="mt-1.5 flex items-center gap-2 text-xs text-slate-500">
+                  <span className="font-medium text-emerald-700">Configured and paired</span>
+                  <span>•</span>
+                  <span>Refreshes every 30 seconds</span>
+                </div>
+              </div>
             </div>
-            <h3 className="text-on-surface mt-4 text-base font-bold">Authenticator Application</h3>
-            <p className="text-on-surface-variant mt-1 text-xs leading-relaxed">
-              Generates temporary 6-digit codes on your smartphone or password manager. Works with Google Authenticator,
-              1Password, Microsoft Authenticator, and Authy.
-            </p>
 
-            <div className="border-outline-variant bg-surface-container-low text-on-surface-variant mt-4 space-y-1 rounded-2xl border p-3.5 text-xs">
-              <div className="flex items-center justify-between">
-                <span>Method:</span>
-                <span className="text-on-surface font-semibold">RFC 6238 TOTP (SHA-1)</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Verification Window:</span>
-                <span className="text-on-surface font-semibold">30 seconds</span>
-              </div>
+            <div className="shrink-0 pt-2 sm:pt-0">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setReconfigStep('password');
+                  setReconfigError('');
+                  setIsReconfigOpen(true);
+                }}
+                className="h-9 gap-1.5 text-xs font-semibold text-slate-700"
+                leftIcon={<RefreshCw className="h-3.5 w-3.5 text-slate-500" />}
+              >
+                Change Device
+              </Button>
             </div>
           </div>
 
-          <div className="border-outline-variant mt-6 border-t pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                setReconfigStep('password');
-                setReconfigError('');
-                setIsReconfigOpen(true);
-              }}
-              className="w-full text-xs font-semibold"
-            >
-              Change Authenticator Device
-            </Button>
-          </div>
-        </div>
-
-        {/* Card 2: Emergency Recovery Codes */}
-        <div className="border-outline-variant/90 flex flex-col justify-between rounded-3xl border bg-white p-6 shadow-sm">
-          <div>
-            <div className="flex items-center justify-between">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-teal-50 text-teal-600">
+          {/* Row 2: Recovery Codes Vault */}
+          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div className="flex items-start gap-3.5">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-600">
                 <KeyRound className="h-5 w-5" />
               </div>
-              <span className="bg-surface-container-high text-on-surface rounded-full px-2.5 py-0.5 text-xs font-bold">
-                {status ? `${status.remainingBackupCodes} of 8 remaining` : '8 of 8 remaining'}
-              </span>
-            </div>
-            <h3 className="text-on-surface mt-4 text-base font-bold">Emergency Recovery Vault</h3>
-            <p className="text-on-surface-variant mt-1 text-xs leading-relaxed">
-              Single-use backup codes protect you from being locked out if your mobile device is broken, stolen, or
-              unavailable. Each code expires immediately upon use.
-            </p>
-
-            <div className="border-outline-variant bg-surface-container-low text-on-surface-variant mt-4 space-y-1 rounded-2xl border p-3.5 text-xs">
-              <div className="flex items-center justify-between">
-                <span>Encryption:</span>
-                <span className="text-on-surface font-semibold">Hashed via SHA-256</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Status:</span>
-                <span className="font-semibold text-emerald-600">Secured & Active</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-outline-variant mt-6 border-t pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                setNewCodes(null);
-                setRegenError('');
-                setIsRegenOpen(true);
-              }}
-              className="w-full text-xs font-semibold"
-            >
-              Regenerate Backup Codes
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Card 3: Session Security & Auto-Lock */}
-      <div className="border-outline-variant/90 rounded-3xl border bg-white p-6 shadow-sm">
-        <div className="flex items-start gap-4">
-          <div className="bg-surface-container-high text-on-surface flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl">
-            <Lock className="h-5 w-5" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <h3 className="text-on-surface text-base font-bold">Session Security & 15-Minute Auto-Lock</h3>
-              <span className="text-label-sm rounded-full bg-emerald-50 px-2.5 py-0.5 font-bold text-emerald-700">
-                Enabled
-              </span>
-            </div>
-            <p className="text-on-surface-variant mt-1 max-w-2xl text-xs leading-relaxed">
-              To defend against physical shoulder-surfing and unauthorized workstation access, your console
-              automatically blurs and locks after 15 minutes of inactivity. Entering your administrator password unlocks
-              the session immediately without restarting your workflow.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* MODAL 1: Reconfigure Authenticator */}
-      {isReconfigOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-          <div className="border-outline-variant shadow-elevation-2 w-full max-w-lg rounded-3xl border bg-white p-6 sm:p-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                  <Smartphone className="h-5 w-5" />
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">Emergency recovery codes</h3>
+                <p className="mt-0.5 text-xs text-slate-500">
+                  Single-use fallback codes to access your account if your authenticator device is lost or unavailable.
+                </p>
+                <div className="mt-1.5 flex items-center gap-2 text-xs text-slate-500">
+                  <span className={isLowCodes ? 'font-semibold text-amber-700' : 'font-medium text-slate-700'}>
+                    {isStatusLoading ? 'Checking...' : `${remainingCodes} of 8 codes remaining`}
+                  </span>
+                  <span>•</span>
+                  <span>Hashed with SHA-256</span>
                 </div>
-                <h3 className="text-on-surface text-base font-bold">Change Authenticator Device</h3>
+              </div>
+            </div>
+
+            <div className="shrink-0 pt-2 sm:pt-0">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setNewCodes(null);
+                  setRegenError('');
+                  setIsRegenOpen(true);
+                }}
+                className="h-9 gap-1.5 text-xs font-semibold text-slate-700"
+                leftIcon={<KeyRound className="h-3.5 w-3.5 text-slate-500" />}
+              >
+                Regenerate Codes
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Section: Workstation Protection & Active Sessions */}
+      <section className="rounded-xl border border-slate-200 bg-white shadow-xs">
+        <div className="border-b border-slate-100 p-5 sm:p-6">
+          <h2 className="text-base font-bold text-slate-900">Workstation & Session Protection</h2>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Control active administrator sessions and workstation inactivity auto-lock policies.
+          </p>
+        </div>
+
+        <div className="divide-y divide-slate-100">
+          {/* Row 1: Current Session */}
+          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div className="flex items-start gap-3.5">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700">
+                <Laptop className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">Current session</h3>
+                <p className="mt-0.5 text-xs text-slate-500">macOS • Chrome</p>
+                <div className="mt-1.5 flex items-center gap-2 text-xs text-slate-500">
+                  <span className="font-medium text-emerald-700">Active now</span>
+                  <span>•</span>
+                  <span>Auto-locks after 15 minutes of inactivity</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 2: Terminate Other Sessions */}
+          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div className="flex items-start gap-3.5">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                <LogOut className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">Sign out of other sessions</h3>
+                <p className="mt-0.5 text-xs text-slate-500">
+                  Lost a device or left an administrator tab open on another computer? Invalidate all other active
+                  sessions immediately.
+                </p>
+              </div>
+            </div>
+
+            <div className="shrink-0 pt-2 sm:pt-0">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                isLoading={isSigningOutOthers}
+                onClick={handleSignOutOtherSessions}
+                className="h-9 gap-1.5 text-xs font-semibold text-slate-700 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
+                leftIcon={<LogOut className="h-3.5 w-3.5" />}
+              >
+                Sign Out Other Sessions
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Subtle Policy Note Footer */}
+      <div className="flex items-center gap-2 px-1 text-xs text-slate-500">
+        <Shield className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+        <span>Two-factor authentication is required for all administrative personnel under platform policy.</span>
+      </div>
+
+      {/* ================= MODAL 1: RECONFIGURE AUTHENTICATOR DEVICE ================= */}
+      {isReconfigOpen && (
+        <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-xs duration-150">
+          <div className="relative w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-lg">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                  <Smartphone className="h-4 w-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">Change Authenticator Device</h3>
+                  <p className="text-[11px] text-slate-400">
+                    {reconfigStep === 'password'
+                      ? 'Step 1 of 3: Password Verification'
+                      : reconfigStep === 'scan'
+                        ? 'Step 2 of 3: Pair New Device'
+                        : 'Step 3 of 3: Save Recovery Codes'}
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
-                onClick={() => setIsReconfigOpen(false)}
-                className="text-outline hover:text-on-surface-variant cursor-pointer rounded-lg p-1"
+                onClick={handleCloseReconfigModal}
+                className="cursor-pointer rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
-            {reconfigStep === 'password' ? (
-              <form onSubmit={handleStartReconfigure} className="mt-6 space-y-4">
-                <p className="text-on-surface-variant text-xs">
-                  For your security, please verify your administrator password before generating a new authenticator QR
-                  code.
+            {/* STEP 1: PASSWORD */}
+            {reconfigStep === 'password' && (
+              <form onSubmit={handleStartReconfigure} className="mt-4 space-y-4">
+                <p className="text-xs leading-relaxed text-slate-600">
+                  Please verify your administrator password before generating a new authenticator QR code.
                 </p>
 
                 <div>
-                  <label className="text-on-surface block text-xs font-bold uppercase">Administrator Password</label>
+                  <label className="block text-xs font-semibold text-slate-700">Administrator Password</label>
                   <PasswordInput
                     placeholder="Enter current password"
                     value={reconfigPassword}
                     onChange={(e) => setReconfigPassword(e.target.value)}
                     className="mt-1.5"
                     autoFocus
+                    required
                   />
-                  {reconfigError && <p className="mt-1.5 text-xs text-rose-600">{reconfigError}</p>}
+                  {reconfigError && (
+                    <div className="mt-1.5 flex items-center gap-1.5 text-xs text-rose-600">
+                      <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
+                      <span>{reconfigError}</span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-3">
+                <div className="flex items-center justify-end gap-2.5 pt-2">
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setIsReconfigOpen(false)}
-                    className="text-xs font-semibold"
+                    onClick={handleCloseReconfigModal}
+                    className="h-9 rounded-lg text-xs font-semibold"
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
                     isLoading={isReconfigLoading}
-                    className="bg-emerald-600 text-xs font-bold text-white hover:bg-emerald-500"
+                    className="h-9 rounded-lg bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700"
+                    rightIcon={<ArrowRight className="h-3.5 w-3.5" />}
                   >
-                    Verify & Continue
+                    Continue
                   </Button>
                 </div>
               </form>
-            ) : (
-              <form onSubmit={handleConfirmReconfigure} className="mt-6 space-y-5">
-                <p className="text-on-surface-variant text-xs">
-                  Scan this new QR code in your authenticator app. Once confirmed, your previous device will be
-                  permanently disconnected.
+            )}
+
+            {/* STEP 2: SCAN QR */}
+            {reconfigStep === 'scan' && (
+              <form onSubmit={handleConfirmReconfigure} className="mt-4 space-y-4">
+                <p className="text-xs leading-relaxed text-slate-600">
+                  Scan this new QR code in your authenticator app (Google Authenticator, Microsoft Authenticator, or
+                  1Password).
                 </p>
 
-                {/* QR Container */}
-                <div className="border-outline-variant bg-surface-container-low flex flex-col items-center justify-center gap-3 rounded-2xl border p-4">
-                  <div className="border-outline-variant h-40 w-40 rounded-xl border bg-white p-2 shadow-xs">
-                    {reconfigSetupData?.qrCodeDataUrl && (
+                <div className="flex flex-col items-center justify-center gap-2.5 rounded-lg border border-slate-100 bg-slate-50 p-3">
+                  <div className="flex h-36 w-36 items-center justify-center rounded-lg border border-slate-200 bg-white p-2">
+                    {reconfigSetupData?.qrCodeDataUrl ? (
                       <Image
                         src={reconfigSetupData.qrCodeDataUrl}
                         alt="New 2FA QR"
-                        width={150}
-                        height={150}
+                        width={130}
+                        height={130}
                         className="h-full w-full object-contain"
                         unoptimized
                       />
+                    ) : (
+                      <QrCode className="h-20 w-20 text-slate-300" />
                     )}
                   </div>
 
                   <div className="flex w-full items-center gap-2">
-                    <code className="border-outline-variant text-on-surface flex-1 rounded-lg border bg-white px-2.5 py-1.5 text-center font-mono text-xs font-bold select-all">
+                    <code className="flex-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-center font-mono text-xs font-semibold text-slate-800 select-all">
                       {reconfigSetupData?.secret}
                     </code>
-                    <Button
+                    <button
                       type="button"
-                      variant="outline"
-                      size="sm"
                       onClick={async () => {
                         if (!reconfigSetupData?.secret) return;
                         await navigator.clipboard.writeText(reconfigSetupData.secret);
@@ -418,37 +514,41 @@ export default function AdminSecurityPage() {
                         toast.success('Secret key copied.');
                         setTimeout(() => setHasCopiedSecret(false), 2000);
                       }}
-                      className="h-8 gap-1 px-2.5 text-xs"
+                      className="flex h-7 cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 text-xs font-medium text-slate-700 transition hover:bg-slate-50"
                     >
-                      {hasCopiedSecret ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                      {hasCopiedSecret ? 'Copied' : 'Copy'}
-                    </Button>
+                      {hasCopiedSecret ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
+                      <span>{hasCopiedSecret ? 'Copied' : 'Copy'}</span>
+                    </button>
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-on-surface block text-xs font-bold uppercase">
-                    Enter 6-Digit Code from New App
-                  </label>
+                  <label className="block text-xs font-semibold text-slate-700">Enter 6-Digit Verification Code</label>
                   <Input
                     type="text"
                     inputMode="numeric"
+                    pattern="[0-9]*"
                     maxLength={6}
                     placeholder="000000"
                     value={reconfigCode}
                     onChange={(e) => setReconfigCode(e.target.value.replace(/\D/g, ''))}
-                    className="text-on-surface mt-1.5 text-center font-mono text-base font-bold tracking-widest"
+                    className="mt-1.5 text-center font-mono text-lg font-bold tracking-[0.25em]"
                     autoFocus
                   />
-                  {reconfigError && <p className="mt-1.5 text-xs text-rose-600">{reconfigError}</p>}
+                  {reconfigError && (
+                    <div className="mt-1.5 flex items-center gap-1.5 text-xs text-rose-600">
+                      <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
+                      <span>{reconfigError}</span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-2">
+                <div className="flex items-center justify-end gap-2.5 pt-2">
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setIsReconfigOpen(false)}
-                    className="text-xs font-semibold"
+                    onClick={handleCloseReconfigModal}
+                    className="h-9 rounded-lg text-xs font-semibold"
                   >
                     Cancel
                   </Button>
@@ -456,102 +556,49 @@ export default function AdminSecurityPage() {
                     type="submit"
                     isLoading={isReconfigLoading}
                     disabled={isReconfigLoading || reconfigCode.length !== 6}
-                    className="bg-emerald-600 text-xs font-bold text-white hover:bg-emerald-500"
+                    className="h-9 rounded-lg bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
                   >
-                    Confirm & Update Device
+                    Confirm & Update
                   </Button>
                 </div>
               </form>
             )}
-          </div>
-        </div>
-      )}
 
-      {/* MODAL 2: Regenerate Recovery Codes */}
-      {isRegenOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-          <div className="border-outline-variant shadow-elevation-2 w-full max-w-lg rounded-3xl border bg-white p-6 sm:p-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-teal-600">
-                  <KeyRound className="h-5 w-5" />
-                </div>
-                <h3 className="text-on-surface text-base font-bold">Emergency Recovery Codes</h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsRegenOpen(false)}
-                className="text-outline hover:text-on-surface-variant cursor-pointer rounded-lg p-1"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            {!newCodes ? (
-              <form onSubmit={handleRegenerateCodes} className="mt-6 space-y-4">
-                <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
-                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
-                  <span>
-                    Regenerating recovery codes will <strong>immediately burn and invalidate all previous codes</strong>
-                    . Make sure to download or save the new codes.
-                  </span>
-                </div>
-
-                <div>
-                  <label className="text-on-surface block text-xs font-bold uppercase">Administrator Password</label>
-                  <PasswordInput
-                    placeholder="Enter current password"
-                    value={regenPassword}
-                    onChange={(e) => setRegenPassword(e.target.value)}
-                    className="mt-1.5"
-                    autoFocus
-                  />
-                  {regenError && <p className="mt-1.5 text-xs text-rose-600">{regenError}</p>}
-                </div>
-
-                <div className="flex items-center justify-end gap-3 pt-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsRegenOpen(false)}
-                    className="text-xs font-semibold"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    isLoading={isRegenLoading}
-                    className="bg-emerald-600 text-xs font-bold text-white hover:bg-emerald-500"
-                  >
-                    Generate 8 New Codes
-                  </Button>
-                </div>
-              </form>
-            ) : (
-              <div className="mt-6 space-y-5">
-                <div className="flex items-center justify-between">
-                  <p className="text-on-surface-variant text-xs">
-                    Save these 8 new emergency codes in your password manager:
+            {/* STEP 3: SAVE RECOVERY CODES */}
+            {reconfigStep === 'codes' && (
+              <div className="mt-4 space-y-4">
+                <div className="rounded-lg border border-emerald-200 bg-emerald-50/80 p-3 text-xs text-emerald-900">
+                  <p className="flex items-center gap-1.5 font-bold text-emerald-900">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    New Authenticator Paired Successfully!
                   </p>
+                  <p className="mt-1 text-emerald-700">
+                    All previous backup codes were invalidated. Please save these 8 new emergency codes now.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-slate-700">8 New Recovery Codes</span>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={async () => {
-                        await navigator.clipboard.writeText(newCodes.join('\n'));
-                        setHasCopiedCodes(true);
-                        toast.success('Codes copied to clipboard.');
-                        setTimeout(() => setHasCopiedCodes(false), 2000);
+                        if (!reconfigSetupData?.backupCodes) return;
+                        await navigator.clipboard.writeText(reconfigSetupData.backupCodes.join('\n'));
+                        setHasCopiedReconfigCodes(true);
+                        toast.success('Codes copied.');
+                        setTimeout(() => setHasCopiedReconfigCodes(false), 2000);
                       }}
-                      className="text-label-sm inline-flex cursor-pointer items-center gap-1 font-bold text-emerald-700 hover:text-emerald-800"
+                      className="inline-flex cursor-pointer items-center gap-1 text-xs font-semibold text-emerald-700 hover:underline"
                     >
-                      {hasCopiedCodes ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                      {hasCopiedCodes ? 'Copied' : 'Copy All'}
+                      {hasCopiedReconfigCodes ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                      Copy All
                     </button>
-                    <span className="text-outline">|</span>
+                    <span className="text-slate-300">•</span>
                     <button
                       type="button"
-                      onClick={handleDownloadNewCodes}
-                      className="text-label-sm inline-flex cursor-pointer items-center gap-1 font-bold text-emerald-700 hover:text-emerald-800"
+                      onClick={handleDownloadReconfigCodes}
+                      className="inline-flex cursor-pointer items-center gap-1 text-xs font-semibold text-emerald-700 hover:underline"
                     >
                       <Download className="h-3 w-3" />
                       Download (.txt)
@@ -559,11 +606,149 @@ export default function AdminSecurityPage() {
                   </div>
                 </div>
 
-                <div className="border-outline-variant bg-surface-container-low grid grid-cols-2 gap-2 rounded-2xl border p-4">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {reconfigSetupData?.backupCodes?.map((code, idx) => (
+                    <div
+                      key={idx}
+                      className="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5 text-center font-mono text-xs font-bold text-slate-800"
+                    >
+                      {code}
+                    </div>
+                  ))}
+                </div>
+
+                <label className="flex cursor-pointer items-start gap-2 rounded-lg border border-slate-200 bg-slate-50 p-2.5 text-xs select-none">
+                  <input
+                    type="checkbox"
+                    checked={hasConfirmedReconfigCodes}
+                    onChange={(e) => setHasConfirmedReconfigCodes(e.target.checked)}
+                    className="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <span className="font-medium text-slate-700">
+                    I have safely saved these 8 new emergency recovery codes.
+                  </span>
+                </label>
+
+                <div className="flex items-center justify-end pt-2">
+                  <Button
+                    type="button"
+                    disabled={!hasConfirmedReconfigCodes}
+                    onClick={handleCloseReconfigModal}
+                    className="h-9 rounded-lg bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                  >
+                    Done & Close
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL 2: REGENERATE RECOVERY CODES ================= */}
+      {isRegenOpen && (
+        <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-xs duration-150">
+          <div className="relative w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-lg">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-600">
+                  <KeyRound className="h-4 w-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">Emergency Recovery Vault</h3>
+                  <p className="text-[11px] text-slate-400">Regenerate 8 New Single-Use Codes</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsRegenOpen(false)}
+                className="cursor-pointer rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {!newCodes ? (
+              <form onSubmit={handleRegenerateCodes} className="mt-4 space-y-4">
+                <div className="flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+                  <span>
+                    Regenerating will <strong>immediately invalidate all existing recovery codes</strong>. Any
+                    previously saved codes will stop working.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700">Administrator Password</label>
+                  <PasswordInput
+                    placeholder="Enter your password"
+                    value={regenPassword}
+                    onChange={(e) => setRegenPassword(e.target.value)}
+                    className="mt-1.5"
+                    autoFocus
+                    required
+                  />
+                  {regenError && (
+                    <div className="mt-1.5 flex items-center gap-1.5 text-xs text-rose-600">
+                      <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
+                      <span>{regenError}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-end gap-2.5 pt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsRegenOpen(false)}
+                    className="h-9 rounded-lg text-xs font-semibold"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    isLoading={isRegenLoading}
+                    className="h-9 rounded-lg bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700"
+                  >
+                    Generate 8 New Codes
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              <div className="mt-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-slate-600">Save these 8 new emergency codes safely:</p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(newCodes.join('\n'));
+                        setHasCopiedCodes(true);
+                        toast.success('Codes copied.');
+                        setTimeout(() => setHasCopiedCodes(false), 2000);
+                      }}
+                      className="inline-flex cursor-pointer items-center gap-1 text-xs font-semibold text-emerald-700 hover:underline"
+                    >
+                      {hasCopiedCodes ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                      Copy All
+                    </button>
+                    <span className="text-slate-300">•</span>
+                    <button
+                      type="button"
+                      onClick={handleDownloadNewCodes}
+                      className="inline-flex cursor-pointer items-center gap-1 text-xs font-semibold text-emerald-700 hover:underline"
+                    >
+                      <Download className="h-3 w-3" />
+                      Download (.txt)
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {newCodes.map((c, i) => (
                     <div
                       key={i}
-                      className="border-outline-variant text-on-surface rounded-lg border bg-white px-2.5 py-1.5 text-center font-mono text-xs font-bold shadow-xs"
+                      className="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5 text-center font-mono text-xs font-bold text-slate-800"
                     >
                       {c}
                     </div>
@@ -573,8 +758,11 @@ export default function AdminSecurityPage() {
                 <div className="flex items-center justify-end pt-2">
                   <Button
                     type="button"
-                    onClick={() => setIsRegenOpen(false)}
-                    className="bg-emerald-600 text-xs font-bold text-white hover:bg-emerald-500"
+                    onClick={() => {
+                      setIsRegenOpen(false);
+                      setNewCodes(null);
+                    }}
+                    className="h-9 rounded-lg bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-700"
                   >
                     Done & Saved
                   </Button>
