@@ -325,77 +325,199 @@ export default function AccountTwoFactorView({ portal = 'candidate' }: AccountTw
       ) : isEnabled ? (
         <div className="space-y-6">
           {/* Active Status Card */}
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-6 sm:p-8">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md">
-                <ShieldCheck className="h-7 w-7" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-slate-900">
-                  {isRecruiter ? 'Your employer account is protected with 2FA' : 'Your account is protected with 2FA'}
-                </h3>
-                <p className="mt-1 text-sm leading-relaxed text-slate-600">
-                  {isRecruiter
-                    ? 'Primary method: Time-based One-Time Password (TOTP). Untrusted browsers and devices will be challenged for a 6-digit verification code.'
-                    : 'Primary method: authenticator app one-time code (TOTP). Each time you sign in on a new device, we ask for the code from your phone.'}
-                </p>
-
-                {status?.remainingBackupCodes !== undefined && (
-                  <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-slate-600">
-                    <span>
-                      {isRecruiter ? 'Remaining emergency recovery codes:' : 'Remaining emergency recovery codes:'}{' '}
-                      <strong className="text-slate-900">{status.remainingBackupCodes}</strong>
-                    </span>
-                    {status.remainingBackupCodes <= 2 && (
-                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
-                        {isRecruiter ? 'Low backup codes' : 'Low backup codes'}
-                      </span>
-                    )}
+          {isRecruiter ? (
+            <>
+              {/* Executive Security Status Banner */}
+              <div className="rounded-2xl border border-emerald-200/80 bg-gradient-to-r from-emerald-50/60 via-white to-emerald-50/30 p-5 shadow-xs sm:p-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+                      <ShieldCheck className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-base font-bold text-slate-900">
+                          Tài khoản nhà tuyển dụng được bảo vệ với xác thực 2 bước (2FA)
+                        </h3>
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                          Đang kích hoạt
+                        </span>
+                      </div>
+                      <p className="mt-1 max-w-2xl text-xs leading-relaxed text-slate-600">
+                        Mọi lượt đăng nhập trên thiết bị hoặc trình duyệt chưa được tin cậy đều bắt buộc cung cấp mã OTP
+                        6 chữ số từ ứng dụng xác thực của bạn theo tiêu chuẩn bảo mật RFC 6238.
+                      </p>
+                    </div>
                   </div>
-                )}
+                </div>
+              </div>
 
-                {/* Management Action Buttons */}
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  {isRecruiter && (
-                    <>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setReconfigureError('');
-                          setShowReconfigureModal(true);
-                        }}
-                        leftIcon={<RefreshCw className="h-3.5 w-3.5 text-slate-500" />}
+              {/* Two Modular Master-Detail Cards */}
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {/* Authenticator App Card */}
+                <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                          <Smartphone className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-slate-900">Ứng dụng xác thực</h4>
+                          <p className="text-[11px] text-slate-500">
+                            Google Authenticator, Microsoft Authenticator, 1Password
+                          </p>
+                        </div>
+                      </div>
+                      <span className="rounded-md border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+                        Đã kết nối
+                      </span>
+                    </div>
+
+                    <p className="mt-4 text-xs leading-relaxed text-slate-600">
+                      Tạo mã xác thực 6 chữ số trên điện thoại thông minh hoặc trình quản lý mật khẩu của bạn. Mã được
+                      làm mới tự động.
+                    </p>
+
+                    <div className="mt-4 space-y-2 rounded-xl bg-slate-50 p-3.5 text-xs">
+                      <div className="flex justify-between text-slate-600">
+                        <span>Phương thức:</span>
+                        <span className="font-semibold text-slate-800">Mã TOTP (RFC 6238)</span>
+                      </div>
+                      <div className="flex justify-between text-slate-600">
+                        <span>Chu kỳ đổi mã:</span>
+                        <span className="font-semibold text-slate-800">30 giây</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 border-t border-slate-100 pt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setReconfigureError('');
+                        setShowReconfigureModal(true);
+                      }}
+                      leftIcon={<RefreshCw className="h-3.5 w-3.5 text-slate-500" />}
+                      className="w-full justify-center text-xs"
+                    >
+                      Đổi thiết bị xác thực
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Emergency Recovery Codes Card */}
+                <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                          <KeyRound className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-slate-900">Kho mã khôi phục khẩn cấp</h4>
+                          <p className="text-[11px] text-slate-500">
+                            Dùng khi không thể mở ứng dụng xác thực hoặc mất điện thoại
+                          </p>
+                        </div>
+                      </div>
+                      <span
+                        className={cn(
+                          'rounded-md px-2 py-0.5 text-[11px] font-medium',
+                          (status?.remainingBackupCodes ?? 8) <= 2
+                            ? 'border border-amber-200 bg-amber-100 text-amber-800'
+                            : 'bg-slate-100 text-slate-700',
+                        )}
                       >
-                        Reconfigure Authenticator
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setRegenerateError('');
-                          setShowRegenerateModal(true);
-                        }}
-                        leftIcon={<KeyRound className="h-3.5 w-3.5 text-slate-500" />}
-                      >
-                        Regenerate Backup Codes
-                      </Button>
-                    </>
+                        {status?.remainingBackupCodes ?? 8} / 8 mã còn lại
+                      </span>
+                    </div>
+
+                    <p className="mt-4 text-xs leading-relaxed text-slate-600">
+                      Mỗi mã chỉ sử dụng được 1 lần duy nhất để đăng nhập khẩn cấp. Hãy lưu trữ cẩn thận trong trình
+                      quản lý mật khẩu.
+                    </p>
+
+                    <div className="mt-4 space-y-2 rounded-xl bg-slate-50 p-3.5 text-xs">
+                      <div className="flex justify-between text-slate-600">
+                        <span>Trạng thái bảo vệ:</span>
+                        <span className="font-semibold text-slate-800">Mã hóa SHA-256 an toàn</span>
+                      </div>
+                      <div className="flex justify-between text-slate-600">
+                        <span>Số mã khả dụng:</span>
+                        <span
+                          className={cn(
+                            'font-semibold',
+                            (status?.remainingBackupCodes ?? 8) <= 2 ? 'text-amber-700' : 'text-emerald-700',
+                          )}
+                        >
+                          {status?.remainingBackupCodes ?? 8} mã khả dụng
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 border-t border-slate-100 pt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setRegenerateError('');
+                        setShowRegenerateModal(true);
+                      }}
+                      leftIcon={<KeyRound className="h-3.5 w-3.5 text-slate-500" />}
+                      className="w-full justify-center text-xs"
+                    >
+                      Tạo lại 8 mã khôi phục mới
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-6 sm:p-8">
+              <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md">
+                  <ShieldCheck className="h-7 w-7" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-slate-900">Your account is protected with 2FA</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                    Primary method: authenticator app one-time code (TOTP). Each time you sign in on a new device, we
+                    ask for the code from your phone.
+                  </p>
+
+                  {status?.remainingBackupCodes !== undefined && (
+                    <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-slate-600">
+                      <span>
+                        Remaining emergency recovery codes:{' '}
+                        <strong className="text-slate-900">{status.remainingBackupCodes}</strong>
+                      </span>
+                      {status.remainingBackupCodes <= 2 && (
+                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                          Low backup codes
+                        </span>
+                      )}
+                    </div>
                   )}
 
-                  <button
-                    type="button"
-                    onClick={() => setShowDisableModal(true)}
-                    className="cursor-pointer text-xs font-bold text-rose-600 transition hover:underline"
-                  >
-                    {isRecruiter ? 'Disable Two-Factor Authentication' : 'Disable Two-Factor Authentication'}
-                  </button>
+                  <div className="mt-6 flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowDisableModal(true)}
+                      className="cursor-pointer text-xs font-bold text-rose-600 transition hover:underline"
+                    >
+                      Disable Two-Factor Authentication
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Trusted Devices Section (Recruiter Only) */}
           {isRecruiter && (
@@ -490,6 +612,30 @@ export default function AccountTwoFactorView({ portal = 'candidate' }: AccountTw
                     </div>
                   ))
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* Danger Zone: Disable 2FA (Recruiter) */}
+          {isRecruiter && (
+            <div className="rounded-2xl border border-rose-200/80 bg-rose-50/30 p-5 shadow-xs sm:p-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h4 className="text-sm font-bold text-rose-950">Tắt xác thực hai yếu tố (2FA)</h4>
+                  <p className="mt-0.5 text-xs leading-relaxed text-rose-700/80">
+                    Hạ mức bảo vệ tài khoản nhà tuyển dụng xuống chỉ dùng mật khẩu. InterVue khuyến nghị luôn giữ tính
+                    năng này để bảo vệ dữ liệu hồ sơ ứng viên và thông tin doanh nghiệp.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowDisableModal(true)}
+                  className="shrink-0 border-rose-300 bg-white text-xs font-semibold text-rose-700 hover:bg-rose-50 hover:text-rose-800"
+                >
+                  Tắt xác thực 2FA...
+                </Button>
               </div>
             </div>
           )}
