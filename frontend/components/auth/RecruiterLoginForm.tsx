@@ -20,13 +20,11 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import FormErrorAlert from './FormErrorAlert';
 import SocialAuthButtons from './SocialAuthButtons';
-import TwoFactorChallengeModal from './TwoFactorChallengeModal';
 
 export default function RecruiterLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [challengeToken, setChallengeToken] = useState<string | null>(null);
 
   const {
     register,
@@ -44,7 +42,13 @@ export default function RecruiterLoginForm() {
     try {
       const res = await recruiterAuthApi.login(values);
       if (res.requiresTwoFactor && res.tempToken) {
-        setChallengeToken(res.tempToken);
+        sessionStorage.setItem('recruiter_2fa_temp_token', res.tempToken);
+        sessionStorage.setItem('recruiter_2fa_email', values.email);
+        const redirectParam = searchParams?.get(REDIRECT_PARAM);
+        const target = redirectParam
+          ? `${ROUTES.RECRUITER_TWO_FACTOR}?${REDIRECT_PARAM}=${encodeURIComponent(redirectParam)}`
+          : ROUTES.RECRUITER_TWO_FACTOR;
+        router.push(target);
         return;
       }
       const session = toRecruiterSession(res);
@@ -148,20 +152,6 @@ export default function RecruiterLoginForm() {
           Sign up now
         </Link>
       </div>
-
-      {challengeToken && (
-        <TwoFactorChallengeModal
-          isOpen={true}
-          tempToken={challengeToken}
-          portal="recruiter"
-          onSuccess={(session) => {
-            useAuthStore.getState().setSession(session, 'recruiter');
-            toast.success('Signed in to the recruiter portal.');
-            router.replace(sanitizeRedirect(searchParams?.get(REDIRECT_PARAM), ROUTES.RECRUITER_DASHBOARD));
-          }}
-          onCancel={() => setChallengeToken(null)}
-        />
-      )}
     </div>
   );
 }
