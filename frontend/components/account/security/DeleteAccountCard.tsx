@@ -2,17 +2,18 @@
 
 import Button from '@/components/ui/Button';
 import type { AuthPortal } from '@/lib/auth-portal';
+import { cn } from '@/lib/utils';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import DeleteAccountDialog from './DeleteAccountDialog';
 
-type DeleteAccountCardProps = { portal: AuthPortal };
+type DeleteAccountCardProps = { portal: AuthPortal; className?: string };
 
-export default function DeleteAccountCard({ portal }: DeleteAccountCardProps) {
+export default function DeleteAccountCard({ portal, className }: DeleteAccountCardProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-error/30 rounded-2xl border bg-white p-6 shadow-xs">
+    <div className={cn('border-error/30 rounded-2xl border bg-white p-6 shadow-xs', className)}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-error text-base font-bold">Delete account</h2>
@@ -24,11 +25,11 @@ export default function DeleteAccountCard({ portal }: DeleteAccountCardProps) {
 
         <Button
           type="button"
-          variant="outline"
           size="sm"
+          radius="md"
           onClick={() => setIsOpen(true)}
-          leftIcon={<Trash2 className="h-3.5 w-3.5" />}
-          className="border-error/30 bg-error/10 text-error hover:bg-error/10 hover:text-error"
+          leftIcon={<Trash2 className="h-3.5 w-3.5 text-rose-600" />}
+          className="shrink-0 border border-rose-300 bg-white text-xs font-semibold text-rose-600 shadow-2xs hover:border-rose-400 hover:bg-rose-50 hover:text-rose-700 active:bg-rose-100"
         >
           Delete account
         </Button>

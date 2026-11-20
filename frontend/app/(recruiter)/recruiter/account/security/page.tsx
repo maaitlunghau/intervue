@@ -1,4 +1,4 @@
-import AccountSecurityView from '@/components/account/AccountSecurityView';
+import RecruiterAccountSecuritySettingsView from '@/components/recruiter/security/RecruiterAccountSecuritySettingsView';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function RecruiterSecurityPage() {
-  return <AccountSecurityView portal="recruiter" />;
+  return <RecruiterAccountSecuritySettingsView />;
 }

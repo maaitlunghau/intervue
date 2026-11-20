@@ -1,15 +1,16 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
-type SecurityAlertsCardProps = { email: string };
+type SecurityAlertsCardProps = { email: string; className?: string };
 
-export default function SecurityAlertsCard({ email }: SecurityAlertsCardProps) {
+export default function SecurityAlertsCard({ email, className }: SecurityAlertsCardProps) {
   const [emailAlerts, setEmailAlerts] = useState(true);
   const [loginAlerts, setLoginAlerts] = useState(true);
 
   return (
-    <div className="border-outline-variant rounded-2xl border bg-white p-6 shadow-xs">
+    <div className={cn('border-outline-variant rounded-2xl border bg-white p-6 shadow-xs', className)}>
       <h2 className="text-on-surface text-base font-bold">Security alerts & notifications</h2>
 
       <div className="mt-4 space-y-4">
