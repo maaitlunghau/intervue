@@ -7,16 +7,14 @@ import {
   Building2,
   CalendarClock,
   ClipboardList,
-  KeyRound,
   LayoutDashboard,
   Megaphone,
   MessageSquare,
+  PackageOpen,
   Receipt,
   ShieldCheck,
-  PackageOpen,
   ShoppingBag,
   ShoppingCart,
-  Smartphone,
   Ticket,
   Users,
 } from 'lucide-react';
@@ -60,7 +58,6 @@ export const RECRUITER_NAV_SECTIONS: RecruiterNavSection[] = [
         href: ROUTES.RECRUITER_COMPANY_VERIFICATION,
         icon: ShieldCheck,
       },
-      { label: 'Hiring needs', href: ROUTES.RECRUITER_COMPANY_NEEDS, icon: ClipboardList },
     ],
   },
   {
@@ -84,10 +81,6 @@ export const RECRUITER_NAV_SECTIONS: RecruiterNavSection[] = [
   },
   {
     title: 'Account',
-    items: [
-      { label: 'Account security', href: ROUTES.RECRUITER_ACCOUNT_SECURITY, icon: ShieldCheck },
-      { label: 'Change password', href: ROUTES.RECRUITER_ACCOUNT_PASSWORD, icon: KeyRound },
-      { label: 'Two-factor authentication', href: '/account/two-factor', icon: Smartphone },
-    ],
+    items: [{ label: 'Account security', href: ROUTES.RECRUITER_ACCOUNT_SECURITY, icon: ShieldCheck }],
   },
 ];

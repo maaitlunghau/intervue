@@ -107,7 +107,14 @@ export default function RecruiterSidebar({ isCollapsed, className, onNavigate }:
           {sectionIndex > 0 && <div className="border-outline-variant mx-1 my-2 border-t" />}
 
           {section.items.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive =
+              pathname === item.href ||
+              (item.href === ROUTES.RECRUITER_COMPANY &&
+                pathname.startsWith('/recruiter/company') &&
+                !pathname.includes('/verification')) ||
+              (item.href === ROUTES.RECRUITER_COMPANY_VERIFICATION &&
+                pathname.startsWith('/recruiter/company/verification')) ||
+              (item.href === ROUTES.RECRUITER_ACCOUNT_SECURITY && pathname.startsWith('/recruiter/account'));
             const Icon = item.icon;
             const badgeCount = badgeCounts[item.href] ?? 0;
 
