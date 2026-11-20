@@ -24,6 +24,8 @@ export const ROUTES = {
   NOTIFICATION_PREFERENCES: '/account/notification-preferences',
   RECRUITER_LANDING: '/recruiter',
   RECRUITER_LOGIN: '/recruiter/login',
+  RECRUITER_TWO_FACTOR: '/recruiter/two-factor',
+  RECRUITER_TRUST_DEVICE: '/recruiter/trust-device',
   RECRUITER_REGISTER: '/recruiter/register',
   RECRUITER_ONBOARDING: '/recruiter/onboarding',
   RECRUITER_FORGOT_PASSWORD: '/recruiter/forgot-password',

@@ -1,4 +1,4 @@
-import AccountPasswordView from '@/components/account/AccountPasswordView';
+import RecruiterChangePasswordSettingsView from '@/components/recruiter/security/RecruiterChangePasswordSettingsView';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function RecruiterPasswordPage() {
-  return <AccountPasswordView portal="recruiter" />;
+  return <RecruiterChangePasswordSettingsView />;
 }

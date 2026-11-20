@@ -74,6 +74,12 @@ export const recruiterTwoFactorApi = {
       auth: true,
     }),
 
+  trustCurrentDevice: () =>
+    request<void>('/recruiter/two-factor/devices/trust', {
+      method: 'POST',
+      auth: true,
+    }),
+
   revokeTrustedDevice: (id: number) =>
     request<void>(`/recruiter/two-factor/devices/${id}`, {
       method: 'DELETE',

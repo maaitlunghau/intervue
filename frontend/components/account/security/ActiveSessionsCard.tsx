@@ -3,13 +3,14 @@
 import Button from '@/components/ui/Button';
 import { useAccountSessions, useRevokeOtherSessions, useRevokeSession } from '@/hooks/useAccountSecurity';
 import type { AuthPortal } from '@/lib/auth-portal';
+import { cn } from '@/lib/utils';
 import { getErrorMessage } from '@/utils/error';
 import { LogOut } from 'lucide-react';
 import SessionRow from './SessionRow';
 
-type ActiveSessionsCardProps = { portal: AuthPortal };
+type ActiveSessionsCardProps = { portal: AuthPortal; className?: string };
 
-export default function ActiveSessionsCard({ portal }: ActiveSessionsCardProps) {
+export default function ActiveSessionsCard({ portal, className }: ActiveSessionsCardProps) {
   const sessions = useAccountSessions(portal);
   const revokeSession = useRevokeSession(portal);
   const revokeOthers = useRevokeOtherSessions(portal);
@@ -18,7 +19,7 @@ export default function ActiveSessionsCard({ portal }: ActiveSessionsCardProps) 
   const hasOthers = items.some((session) => !session.current);
 
   return (
-    <div className="border-outline-variant rounded-2xl border bg-white p-6 shadow-xs">
+    <div className={cn('border-outline-variant rounded-2xl border bg-white p-6 shadow-xs', className)}>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-on-surface text-base font-bold">Sessions & active devices</h2>
@@ -27,13 +28,13 @@ export default function ActiveSessionsCard({ portal }: ActiveSessionsCardProps) 
 
         <Button
           type="button"
-          variant="outline"
           size="sm"
+          radius="md"
           disabled={!hasOthers}
           isLoading={revokeOthers.isPending}
           onClick={() => revokeOthers.mutate()}
-          leftIcon={<LogOut className="h-3.5 w-3.5" />}
-          className="border-error/30 bg-error/10 text-error hover:bg-error/10 hover:text-error"
+          leftIcon={<LogOut className="h-3.5 w-3.5 text-rose-600" />}
+          className="shrink-0 border border-rose-200 bg-rose-50 text-xs font-semibold text-rose-700 shadow-2xs hover:border-rose-300 hover:bg-rose-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:opacity-70"
         >
           Sign out of all other devices
         </Button>

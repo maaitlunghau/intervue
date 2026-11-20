@@ -2,13 +2,24 @@
 
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { ROUTES } from '@/constants/routes';
-import { Briefcase, Building2, FileText, KeyRound, RefreshCw, Settings, Share2, ShieldCheck, User } from 'lucide-react';
+import {
+  Briefcase,
+  Building2,
+  FileText,
+  KeyRound,
+  RefreshCw,
+  Settings,
+  Share2,
+  ShieldCheck,
+  Smartphone,
+  User,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 interface AccountSettingsLayoutProps {
   children: React.ReactNode;
-  activeTab: 'company' | 'license' | 'agreements' | 'password' | 'account' | 'needs';
+  activeTab: 'company' | 'license' | 'agreements' | 'password' | 'account' | 'needs' | 'two-factor' | 'security';
   pageTitle?: string;
   nextStepOverride?: { label: string; href: string };
 }
@@ -22,11 +33,28 @@ export function AccountSettingsLayout({
 
   const navItems = [
     {
+      id: 'security',
+      label: 'Account Security',
+      icon: ShieldCheck,
+      href: ROUTES.RECRUITER_ACCOUNT_SECURITY,
+      disabled: false,
+      isActive: activeTab === 'security' || pathname.includes('/account/security'),
+    },
+    {
       id: 'password',
       label: 'Change Password',
       icon: KeyRound,
-      href: '#',
-      disabled: true,
+      href: ROUTES.RECRUITER_ACCOUNT_PASSWORD,
+      disabled: false,
+      isActive: activeTab === 'password' || pathname.includes('/account/password'),
+    },
+    {
+      id: 'two-factor',
+      label: 'Two-Factor Authentication',
+      icon: Smartphone,
+      href: ROUTES.RECRUITER_ACCOUNT_TWO_FACTOR,
+      disabled: false,
+      isActive: activeTab === 'two-factor' || pathname.includes('/account/two-factor'),
     },
     {
       id: 'account',
@@ -55,7 +83,10 @@ export function AccountSettingsLayout({
       icon: Building2,
       href: ROUTES.RECRUITER_COMPANY,
       isActive:
-        activeTab === 'company' || (pathname.startsWith('/recruiter/company') && !pathname.includes('/verification')),
+        activeTab === 'company' ||
+        (pathname.startsWith('/recruiter/company') &&
+          !pathname.includes('/verification') &&
+          !pathname.includes('/needs')),
     },
     {
       id: 'needs',

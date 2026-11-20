@@ -1,4 +1,4 @@
-import AccountTwoFactorView from '@/components/account/AccountTwoFactorView';
+import RecruiterTwoFactorSettingsView from '@/components/recruiter/security/RecruiterTwoFactorSettingsView';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function RecruiterTwoFactorPage() {
-  return <AccountTwoFactorView portal="recruiter" />;
+  return <RecruiterTwoFactorSettingsView />;
 }
