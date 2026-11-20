@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react';
 import AdminLoginBackground from './AdminLoginBackground';
 
 interface AdminAuthLayoutProps {
-  hero: ReactNode;
+  hero?: ReactNode;
   children: ReactNode;
 }
 
@@ -28,12 +28,16 @@ export default function AdminAuthLayout({ hero, children }: AdminAuthLayoutProps
         </Link>
       </header>
 
-      {/* Main Split Content (6:4 Ratio) */}
-      <main className="relative z-10 mx-auto my-auto w-full max-w-7xl px-6 py-10 sm:px-10 sm:py-14">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14">
-          {hero}
-          <section className="flex justify-center lg:col-span-5 lg:justify-end">{children}</section>
-        </div>
+      {/* Main Content: Split or Centered */}
+      <main className="relative z-10 mx-auto my-auto w-full max-w-7xl px-6 py-8 sm:px-10 sm:py-10">
+        {hero ? (
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14">
+            {hero}
+            <section className="flex justify-center lg:col-span-5 lg:justify-end">{children}</section>
+          </div>
+        ) : (
+          <section className="mx-auto flex w-full max-w-2xl justify-center">{children}</section>
+        )}
       </main>
 
       {/* Page Footer with Subtle Border */}
